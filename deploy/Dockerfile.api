@@ -1,0 +1,91 @@
+# syntax=docker/dockerfile:1.9
+# ==============================================================================
+# TenPoint — API (Go monolith: HTTP API + cron scheduler + ingest pipeline)
+# Tham chiếu: docs/03-sa/architecture.md mục 2, 3, 11, 12
+#
+# BUILD CONTEXT PHẢI LÀ THƯ MỤC GỐC DỰ ÁN:
+#   docker build -f deploy/Dockerfile.api -t tenpoint-api .
+# (docker-compose.yml đã set `context: ..` nên chạy `make build` là đúng.)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Stage 1 — builder
+# ------------------------------------------------------------------------------
+FROM golang:1.26-alpine AS builder
+
+# git: một số module cần khi `go mod download`.
+# ca-certificates + tzdata: cài ở đây để COPY sang runtime nếu cần.
+RUN apk add --no-cache git ca-certificates tzdata
+
+WORKDIR /src
+
+# --- Lớp cache phụ thuộc -------------------------------------------------------
+# Chỉ copy go.mod/go.sum trước → đổi source code KHÔNG làm mất cache module.
+COPY backend/go.mod backend/go.sum ./
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go mod download
+
+# --- Source code ---------------------------------------------------------------
+COPY backend/ ./
+
+# --- Biên dịch tĩnh ------------------------------------------------------------
+# CGO_ENABLED=0  → binary tĩnh, chạy được trên alpine/distroless không cần libc.
+# -trimpath      → bỏ đường dẫn build khỏi binary (reproducible + không lộ path).
+# -ldflags="-s -w" → bỏ symbol table & DWARF, giảm ~30% kích thước.
+ARG VERSION=dev
+ARG TARGETOS=linux
+ARG TARGETARCH
+ENV CGO_ENABLED=0
+
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    go build -trimpath -ldflags="-s -w -X main.version=${VERSION}" \
+        -o /out/api ./cmd/api
+
+# Binary `ingest`: chạy pipeline 1 lần thủ công (debug / backfill).
+#   make ingest   →   docker compose run --rm --entrypoint /usr/local/bin/ingest api
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    go build -trimpath -ldflags="-s -w -X main.version=${VERSION}" \
+        -o /out/ingest ./cmd/ingest
+
+# ------------------------------------------------------------------------------
+# Stage 2 — runtime
+# ------------------------------------------------------------------------------
+# Chọn alpine (không phải distroless) vì HEALTHCHECK cần một shell + wget để gọi
+# /healthz. Distroless nhỏ hơn nhưng không có shell → phải nhúng thêm binary
+# healthcheck riêng, không đáng cho quy mô MVP.
+FROM alpine:3.20 AS runtime
+
+# tzdata      — BẮT BUỘC. Không có nó, time.LoadLocation("Asia/Ho_Chi_Minh")
+#               lỗi và cron 06:00/14:00/22:00 sẽ chạy theo UTC → SAI 7 TIẾNG.
+# ca-certificates — BẮT BUỘC để gọi HTTPS tới nguồn tin và Claude API.
+RUN apk add --no-cache ca-certificates tzdata wget && \
+    update-ca-certificates
+
+# Người dùng non-root cố định UID/GID (dễ map quyền khi mount volume).
+# Lưu ý: busybox adduser yêu cầu TÊN USER đứng CUỐI, sau mọi tuỳ chọn.
+RUN addgroup -g 10001 -S tenpoint && \
+    adduser -S -D -u 10001 -G tenpoint -h /app -s /sbin/nologin tenpoint
+
+WORKDIR /app
+
+COPY --from=builder --chown=root:root --chmod=0755 /out/api    /usr/local/bin/api
+COPY --from=builder --chown=root:root --chmod=0755 /out/ingest /usr/local/bin/ingest
+
+# Mặc định an toàn — docker-compose.yml sẽ ghi đè bằng giá trị từ .env
+ENV TZ=Asia/Ho_Chi_Minh \
+    PORT=8080
+
+USER tenpoint:tenpoint
+
+EXPOSE 8080
+
+# Liveness theo mục 6 architecture.md. start-period đủ dài cho lần chạy migration
+# đầu tiên (migrations được embed vào binary và tự chạy khi khởi động).
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+    CMD wget -q --spider "http://127.0.0.1:${PORT}/healthz" || exit 1
+
+ENTRYPOINT ["/usr/local/bin/api"]

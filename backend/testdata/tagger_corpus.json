@@ -1,0 +1,573 @@
+{
+ "description": "Corpus gán nhãn tay để đo precision/recall của tagger (test-plan mục 4.2).",
+ "source": "50 bài crawl thật ngày 16/09/2026 từ 6 nguồn đang bật. Loại toàn bộ bài vneconomy vì thân bài lưu trong DB lúc lấy mẫu là sản phẩm của lỗi bóc tách P0-2.",
+ "labelling_rules": [
+  "Gắn mã khi bài nêu đích danh doanh nghiệp đó hoặc mã của nó (kể cả công ty con mang tên thương hiệu).",
+  "KHÔNG gắn khi mã chỉ nằm trong cụm trích dẫn nguồn phân tích ('Chứng khoán X', 'X Research') - rule B3.",
+  "KHÔNG gắn khi ký hiệu là đơn vị tiền tệ (VND), mã quỹ ngoại (VNM ETF) hay pháp nhân khác trùng tên.",
+  "Bài không nêu doanh nghiệp nào thì expected rỗng, kể cả khi có nhắc tên ngành."
+ ],
+ "articles": [
+  {
+   "id": 6,
+   "source": "tinnhanhchungkhoan",
+   "title": "Sự kiện chứng khoán đáng chú ý ngày 17/9",
+   "body": "* DMX: CTCP Đầu tư Điện Máy Xanh (DMX – HOSE) thông báo, ngày 05/10 tới đây sẽ chốt danh sách cổ đông thực hiện quyền tham dự Đại hội đồng cổ đông bất thường 2016. Theo đó, Đại hội dự kiến được tổ chức vào ngày 29/10/2026 theo hình thức trực tiếp và trực tuyến. Chi tiết sẽ được thông báo sau.\n\n* EVF: Ông Lê Mạnh Linh, Tổng giám đốc Công ty Tài chính Tổng hợp cổ phần Điện lực (EVF – HOSE) đăng ký mua 4 triệu cổ phiếu EVF từ ngày 21/9 đến 20/10 theo phương thức thỏa thuận và khớp lệnh. Dự kiến giao dịch thành công, ông Linh sẽ nâng sở hữu tại EVF lên hơn 7,31 triệu cổ phiếu, tỷ lệ 0,96%\n\n* EIB: Ngân hàng TMCP Xuất nhập khẩu Việt Nam – Eximbank (EIB – HOSE) thông báo, Đại hội đồng cổ đông bất thường 2026 dự kiến được tổ chức vào 8h30’ ngày 14/10/2026 tại tầng 7, Khách sạn Melia, số 44B Lý Thường Kiệt, phường Cửa Nam, Hà Nội.\n\n* DHC: Ngày 05/10 là ngày giao dịch không hưởng quyền nhận tạm ứng cổ tức đợt 2 năm 2026 của CTCP Đông Hải Bến Tre (DHC – HOSE), ngày đăng ký cuối cùng là 06/10. Theo đó, cổ tức sẽ được trả bằng tiền mặt theo tỷ lệ 10%, thanh toán bắt đầu từ ngày 28/10/2026.\n\n* DSE: Pyn Elite Fund (Non-Ucits), cổ đông lớn của CTCP Chứng khoán DNSE (DSE – HOSE) đã bán ra 100.000 cổ phiếu DSE trong ngày 04/9. Qua đó, giảm sở hữu tại DSE xuống còn hơn 38,5 triệu cổ phiếu, tỷ lệ 8,99%.\n\n* TDW: Ngày 29/9 là ngày giao dịch không hưởng quyền nhận cổ tức đợt 3 từ nguồn lợi nhuận chưa phân phối của các năm trước của CTCP Cấp nước Thủ Đức (TDW – HOSE), ngày đăng ký cuối cùng là 30/9.",
+   "expected": [
+    "DMX"
+   ],
+   "note": "'Điện Máy Xanh' ở đây là pháp nhân CTCP Đầu tư Điện Máy Xanh (DMX - HOSE), không phải chuỗi của MWG"
+  },
+  {
+   "id": 7,
+   "source": "cafef",
+   "title": "Một công ty quản lý quỹ bị xử phạt do vi phạm công bố thông tin",
+   "body": "Ủy ban Chứng khoán Nhà nước (UBCKNN) mới đây đã ban hành Quyết định số 513/QĐ-XPHC về việc xử phạt vi phạm hành chính trong lĩnh vực chứng khoán và thị trường chứng khoán đối với Công ty CP Quản lý quỹ đầu tư Pacific Bridge (Pacific Bridge, trụ sở chính: Tầng 6, số 389 Đê La Thành, Phường Giảng Võ, TP.Hà Nội).\n\nTheo đó, Pacific Bridge bị phạt tiền 85 triệu đồng do có hành vi vi phạm quy định về thời hạn công bố thông tin. Cụ thể, công ty chậm công bố thông tin trên Hệ thống công bố thông tin của UBCKNN từ 15 ngày trở lên so với quy định đối với các tài liệu: BCTC Quý IV/2025, BCTC năm 2025 đã kiểm toán, Báo cáo tỷ lệ an toàn tài chính tại ngày 31/12/2025 đã kiểm toán, Báo cáo tình hình quản trị công ty 6 tháng đầu năm 2025, Báo cáo tình hình quản trị công ty năm 2025, Báo cáo thường niên năm 2025.\n\nNgoài ra, Pacific Bridge còn bị phạt 85 triệu đồng do chậm báo cáo từ 15 ngày trở lên so với quy định đối với các tài liệu: BCTC năm 2025 đã kiểm toán bởi tổ chức kiểm toán được chấp thuận của Quỹ đầu tư tăng trưởng Pacific Bridge, Báo cáo đánh giá rủi ro về rửa tiền năm 2025, Báo cáo kiểm toán nội bộ về phòng chống rửa tiền năm 2025.\n\nPacific Bridge tiền thân là Công ty CP Quản lý Quỹ đầu tư Nhân Việt (tên viết tắt Nhân Việt Capital) được cấp phép thành lập và hoạt động vào tháng 3/2009 với vốn điều lệ là 25 tỷ đồng.\n\nĐến 8/2013, Nhân Việt Capital đổi tên thành Công ty CP Quản lý Quỹ đầu tư Sao Vàng (Sao Vàng Capital) và đến tháng 8/2018, doanh nghiệp tiếp tục đổi thành Công ty CP",
+   "expected": [],
+   "note": "không doanh nghiệp niêm yết nào được nêu đích danh"
+  },
+  {
+   "id": 8,
+   "source": "tinnhanhchungkhoan",
+   "title": "Nhận định thị trường phiên giao dịch ngày 17/9: Thận trọng trong ngắn hạn",
+   "body": "Báo Đầu tư Chứng khoán lược trích báo cáo nhận định thị trường của một số công ty chứng khoán cho phiên giao dịch ngày 17/9.\n\nNhịp rung lắc là thời điểm tốt\n\nCTCP Chứng khoán Kirin (CSI)\n\nDiễn biến phiên hôm nay cho thấy tâm lý thận trọng cao độ của giới đầu tư và gần như tất cả đều ngóng chờ kết quả cuộc họp FOMC trong tháng 9 sẽ được công bố vào ngày mai.\n\nXác suất thăm dò cho thấy khả năng Fed sẽ tăng lãi suất thêm 25 điểm cơ bản là khoảng 90%, tuy nhiên giới đầu tư còn chú ý đến nhiều tín hiệu về đường hướng sắp tới sau cuộc họp báo nên tâm lý thận trọng bao trùm cả thị trường.\n\nPhiên giảm nhẹ hôm nay không mang nhiều tín hiệu tiêu cực và chưa đánh mất chiều hướng phục hồi của phiên tăng mạnh hôm qua.\n\nChúng tôi vẫn duy trì quan điểm nắm giữ danh mục và khả năng thị trường sẽ có nhịp rung lắc trong phiên tiếp theo khi các thông tin về cuộc họp của Fed được công bố.\n\nTuy nhiên, nhịp rung lắc là thời điểm tốt theo quan điểm của chúng tôi để gia tăng thêm tỷ trọng cổ phiếu ở những mã đang có lợi nhuận trong danh mục.\n\nTập trung tỷ trọng vào cổ phiếu giữ vững xu hướng tích cực\n\nChỉ số VN-Index trải qua phiên giao dịch giằng co với biên độ hẹp, phản ánh tâm lý thận trọng của dòng tiền khi thị trường đang chờ đợi quyết định lãi suất từ Fed vào rạng sáng mai.\n\nSức nâng đỡ chủ yếu đến từ nhóm ngân hàng, năng lượng và công nghệ. Ở chiều ngược lại, áp lực điều chỉnh gây sức ép đáng kể lên nhóm chứng khoán, bất động sản và vật liệu cơ bản.\n\nKhối ngoại tiếp tục duy trì vị thế mua ròn",
+   "expected": [],
+   "note": "không doanh nghiệp niêm yết nào được nêu đích danh"
+  },
+  {
+   "id": 9,
+   "source": "vietstock",
+   "title": "Góc nhìn 17/09: Chưa có tín hiệu rõ ràng | Vietstock",
+   "body": "Góc nhìn 17/09: Chưa có tín hiệu rõ ràng\n\nPhần đông các công ty chứng khoán cho rằng các chỉ báo động lượng đã bớt tiêu cực, nhưng chưa có tín hiệu đảo chiều rõ ràng.\n\nTiếp tục dao động vùng 1,805-1,820\n\nCTCK Yuanta Việt Nam (Yuanta): Chỉ số VN-Index có phiên 16/09 biến động hẹp, phản ánh sự lưỡng lự của giá trong bối cảnh thanh khoản suy giảm. Đồ thị giá vẫn giữ trên MA5 phiên, nhưng Yuanta lưu ý vùng 1,820 điểm (đường viền cổ của giai đoạn cuối tháng 08 và đầu tháng 09/2026) vẫn đang đóng vai trò kháng cự cho chỉ số. Đồng thời, thị trường vẫn đang có sự xoay vòng ở đà tăng ở các nhóm ngành với Thực phẩm-Đồ uống và Bán lẻ là 2 nhóm có diễn biến hồi phục tích cực trong phiên. Yuanta cho rằng chỉ số sẽ tiếp tục dao động trong vùng 1,805-1,820 điểm trong phiên 17/09, cũng là phiên đáo hạn hợp đồng tương lai và Fed công bố lãi suất trước khi có diễn biến mới.\n\nNhà đầu tư có thể giữ tỷ trọng cổ phiếu ở mức 40% cp - 60% tiền mặt. Đồng thời, nhà đầu tư nên chú ý tới xu hướng riêng của từng cổ phiếu trong đó có thể xem xét chờ giải ngân tại nhóm Dầu khí (GAS, BSR, PVS), Cao Su (TRC, DRI), Phân bón (DPM, DCM) hoặc các cổ phiếu trụ, vốn trung bình - lớn có sức mạnh giá cao đặc thù như: VIC, VRE, VHM, DGW, FPT, TLG, STB ở nhịp điều chỉnh.\n\nChưa có tín hiệu rõ ràng\n\nCTCK Beta: Ở góc độ kỹ thuật, VN-Index vẫn duy trì phía trên cụm các đường trung bình động, qua đó giữ được nền hỗ trợ cần thiết để tiếp tục tạo đà tăng trong ngắn hạn. Tuy nhiên, khả năng xuất hiện một nhịp tăng đồng thuận ",
+   "expected": [
+    "FPT",
+    "GAS",
+    "PVS",
+    "STB",
+    "VHM",
+    "VIC",
+    "VRE"
+   ],
+   "note": "danh sách mã trong báo cáo góc nhìn: đều được nêu đích danh"
+  },
+  {
+   "id": 11,
+   "source": "cafef",
+   "title": "VPS năm thứ ba liên tiếp dẫn đầu ngành chứng khoán về nộp ngân sách Nhà nước",
+   "body": "Đây là năm thứ ba liên tiếp VPS giữ vị trí quán quân nộp ngân sách trong khối công ty chứng khoán. Năm tài chính 2025, Công ty đóng góp 2.848 tỷ đồng vào ngân sách Nhà nước, chiếm gần 20% tổng mức nộp của Top 15 doanh nghiệp trong ngành.\n\nTheo bảng xếp hạng VNTAX 2026 do CafeF thực hiện, trong lĩnh vực chứng khoán, VPS đồng thời có mặt trong Top 15 công ty chứng khoán đóng góp ngân sách lớn nhất Việt Nam và Top 10 công ty chứng khoán tư nhân nộp ngân sách cao nhất cả nước. Kết quả này tiếp nối vị thế dẫn đầu thị phần môi giới cổ phiếu mà Công ty duy trì trong thời gian qua.\n\nĐây không chỉ là một con số ấn tượng, mà là minh chứng sống động cho một VPS bền vững, trách nhiệm và luôn đồng hành cùng sự thịnh vượng của nền kinh tế đất nước.\n\nVPS đứng đầu cả hai bảng xếp hạng Top 15 công ty chứng khoán đóng góp ngân sách lớn nhất Việt Nam và Top 10 công ty chứng khoán tư nhân nộp ngân sách cao nhất cả nước – Nguồn: CafeF\n\nViệc VPS liên tục giữ vững ngôi vị dẫn đầu trong ba năm liền không phải là một thành tích ngẫu nhiên, mà là kết quả tất yếu của một chiến lược phát triển bài bản, tầm nhìn dài hạn và năng lực thực thi vượt trội.\n\nTừ thị phần môi giới số 1 đến năng lực phát triển sản phẩm\n\nVPS duy trì vị trí số 1 về thị phần môi giới cổ phiếu trên HOSE trong quý II/2026, với thị phần 12,61%. Đây là quý thứ 22 liên tiếp Công ty đứng đầu bảng xếp hạng. Bên cạnh HOSE, VPS cũng giữ vị trí dẫn đầu trên HNX, UPCoM và thị trường phái sinh trong thời gian qua. Quy mô hoạt động môi giới là m",
+   "expected": [],
+   "note": "không doanh nghiệp niêm yết nào được nêu đích danh"
+  },
+  {
+   "id": 12,
+   "source": "vietstock",
+   "title": "[Longform] Tổng Giám đốc Huang Bo (IVS): “Equity Story” tốt phải nối được chiến lược với định giá | Vietstock",
+   "body": "Tổng Giám đốc Huang Bo (IVS): “Equity Story” tốt phải nối được chiến lược với định giá\n\nTập san IR Awards 2026: Quản trị niềm tin - Kiến tạo giá trị\n\nÔng Huang Bo - Tổng Giám đốc CTCP Chứng khoán Guotai Haitong (Việt Nam)\n\nĐổi tên, mở rộng mạng lưới hay kết quả tăng trưởng chưa đủ để thị trường hiểu sự thay đổi của doanh nghiệp. Ông Huang Bo cho rằng, IR phải đi xa hơn việc công bố thông tin, bắt đầu từ những yếu tố nhà đầu tư cần biết để định giá và kiểm chứng doanh nghiệp.\n\nTrong cuộc trao đổi với người viết, ông Huang Bo, Tổng Giám đốc CTCP Chứng khoán Guotai Haitong (Việt Nam) (GTHT, HNX: IVS), nhiều lần nhắc đến “Equity Story” - câu chuyện đầu tư mà doanh nghiệp đưa ra thị trường. Nhưng điểm xuất phát, theo ông, là những yếu tố nhà đầu tư cần biết để có thể định giá doanh nghiệp, thay vì những điều doanh nghiệp muốn nói về mình.\n\nTừ cách nhìn này, việc GTHT vừa mang tên mới sau thương vụ hợp nhất ở cấp tập đoàn cũng trở thành bài toán IR để thị trường thấy những thay đổi thực sự phía sau tên gọi đó.\n\nTheo ông, khi một doanh nghiệp sắp có thay đổi lớn về thương hiệu thì bộ phận IR nên giải thích với thị trường từ thời điểm nào?\n\nÔng Huang Bo: IR nên tham gia ngay từ khi doanh nghiệp bắt đầu xây dựng và đánh giá thay đổi chiến lược, thay vì đợi quyết định đã hoàn tất rồi mới truyền đạt ra bên ngoài.\n\nThay đổi lớn về mô hình kinh doanh, M&A, tái cấu trúc hay định vị lại doanh nghiệp thường tạo ra khoảng cách thông tin. Nếu IR chỉ xuất hiện ở cuối quá trình, vai trò dễ dừng ",
+   "expected": [],
+   "note": "không doanh nghiệp niêm yết nào được nêu đích danh"
+  },
+  {
+   "id": 13,
+   "source": "tinnhanhchungkhoan",
+   "title": "Góc nhìn kỹ thuật phiên giao dịch chứng khoán ngày 17/9: Cần giữ vững vùng hỗ trợ 1.780 điểm",
+   "body": "Báo Đầu tư Chứng khoán lược trích báo cáo phân tích kỹ thuật của một số công ty chứng khoán cho phiên giao dịch ngày 17/9.\n\nCTCK Tiên Phong - TPBS\n\nChỉ số VN-Index gần như đi ngang với biên độ hẹp xuyên suốt phiên giao dịch và đóng cửa tại 1.810 điểm, bám sát đường trung bình động EMA10 ngày.\n\nNhìn chung, xu hướng tăng của chỉ số chưa bị vi phạm dù đã có tín hiệu suy yếu gần đây. Khối lượng khớp lệnh giảm so với phiên hôm trước và thấp hơn trung bình 20 phiên, trong khi chỉ số gần như không thay đổi trước phản ánh tâm lý thận trọng của cả phe mua và phe bán.\n\nChỉ số hiện giao dịch trên hệ thống EMA cho thấy xu hướng tăng có nền tảng hỗ trợ tốt, trong đó hệ thống EMA sẽ đóng vai trò hỗ trợ trong trường hợp điều chỉnh. Mức hỗ trợ gần nhất hiện tại nằm trong khoảng 1.792-1.800 điểm, tương ứng với cụm EMA 20/50/100.\n\nVùng kháng cự gần nhất hiện tại nằm tại 1.875 điểm, tương ứng với đỉnh ngắn hạn hình thành vào ngày 07/9 trước đó đã xuất hiện áp lực phân phối quyết liệt tại vùng điểm số này.\n\nChỉ số VN-Index giằng co quanh mốc tham chiếu và kết phiên giảm nhẹ. Thanh khoản tiếp tục suy yếu so với phiên trước, phản ánh tâm lý thận trọng và sự hạn chế của dòng tiền.\n\nÁp lực bán tập trung tại những cổ phiếu đã tăng tốt trong phiên hồi phục trước đó, cho thấy hoạt động chốt lời ngắn hạn diễn ra khá nhanh khi thị trường phát tín hiệu phục hồi.\n\nTrong các phiên tới, nếu VN-Index giữ vững vùng hỗ trợ 1.780 điểm, lực cầu mới có thể từng bước quay lại, tạo điều kiện để chỉ số hướng đến vùng",
+   "expected": [],
+   "note": "không doanh nghiệp niêm yết nào được nêu đích danh"
+  },
+  {
+   "id": 15,
+   "source": "cafef",
+   "title": "Chứng khoán 'nín thở' trước tin quan trọng",
+   "body": "VN-Index có thời điểm tăng hơn 3 điểm nhưng càng về cuối phiên càng thu hẹp đà tăng, thậm chí có lúc lùi xuống dưới tham chiếu.\n\nChốt phiên, chỉ số giảm hơn 1 điểm, xuống 1.810 điểm. Trên HoSE, 194 mã giảm giá, trong khi 116 mã tăng và 67 mã đứng giá. Tổng giá trị giao dịch toàn thị trường đạt khoảng 14.845 tỷ đồng.\n\nSức ép chủ yếu đến từ nhóm tài chính và bất động sản: TCH mất 2,59%, KDH giảm 1,92%. Ở nhóm chứng khoán, VIX giảm 1,94%, VND giảm 1,36%.\n\nNgược lại, một số cổ phiếu ngân hàng vẫn giữ được sắc xanh như ACB tăng 2,26%, MBB tăng 1,5% và TCB tăng 0,78%. Nhóm năng lượng cũng phân hóa, với PLX tăng 2,28%, OIL tăng 3,45%, trong khi GAS giảm 2,19%.\n\nTrong bức tranh giằng co của thị trường, DCL trở thành điểm đáng chú ý khi tăng 6,93%, lên 41.650 đồng/cổ phiếu và không còn dư bán ở mức giá trần.\n\nThanh khoản DCL cũng tăng đột biến với khoảng 4,2 triệu cổ phiếu được sang tay, cao nhất trong hơn một năm. Sau hai phiên, cổ phiếu này tăng khoảng 10%, với tổng khối lượng giao dịch khoảng 6,5 triệu đơn vị.\n\nMột cổ phiếu khác cũng gây chú ý là SSB. Mã này tiếp tục tăng mạnh trong chuỗi phiên gần đây, sau khi được FTSE Russell đưa vào chỉ số FTSE Global All Cap, cùng 26 cổ phiếu Việt Nam khác, trước thời điểm thị trường Việt Nam dự kiến được nâng hạng vào ngày 21/9.\n\nTrong phiên, nhà đầu tư nước ngoài tiếp tục mua ròng phiên thứ ba liên tiếp, đạt gần 260 tỷ đồng. Dòng tiền tập trung vào SBT, FPT, BSR, MBB và MCH, trong khi bán ra ở VHM, VIC, VIX và một số cổ phiếu khác.\n\nTâm điểm",
+   "expected": [
+    "ACB",
+    "FPT",
+    "GAS",
+    "KDH",
+    "MBB",
+    "PLX",
+    "SSB",
+    "TCB",
+    "VHM",
+    "VIC",
+    "VND"
+   ],
+   "note": ""
+  },
+  {
+   "id": 16,
+   "source": "tinnhanhchungkhoan",
+   "title": "Thị trường tài chính 24h: Bitcoin lao dốc, giá dầu thô hạ nhiệt",
+   "body": "Giá vàng, ngoại tệ, dầu thô, bitcoin\n\nTại thị trường vàng trong nước, giá vàng SJC mở cửa sáng nay ngày 16/9 tăng 600.000 đồng/lượng so với cuối ngày hôm qua, thì vào cuối ngày hôm nay đã tăng thêm 600.000 đồng/lượng, hiện đứng ở mức 143,50 – 146,50 triệu đồng/lượng (mua vào - bán ra).\n\nTrên thị trường vàng thế giới, giá vàng giao ngay chốt phiên hôm qua tại Mỹ giảm nhẹ khoảng hơn 5 USD xuống mức 4.294 USD/ounce. Sang phiên châu Á sáng nay, giá vàng hồi phục lên 4.335 USD và chững lại cho đến cuối ngày.\n\nTại thị trường ngoại hối, chỉ số US Dollar Index (DXY) đứng ở mức 99,65 điểm.\n\nTỷ giá trung tâm trong nước ngày hôm nay 16/9 được Ngân hàng Nhà nước công bố ở mức 25.626 đồng/USD, tăng 9 đồng so với ngày hôm qua. Tỷ giá USD tại các ngân hàng thương mại chiều nay giao dịch phổ biến ở mức 25.800 - 26.180 đồng/USD.\n\nTrên thị trường tiền kỹ thuật số, đồng Bitcoin sau ngày hôm qua giảm khá mạnh từ 78.900 USD xuống 76.900 USD, thì sang ngày hôm nay đã tiếp tục giảm và lùi về 75.800 USD/BTC vào cuối ngày.\n\nThị trường dầu mỏ, vào cuối giờ chiều nay theo giờ châu Á, giá dầu thô kỳ hạn của Mỹ (WTI) giảm 1,47 USD (-1,39%) xuống 104,36 USD/thùng. Giá dầu thô tương lai Brent giảm 0,88 USD (-0,81%) xuống 107,87 USD/thùng.\n\nChỉ số VN-Index chủ yếu giao dịch trong trạng thái giằng co trong suốt cả phiên, với điểm nhấn chỉ ở nhóm dầu khí.\n\nĐáng chú ý, đồ thị trong phiên xuất hiện một nhịp rơi rất mạnh về cuối phiên, song lực cầu nhanh chóng nhập cuộc giúp chỉ số hồi phục, qua đó hạn chế đáng ",
+   "expected": [],
+   "note": "không doanh nghiệp niêm yết nào được nêu đích danh"
+  },
+  {
+   "id": 17,
+   "source": "vietstock",
+   "title": "Góc nhìn 16/09: Giằng co trong biên độ hẹp, kiên nhẫn chờ tín hiệu | Vietstock",
+   "body": "Góc nhìn 16/09: Giằng co trong biên độ hẹp, kiên nhẫn chờ tín hiệu\n\nCác CTCK nhìn nhận VN-Index có thể tiếp tục giằng co trong ngắn hạn, trong khi độ bền của nhịp hồi phục vẫn cần thêm tín hiệu xác nhận. Nhà đầu tư được khuyến nghị giao dịch thận trọng và kiên nhẫn chờ đợi các cơ hội rõ ràng hơn.\n\nGiằng co trong biên độ hẹp\n\nCTCK Asean (Aseansc): Trong kịch bản cơ sở, VN-Index nhiều khả năng sẽ dao động giằng co trong biên độ hẹp ở đầu phiên trước khi định hình xu hướng rõ ràng hơn vào cuối ngày, do đó nhà đầu tư ngắn hạn nên duy trì tỷ trọng trung bình, tránh mua đuổi và tập trung giao dịch theo vùng hỗ trợ 1,810 - 1,820 điểm và kháng cự 1,830 - 1,840 điểm, đồng thời chú ý các nhóm cổ phiếu có câu chuyện riêng như thoái vốn Nhà nước, các nghị quyết phát triển kinh tế, lộ trình nâng hạng thị trường hoặc chu kỳ offshore dầu khí.\n\nSong song đó, đối với chiến lược trung và dài hạn, nhà đầu tư có thể tiếp tục giải ngân từng phần tại các nhịp điều chỉnh về vùng hỗ trợ, ưu tiên các mã có nền tảng cơ bản tốt và thanh khoản cao thuộc nhóm ngân hàng, chứng khoán, bán lẻ, đầu tư công và dầu khí.\n\nNhịp phục hồi cần được đánh giá thêm\n\nCTCK Tiên Phong (TPS): Trong trường hợp tích cực, chỉ số có thể kiểm định lại vùng kháng cự gần quanh 1,875 điểm trong ngắn hạn. Ngược lại, trong trường hợp điều chỉnh, chỉ số có thể kiểm định lại vùng hỗ trợ 1,715 - 1,755 điểm, tương ứng với vùng đáy hình thành trong tháng 8 kết hợp với EMA200 ngày.\n\nTPS duy trì quan điểm thận trọng, nhịp phục hồi cần đượ",
+   "expected": [],
+   "note": "không doanh nghiệp niêm yết nào được nêu đích danh"
+  },
+  {
+   "id": 19,
+   "source": "vietstock",
+   "title": "[Longform] Bà Vũ Thị Thanh Nga (FPTS): Niềm tin nhà đầu tư được tích lũy qua từng thông tin doanh nghiệp công bố | Vietstock",
+   "body": "TẬP SAN IR AWARDS 2026: QUẢN TRỊ NIỀM TIN - KIẾN TẠO GIÁ TRỊ\n\nBà Vũ Thị Thanh Nga (FPTS): Niềm tin nhà đầu tư được tích lũy qua từng thông tin doanh nghiệp công bố\n\nThị trường chứng khoán Việt Nam hướng tới những chuẩn mực cao hơn, kéo theo yêu cầu ngày càng lớn về minh bạch, quản trị và chất lượng thông tin. Hoạt động Quan hệ nhà đầu tư (IR) của doanh nghiệp cần chuyển sang tư duy chủ động, giúp nhà đầu tư hiểu đúng về doanh nghiệp và qua đó xây dựng niềm tin dài hạn.\n\nTrong bối cảnh đó, vai trò của IR đang được nhìn nhận rộng hơn, từ hoạt động cung cấp thông tin sang kênh kết nối giữa doanh nghiệp với thị trường và nhà đầu tư. Khi dòng vốn quốc tế ngày càng quan tâm đến chất lượng quản trị, triển vọng dài hạn và khả năng tiếp cận thông tin, yêu cầu đối với đội ngũ IR trở nên cao hơn.\n\nTrao đổi với người viết, bà Vũ Thị Thanh Nga, Giám đốc Tư vấn Tài chính doanh nghiệp, Chứng khoán FPT (FPTS, HOSE: FTS) cho rằng, thay đổi quan trọng nhất là doanh nghiệp cần chuyển IR từ tư duy “tuân thủ” sang chủ động cung cấp thông tin, qua đó thu hẹp khoảng cách thông tin và từng bước xây dựng niềm tin với thị trường.\n\nTrong bối cảnh hiện nay, theo bà, hoạt động IR của doanh nghiệp niêm yết cần thay đổi như thế nào để đáp ứng các chuẩn mực mới?\n\nBà Vũ Thị Thanh Nga: Theo tôi, thay đổi đầu tiên và quan trọng nhất là IR cần chuyển từ tư duy “tuân thủ” sang “chủ động cung cấp thông tin”.\n\nTuân thủ quy định về công bố thông tin là nền tảng bắt buộc, nhưng trong một thị trường vốn ngày càng phá",
+   "expected": [],
+   "note": "FPT chỉ xuất hiện trong 'Chứng khoán FPT (FPTS, HOSE: FTS)' - cụm trích dẫn nguồn, mã thật là FTS"
+  },
+  {
+   "id": 20,
+   "source": "cafef",
+   "title": "VinFast nhận khoản tài trợ 200 triệu USD từ 3 định chế tài chính hàng đầu thế giới",
+   "body": "Ngày 16/9/2026, SACE, Cơ quan Tín dụng Xuất khẩu của Italy thuộc Bộ Kinh tế và Tài chính Italy, vừa công bố khoản tài trợ trị giá 200 triệu USD cho VinFast Việt Nam, công ty con của VinFast Auto Ltd., thành viên của Tập đoàn Vingroup – tập đoàn tư nhân lớn nhất Việt Nam. Đây là giao dịch đầu tiên được ký kết thành công dành cho doanh nghiệp trong khuôn khổ Chương trình New Push Strategy của SACE, khẳng định tiềm năng và uy tín của VinFast trong lĩnh vực giao thông xanh toàn cầu.\n\nBarclays Bank PLC, BNP Paribas và HSBC đảm nhiệm vai trò Ngân hàng thu xếp chính được ủy quyền và Quản lý sổ lệnh, đồng thời là các bên cho vay trong giao dịch. HSBC đồng thời đảm nhiệm các vai trò Điều phối tín dụng xuất khẩu, bên đại diện quản lý khoản vay, đại diện quản lý tài sản bảo đảm và ngân hàng quản lý tài khoản ở nước ngoài.\n\nSACE cung cấp bảo lãnh theo Chương trình Push Strategy. Thông qua chương trình này, SACE hỗ trợ các doanh nghiệp và bên mua lớn trên toàn cầu, đồng thời thúc đẩy quan hệ thương mại với các nhà cung cấp Italy, trong đó có các chương trình kết nối doanh nghiệp chuyên biệt.\n\nNguồn vốn sẽ được VinFast sử dụng cho các mục đích chung của doanh nghiệp, bao gồm đầu tư, nghiên cứu và phát triển (R&D), qua đó hỗ trợ triển khai kế hoạch kinh doanh của VinFast Việt Nam.\n\nNgài Marco della Seta, Đại sứ Italy tại Việt Nam, cho biết: \"Hoạt động Push Strategy của SACE với VinFast Vietnam phản ánh sự tin tưởng của Italy đối với thị trường này. Việt Nam đang tăng trưởng nhanh chóng, và ",
+   "expected": [
+    "VIC"
+   ],
+   "note": ""
+  },
+  {
+   "id": 21,
+   "source": "tinnhanhchungkhoan",
+   "title": "Cổ phiếu cần quan tâm ngày 17/9",
+   "body": "Khuyến nghị mua dành cho cổ phiếu VCB\n\nBSC khuyến nghị mua đối với VCB với giá mục tiêu 77.800 đồng/CP, tương đương upside 30% so với giá đóng cửa ngày 15/09/2026. Chúng tôi định giá theo phương pháp hỗn hợp P/B, P/E với tỷ trọng 70/30, tương ứng P/B mục tiêu 2.4x trên giá trị sổ sách 2026F và P/E mục tiêu 16x. Giá mục tiêu tăng nhẹ 2.6% so với báo cáo trước chủ yếu do điều chỉnh tăng 10% dự phóng lợi nhuận trước thuế năm 2026F.\n\nLuận điểm đầu tư: Thay đổi quy định về chỉ số LDR tạo lợi thế cho VCB. Việc nâng tỷ lệ tiền gửi Kho bạc Nhà nước được tính vào LDR từ 20% lên 50%, giúp VCB mở thêm khoảng 47 nghìn tỷ dư địa cho vay (tăng 2,7% dư nợ hiện tại) mà không cần huy động thêm tiền gửi. Yếu tố cải thiện NIM giúp thúc đẩy tăng trưởng lợi nhuận 2026F – 2027F lần lượt đạt 20%/9%, cao hơn so với mức tăng trưởng 2%/4% giai đoạn 2024-2025.\n\nChất lượng tài sản vượt trội tuyệt đối trong ngành là bộ đệm an toàn trước những cú sốc vĩ mô bất ngờ. Tỷ lệ bao phủ nợ xấu đạt 280%, cao đáng kể so với mức 84% của cả ngành.\n\nĐịnh giá P/B TTM hiện đang ở quanh mức 2.0x, mức thấp nhất 8 năm trong khi tiềm năng lợi nhuận tăng tốc trở lại trong 2 năm kế tiếp như đã đề cập ở trên.\n\nCatalyst hỗ trợ giá cổ phiếu trong 12 tháng tới. Phát hành riêng lẻ 6,5% cho nhà đầu tư nước ngoài, các quỹ ETF FTSE Emerging Markets bắt đầu mua cổ phiếu VCB từ 9/2026 và khả năng hoàn nhập dự phòng trái phiếu khoảng 1,3 nghìn tỷ.\n\nSo với dự báo trước, BSC điều chỉnh tăng lần lượt 10% và 5% dự báo lợi nhuận trước thuế 2",
+   "expected": [
+    "VCB"
+   ],
+   "note": ""
+  },
+  {
+   "id": 22,
+   "source": "cafef",
+   "title": "Một DN sắp trả thêm 1.500 đồng/cp sau năm trả cổ tức kỷ lục, đều đặn \"chia tiền\" suốt 11 năm",
+   "body": "CTCP Tập đoàn Đầu tư DIN Capital (HNX: PDB) vừa thông báo ngày đăng ký cuối cùng để thực hiện quyền tạm ứng cổ tức năm 2026 bằng tiền là 28/9. Với tỷ lệ 15%, cổ đông sở hữu mỗi cổ phiếu PDB sẽ nhận 1.500 đồng. Ngày thanh toán dự kiến là 14/10/2026.\n\nNgày giao dịch không hưởng quyền là 25/9. DIN Capital hiện có hơn 8,9 triệu cổ phiếu đang lưu hành, do đó doanh nghiệp dự kiến chi khoảng 13,4 tỷ đồng cho đợt tạm ứng cổ tức lần này.\n\nĐây là mức cổ tức đã được Đại hội đồng cổ đông thường niên 2026 thông qua, nối dài lịch sử chia cổ tức tiền mặt đều đặn trong 11 năm liền. Trước đó, DIN Capital vừa hoàn tất chi trả cổ tức năm 2025 với tỷ lệ 40% - mức cổ tức tiền mặt cao nhất của DIN Capital kể từ khi niêm yết trên HNX năm 2015.\n\nChính sách cổ tức cao được đưa ra sau một năm kinh doanh tăng trưởng mạnh. Năm 2025, DIN Capital ghi nhận 425,7 tỷ đồng doanh thu thuần, lợi nhuận trước thuế 65,1 tỷ đồng và lợi nhuận sau thuế hợp nhất thuộc về cổ đông công ty mẹ 52 tỷ đồng. Các chỉ tiêu này lần lượt hoàn thành 152%, 383% và 372% kế hoạch năm.\n\nSang năm 2026, doanh nghiệp đặt mục tiêu doanh thu thuần 291,5 tỷ đồng và lợi nhuận sau thuế hợp nhất thuộc về cổ đông công ty mẹ 32 tỷ đồng, đồng thời duy trì kế hoạch cổ tức ở mức 15%. DIN Capital hoạt động chính trong lĩnh vực sản xuất bê tông thương phẩm, vận chuyển và bơm bê tông, với các trạm tại Đà Nẵng và khu vực lân cận.\n\nTrong một diễn biến liên quan, ông Lê Trường Kỹ, Chủ tịch HĐQT, đăng ký bán 440.000 cổ phiếu PDB trong giai đoạn 15/9-13/1",
+   "expected": [],
+   "note": "không doanh nghiệp niêm yết nào được nêu đích danh"
+  },
+  {
+   "id": 23,
+   "source": "tinnhanhchungkhoan",
+   "title": "Thị trường phân bón toàn cầu tránh được cú sốc nguồn cung",
+   "body": "Lượng nhập khẩu ure từ các nền kinh tế vận chuyển hàng hóa qua eo biển Hormuz đã giảm 85% so với mức trước xung đột, do hoạt động giao thông qua tuyến đường thủy này do gần như bị tê liệt. Tuy nhiên, tổng lượng ure nhập khẩu chỉ giảm 6% do các nhà cung cấp thay thế đã tăng lượng hàng xuất khẩu hơn 25%.\n\nTheo Trung tâm Thương mại Quốc tế (ITC), Ai Cập và Nigeria đã tăng xuất khẩu ure lần lượt là 98% và 81% trong giai đoạn này. Dữ liệu cũng cho thấy Mỹ và Nga đã gia tăng thị phần tại các thị trường trọng điểm, trong khi Trung Quốc cũng đẩy mạnh xuất khẩu.\n\nPamela Coke-Hamilton, Giám đốc điều hành của ITC cho biết: \"Các nhà cung cấp mới đã xuất hiện và chuỗi cung ứng cũng có sự điều chỉnh nhất định. Tuy nhiên, điều này đi kèm với cái giá phải trả. Đối với nhiều nước đang phát triển, thách thức giờ đây không còn là tìm kiếm nguồn cung mà là khả năng chi trả cho chúng\".\n\nTrước khi xung đột nổ ra, khoảng 1/3 lượng phân bón chứa nitơ (như ure và amoniac) được giao dịch toàn cầu đã đi qua eo biển Hormuz. Tuyến đường này cũng là nơi vận chuyển gần một nửa lượng lưu huỳnh được giao dịch trên toàn cầu, nguyên liệu cần thiết để chế biến đá phốt phát thành phân bón.\n\nWillis Thomas, Trưởng bộ phận phân bón tại công ty tư vấn CRU nhận định: \"Cách nhanh nhất và chắc chắn nhất dẫn đến khủng hoảng lương thực là thiếu hụt nitơ...đây là dưỡng chất quan trọng nhất mà chúng ta cung cấp cho cây trồng\".\n\nDữ liệu của ITC cũng cho thấy chi phí nhập khẩu ure trung bình trong quý II/2026 đã tăng 70% so ",
+   "expected": [],
+   "note": "không doanh nghiệp niêm yết nào được nêu đích danh"
+  },
+  {
+   "id": 25,
+   "source": "vnexpress",
+   "title": "Mới có hai địa phương hỗ trợ người dân lắp điện mặt trời mái nhà - Báo VnExpress",
+   "body": "Bộ Công Thương đề nghị các địa phương sớm đưa ra chính sách hỗ trợ hộ gia đình lắp điện mặt trời mái nhà tự dùng, tương tự Bắc Ninh và Lai Châu.\n\nNgày 16/9, Bộ Công Thương có văn bản gửi các cơ quan, địa phương và Tập đoàn Điện lực Việt Nam (EVN) về đẩy nhanh phát triển điện mặt trời mái nhà tự sản xuất, tự tiêu thụ.\n\nTheo đó, cơ quan này đề nghị các tỉnh thành sớm có chính sách hỗ trợ hộ gia đình lắp điện mặt trời mái nhà tự dùng. Các địa phương cũng cần tuyên truyền, hướng dẫn người dân lắp điện mặt trời mái nhà gắn với hệ thống lưu trữ điện (BESS).\n\nTheo thống kê của Bộ, đến nay cả nước mới có Bắc Ninh và Lai Châu đưa ra chính sách hỗ trợ hộ gia đình lắp điện mặt trời mái nhà tự dùng.\n\nTại Bắc Ninh, hộ gia đình lắp điện mặt trời mái nhà được hỗ trợ tối đa 1 triệu đồng mỗi kWp, tối đa 3 triệu. Hộ gia đình sẽ được tỉnh hỗ trợ thêm không quá 3 triệu khi lắp thêm hệ thống lưu trữ (BESS), nâng tổng số tiền một hộ có thể nhận lên 6 triệu.\n\nTrong khi đó, Lai Châu hỗ trợ mỗi hộ lắp hệ thống điện mặt trời và thiết bị đi kèm tối đa 50 triệu đồng. Tuy nhiên, chính sách này chủ yếu áp dụng với hộ dân tộc thiểu số, nghèo, cận nghèo hoặc người dân ở nơi chưa có điện lưới. Tính đến tháng 7, khoảng 180 hộ được tỉnh hỗ trợ hệ thống điện mặt trời mái nhà và thiết bị điện sau công tơ là 882.\n\nCuối tháng 8, Hà Nội tính hỗ trợ tới 6 triệu đồng cho hộ lắp điện mặt trời mái nhà. Tuy nhiên, chính sách này cần HĐND thành phố thông qua, trước khi đưa vào triển khai thực tế.\n\nTheo số liệu của EVN, t",
+   "expected": [],
+   "note": "không doanh nghiệp niêm yết nào được nêu đích danh"
+  },
+  {
+   "id": 26,
+   "source": "cafef",
+   "title": "Cổ phiếu SSB tăng 48% trong chưa đầy 1 tháng: Dòng tiền nào đứng sau?",
+   "body": "Cổ phiếu SSB của Ngân hàng TMCP Đông Nam Á (SeABank) tiếp tục gây chú ý trong phiên giao dịch ngày 16/9 khi tăng hết biên độ lên 22.350 đồng/cổ phiếu, đánh dấu phiên tăng trần thứ 3 liên tiếp, đưa vốn hóa ngân hàng lên hơn 76.600 tỷ đồng.\n\nMặc dù gặp áp lực trong nửa đầu phiên sáng và có lúc giảm sàn, nhưng đến 10h30 cổ phiếu này đã nhanh chóng hồi phục và tiếp tục duy trì đà tăng trong suốt phiên chiều, trước khi chốt phiên ở 22.350 đồng/cổ phiếu.\n\nDiễn biến tăng trần 3 phiên liên tiếp đã nối dài chuỗi tăng mạnh hơn 48% của cổ phiếu SSB trong vòng chưa đầy một tháng gần đây, từ mức 15.100 đồng/cổ phiếu (chốt phiên ngày 20/8) lên 22.350 đồng cổ phiếu. Tính riêng từ đầu tháng 9 đến hết phiên ngày 16/9, cổ phiếu này tăng khoảng 22,5%.\n\nĐà tăng giá diễn ra đồng thời với thanh khoản cải thiện rõ rệt. Riêng phiên giao dịch ngày 16/9, đã có hơn 6,2 triệu cổ phiếu SSB được giao dịch khớp lệnh. Trước đó, trong phiên ngày 15/9, cũng có hơn 6,5 triệu cổ phiếu SSB được giao dịch khớp lệnh và gần 5,4 triệu cổ phiếu giao dịch theo phương thức thỏa thuận. Còn phiên ngày 14/9, SSB có gần 5,6 triệu cổ phiếu khớp lệnh và xấp xỉ 38 triệu cổ phiếu giao dịch thỏa thuận, với giá trị thỏa thuận khoảng 690 tỷ đồng.\n\nTính chung từ ngày 25/8 đến nay, lượng cổ phiếu SSB được sang tay qua phương thức thỏa thuận lên tới hơn 167,1 triệu đơn vị, với tổng giá trị tương đương gần 3.000 tỷ đồng.\n\nDòng tiền kỳ vọng khi SSB lọt vào các bộ chỉ số quốc tế\n\nMột trong những yếu tố đáng chú ý nhất đứng sau diễn biế",
+   "expected": [
+    "SSB"
+   ],
+   "note": ""
+  },
+  {
+   "id": 36,
+   "source": "cafef",
+   "title": "Phiên 16/9: Khối ngoại tiếp đà mua ròng, một cổ phiếu ngân hàng được gom hơn 200 tỷ",
+   "body": "Tâm lý thận trọng trước cuộc họp công bố lãi suất của Fed khiến VN-Index giằng co trong biên hẹp trong phiên 16/9. VN-Index chốt phiên giảm nhẹ 1 điểm, tại 1.810 điểm. Thanh khoản neo mức thấp với tổng giá trị giao dịch trên HoSE đạt hơn 14.800 tỷ đồng.\n\nGiao dịch của khối ngoại là điểm cộng khi mua ròng khoảng 237 tỷ đồng cổ phiếu trên toàn thị trường.\n\nTrên HOSE, khối ngoại mua ròng 221 tỷ đồng\n\nTại chiều mua, cổ phiếu SBT được khối ngoại mua mạnh nhất trên HOSE với giá trị hơn 230 tỷ đồng. Theo sau, FPT và BSR là mã tiếp theo được gom mạnh 119 và 112 tỷ đồng.\n\nỞ chiều ngược lại, VHM dẫn đầu danh sách bị bán ròng với 206 tỷ đồng. Theo sau là VIC và VIX, lần lượt bị bán ròng 150 tỷ đồng và 67 tỷ đồng.\n\nTrên HNX, khối ngoại mua ròng 3 tỷ đồng\n\nTại chiều mua, PVS được mua ròng mạnh nhất với giá 25 tỷ đồng. Bên cạnh đó, BVS xếp tiếp theo trong sách mua ròng mạnh trên HNX với 1 tỷ đồng. Ngoài ra, khối ngoại cũng chi vài tỷ đồng để gom ròng MST, KSF.\n\nChiều ngược lại, IDC là mã chịu áp lực bán ròng của khối ngoại với giá trị 18 tỷ đồng; theo sau CEO bị bán 2,1 tỷ, C69, PMS bị bán từ vài tỷ đồng.\n\nTrên UPCOM, khối ngoại mua ròng 13 tỷ đồng\n\nChiều mua, cổ phiếu QNS được khối ngoại mua 8 tỷ đồng. Theo sau, MSR và ACV cũng được mua ròng mỗi mã vài trăm triệu đồng.\n\nNgược chiều, DRI bị khối ngoại bán ròng 1 tỷ đồng. Ngoài ra khối ngoại cũng bán ròng tại , PAT, VEA,...",
+   "expected": [
+    "ACV",
+    "FPT",
+    "PVS",
+    "VHM",
+    "VIC"
+   ],
+   "note": ""
+  },
+  {
+   "id": 41,
+   "source": "cafef",
+   "title": "Áp lực nguồn vốn, nhiều ngân hàng đẩy mạnh phát hành giấy tờ có giá",
+   "body": "Huy động chậm hơn cho vay, áp lực thanh khoản gia tăng\n\nNửa đầu năm 2026 chứng kiến sự lệch pha rõ nét giữa tốc độ tăng trưởng tín dụng và khả năng huy động vốn của hệ thống ngân hàng. Theo báo cáo cập nhật kết quả kinh doanh ngành ngân hàng quý II/2026 của TCBS Research, tín dụng toàn hệ thống tăng 9%, trong đó riêng quý II lượng vốn giải ngân đạt thêm 811.000 tỷ đồng, cao gấp 1,7 lần so với quý trước.\n\nỞ chiều ngược lại, tiền gửi của khu vực dân cư chỉ tăng 5,5% kể từ đầu năm, đưa tổng quy mô huy động lên 13,4 triệu tỷ đồng. Chênh lệch 3,5 điểm % giữa tín dụng và huy động đang trở thành nguyên nhân chính tạo sức ép lên thanh khoản của nhiều ngân hàng.\n\nThực tế, có tới 20 trong số 26 ngân hàng được khảo sát ghi nhận tốc độ tăng tiền gửi thấp hơn tăng trưởng dư nợ. Mặc dù tiền gửi khách hàng vẫn là nguồn vốn quan trọng nhất, tỷ trọng của nguồn vốn này trong tổng nguồn vốn đã giảm từ 64,6% xuống còn 59,8% trong vòng 6 quý gần đây.\n\nBức tranh huy động phân hóa mạnh giữa các nhà băng\n\nDiễn biến huy động vốn không đồng đều giữa các ngân hàng. HDBank dẫn đầu với mức tăng tiền gửi 20,2%, tiếp theo là VPBank với 16,7%. Trong khi đó, nhóm ngân hàng quốc doanh tăng trưởng khá khiêm tốn: VietinBank đạt 5,4%, Vietcombank 3,4% và BIDV 1,7%, dù vẫn sở hữu quy mô huy động lớn nhất thị trường.\n\nỞ chiều giảm, ACB giảm 1,5%, Eximbank giảm 3,8%, SaigonBank giảm 4,3% và Bac A Bank giảm 5,4% về quy mô tiền gửi.\n\nKhông chỉ quy mô, chất lượng nguồn vốn cũng chịu áp lực khi tiền gửi không kỳ hạn (C",
+   "expected": [
+    "ACB",
+    "BID",
+    "CTG",
+    "HDB",
+    "SGB",
+    "VCB",
+    "VPB"
+   ],
+   "note": ""
+  },
+  {
+   "id": 43,
+   "source": "vnexpress",
+   "title": "Dragon Capital đầu tư trở lại cổ phiếu PNJ",
+   "body": "Hai quỹ DCDS và DCDE của Dragon Capital đưa cổ phiếu PNJ trở lại danh mục trong tháng 8, chỉ một tháng sau khi đưa tỷ trọng mã này về 0%.\n\nBáo cáo hoạt động đầu tư tháng 8 cho thấy DCDS - quỹ mở cổ phiếu có quy mô lớn nhất thị trường - sở hữu 690.000 cổ phiếu PNJ của Công ty cổ phần Vàng bạc đá quý Phú Nhuận. Số cổ phiếu này trị giá gần 29,05 tỷ đồng, tương đương 0,46% tổng tài sản quỹ. DCDE - quỹ mở tập trung vào chính sách cổ tức - nắm 55.100 cổ phiếu, trị giá khoảng 2,32 tỷ đồng, chiếm 0,25% tổng tài sản.\n\nTính chung, hai quỹ đang nắm 745.100 cổ phiếu PNJ, trị giá khoảng 31,37 tỷ đồng theo giá 42.100 đồng một cổ phiếu cuối tháng 8. Tuy nhiên, đây chưa phải là mức phân bổ đủ để cho thấy PNJ đang trở thành một trong những khoản đầu tư trọng yếu của hai quỹ.\n\nNhư vậy, Dragon Capital đã bắt đầu rót vốn trở lại PNJ. Trước đó, theo báo cáo tháng 7, PNJ không còn xuất hiện trong danh mục của cả DCDS và DCDE. Ngoài các quỹ mở, nhóm cổ đông liên quan Dragon Capital cũng thoái vốn bớt trong tháng 7. Nhóm này bán hơn 2,5 triệu cổ phiếu, đưa tỷ lệ sở hữu xuống 4,56%, qua đó không còn là cổ đông lớn.\n\nĐộng thái mua vào trở lại diễn ra sau một tháng đầy biến động của PNJ. Cổ phiếu giảm từ trên 63.000 đồng hồi đầu tháng 7 xuống mức đáy 30.750 đồng chỉ sau 3 tuần, mất gần một nửa giá trị, trước khi hồi phục lên 42.100 đồng vào cuối tháng 8. Tính đến cuối phiên hôm nay, thị giá tiếp tục điều chỉnh sụt gần 13% về 36.750 đồng.\n\nTrong tháng 8, ngoài DCDS và DCDE, một số tổ chức nước ngoài khá",
+   "expected": [
+    "PNJ"
+   ],
+   "note": ""
+  },
+  {
+   "id": 54,
+   "source": "vnexpress",
+   "title": "Chuyên gia: Cơ hội gom cổ phiếu giá rẻ vẫn còn",
+   "body": "Định giá cổ phiếu của hầu hết ngành cốt lõi đang thấp hơn mức trung bình nhiều năm, mở ra cơ hội tích lũy trong các nhịp điều chỉnh.\n\nThị trường chứng khoán đang chứng kiến sự giằng co về mặt tâm lý của dòng tiền. Sau nhịp phục hồi trong tháng 8 khi chỉ số VN-Index tăng hơn 5,5% lên trên vùng 1.830 điểm và nhiều nhóm cổ phiếu bứt phá 10-20% từ vùng đáy lịch sử tháng 7, sự thận trọng lại bắt đầu xuất hiện trước các biến số rủi ro ngắn hạn từ kinh tế toàn cầu.\n\nNửa đầu tháng 9, thị trường chủ yếu giằng co rồi điều chỉnh. Đến cuối phiên 14/9, chỉ số còn 1.788 điểm, giảm khoảng 3% so với cuối tháng 8. Thị trường chịu áp lực chốt lời và khối ngoại bán ròng, trong khi nhà đầu tư vẫn chờ dòng vốn liên quan đến quá trình nâng hạng FTSE và quyết định lãi suất của Cục Dự trữ Liên bang Mỹ (Fed).\n\nTuy nhiên, nhiều công ty chứng khoán và đơn vị phân tích đang chỉ ra một mẫu số chung: mặt bằng định giá của thị trường đang ở vùng hấp dẫn. TVS Research nhận định rằng mức P/E (giá thị trường trên lợi nhuận mỗi cổ phiếu) toàn thị trường 12,5 lần vào cuối tháng 8, dù tăng nhẹ so với mức 11,8 lần của tháng 7, nhưng vẫn thấp hơn đáng kể so với mức trung bình 5 năm. Thậm chí, P/E của hầu hết các nhóm ngành kinh doanh cốt lõi vẫn đang duy trì ở vùng thấp hơn mức trung bình nhiều năm, mở ra cơ hội mua tích lũy tốt trong các nhịp điều chỉnh.\n\nĐồng quan điểm, báo cáo chiến lược của SSI Research ghi nhận thị trường chứng khoán đang giao dịch ở mức P/E dự phóng năm 2026 là 12,9 lần. Đặc biệt, nếu loại t",
+   "expected": [],
+   "note": "SSI chỉ xuất hiện trong 'SSI Research' - rule B3"
+  },
+  {
+   "id": 55,
+   "source": "cafef",
+   "title": "Em trai ông Nguyễn Duy Hưng chi hơn trăm tỷ mua cổ phiếu SSI ngay trước “giờ G” nâng hạng",
+   "body": "Ông Nguyễn Hồng Nam, thành viên HĐQT Chứng khoán SSI (mã SSI), vừa thông báo hoàn tất mua 5 triệu cổ phiếu SSI qua đó nâng sở hữu lên 17,43 triệu cổ phiếu (tỷ lệ 0,58% vốn). Giao dịch được thực hiện thông qua phương thức khớp lệnh trong thời gian từ ngày 26/8 đến 11/9.\n\nÔng Nguyễn Hồng Nam là một trong hai người em trai của ông Nguyễn Duy Hưng, Chủ tịch HĐQT SSI. Hiện ông Hưng sở hữu gần 24,5 triệu cổ phiếu, tương ứng 0,81% vốn. Người em trai còn lại là ông Nguyễn Mạnh Hùng đang nắm gần 13 triệu cổ phiếu, tương đương 0,43% vốn SSI.\n\nBên cạnh đó, ông Nguyễn Hồng Nam hiện giữ chức Chủ tịch HĐTV Công ty TNHH Bất động sản Sài Gòn Đan Linh và sở hữu 75% vốn điều lệ. Doanh nghiệp này đang nắm 3,671% vốn tại SSI.\n\nTrên sàn chứng khoán, cổ phiếu SSI đang giao dịch quanh vùng giá 20.000 đồng/cp, giảm 17% so với đầu năm. Tạm tính tại mức thị giá này, ông Nam có thể đã chi hơn 100 tỷ để hoàn tất giao dịch trên.\n\nĐộng thái của \"sếp\" SSI diễn ra ngay trước khi chứng khoán Việt Nam chính thức lên thị trường mới nổi thứ cấp của FTSE Russell vào ngày 21/9. Trước đó, vào ngày 21/8, FTSE Russell đã công bố danh mục chính thức các cổ phiếu Việt Nam được đưa vào bộ chỉ số FTSE Global Equity Index Series (FTSE GEIS), các quỹ ETF theo dõi bộ chỉ số này sẽ hoàn tất cơ cấu muộn nhất vào ngày 18/9 tới đây.\n\nVề tình hình kinh doanh 6 tháng đầu năm 2026, SSI ghi nhận doanh thu 6.652 tỷ đồng và lợi nhuận trước thuế 3.122 tỷ đồng, lần lượt tăng 27% và 39% so với cùng kỳ năm trước. Với kết quả đạt được, c",
+   "expected": [
+    "SSI"
+   ],
+   "note": ""
+  },
+  {
+   "id": 58,
+   "source": "tinnhanhchungkhoan",
+   "title": "Tổng mức trách nhiệm của bảo hiểm nhân thọ đạt 8.111 nghìn tỉ đồng",
+   "body": "Theo số liệu của Hiệp hội Bảo hiểm Việt Nam (IAV), tổng mức trách nhiệm mà các doanh nghiệp bảo hiểm nhân thọ đang bảo hiểm 6 tháng năm 2026 là 8.111 nghìn tỷ đồng, tăng 2% so với cùng kỳ năm ngoái.\n\nTrong đó, mức trách nhiệm của các sản phẩm chính đạt 5.107 nghìn tỷ đồng (giảm 1,8%), mức trách nhiệm của các sản phẩm bán kèm đạt 3.005 nghìn tỷ đồng (tăng 11%). Tổng mức trách nhiệm của các sản phẩm bảo hiểm cá nhân đạt 8.013 nghìn tỷ đồng (tăng 2,4%) và các sản phẩm bảo hiểm nhóm đạt 98 nghìn tỷ đồng (tăng 8,7%).\n\nCác doanh nghiệp có tổng mức trách nhiệm cao trên thị trường bảo hiểm là: Dai- ichi Life 1.740 nghìn tỷ đồng, Manulife 1.094 nghìn tỷ đồng, AIA 1.089 nghìn tỷ đồng, Prudential 867 nghìn tỷ đồng và Bảo Việt Nhân thọ 838 nghìn tỷ đồng.\n\nCũng theo Hiệp hội Bảo hiểm Việt Nam, tổng số tiền bảo hiểm các doanh nghiệp đã chi trả 6 tháng năm 2026 cho các sản phẩm bảo hiểm là 35.162 tỷ đồng, tăng 21% với cùng kỳ năm trước.\n\nTrong đó: Số tiền bảo hiểm các doanh nghiệp đã chi trả 6 tháng năm 2026 cho hợp đồng năm thứ 1 là 1.286 tỷ đồng, chiếm 3,7% tổng số tiền bảo hiểm các doanh nghiệp đã chi trả cho các sản phẩm bảo hiểm. Số tiền bảo hiểm các doanh nghiệp đã chi trả 6 tháng năm 2026 cho hợp đồng năm thứ 2 là 603 tỷ đồng, chiếm 1,7% tổng số tiền bảo hiểm các doanh nghiệp đã chi trả cho các sản phẩm bảo hiểm. Số tiền bảo hiểm các doanh nghiệp đã chi trả 6 tháng năm 2026 cho hợp đồng năm thứ 3+ là 33.272 tỷ đồng, chiếm 94,6% tổng số tiền bảo hiểm các doanh nghiệp đã chi trả cho cá",
+   "expected": [
+    "BVH"
+   ],
+   "note": ""
+  },
+  {
+   "id": 63,
+   "source": "vnexpress",
+   "title": "Đại diện VCCI: Nguồn thu ngân sách tập trung ở số ít doanh nghiệp",
+   "body": "Việc số thuế đã nộp của 20 doanh nghiệp đứng đầu chiếm 62% Top 200 cho thấy Việt Nam đã hình thành những tập đoàn lớn nhưng theo VCCI, vẫn có thể tiềm ẩn rủi ro.\n\nTại tọa đàm về nguồn lực tăng trưởng quốc gia chiều 15/9, ông Đậu Anh Tuấn, Phó tổng thư ký kiêm Trưởng ban Pháp chế Liên đoàn Thương mại và Công nghiệp Việt Nam (VCCI), phân tích về mức độ tập trung lớn trong cơ cấu đóng góp ngân sách.\n\nTheo bảng xếp hạng VNTAX 2026 do CafeF công bố, tổng số thực nộp ngân sách năm 2025 của 200 doanh nghiệp lớn nhất đạt 989.300 tỷ đồng, tăng 25% so với kỳ trước và tương đương 37,3% tổng thu ngân sách cả nước.\n\nTrong Top 200, 20 doanh nghiệp đứng đầu nộp khoảng 614.000 tỷ đồng (chiếm 62,1%). Top 100 cũng đóng góp 92%, trong khi 100 doanh nghiệp còn lại chỉ chiếm khoảng 8% nguồn thu.\n\nTheo ông Tuấn, số liệu này cho thấy nguồn thu đang phụ thuộc đáng kể vào một nhóm rất nhỏ doanh nghiệp. Đây là thế mạnh khi Việt Nam đã hình thành những tập đoàn quy mô lớn. Song điều này cũng tạo rủi ro cho nguồn thu ngân sách nếu các doanh nghiệp dẫn đầu suy giảm sức khỏe tài chính hoặc khó khăn trong kinh doanh.\n\nMức độ tập trung còn thể hiện qua phần tăng thêm của nguồn thu. Tổng đóng góp ngân sách của nhóm 200 doanh nghiệp tăng khoảng 195.300 tỷ đồng trong năm 2025. Riêng Vingroup đóng góp gần 47% mức tăng này, với số nộp 148.773 tỷ đồng, so với 56.200 tỷ đồng một năm trước. Nếu loại doanh nghiệp này, mức tăng của 199 đơn vị còn lại khoảng 13,9%.\n\n\"Một đỉnh cao mới đã xuất hiện, nhưng cần củng cố nề",
+   "expected": [
+    "GAS",
+    "VIC"
+   ],
+   "note": ""
+  },
+  {
+   "id": 66,
+   "source": "tinnhanhchungkhoan",
+   "title": "Giao dịch chứng khoán khối ngoại ngày 16/9: Tiếp tục mua ròng gần 260 tỷ đồng",
+   "body": "Trên sàn giao dịch HOSE, nhà đầu tư nước ngoài mua vào 77,07 triệu đơn vị, tổng giá trị đạt 2.689,12 tỷ đồng, giảm 23% về khối lượng và 12,5% về giá trị so với phiên trước đó (ngày 15/9).\n\nỞ chiều ngược lại, khối này bán ra 72,36 triệu đơn vị, giá trị đạt 2.446,09 đồng, tăng 2% về khối lượng và 3,8% về giá trị so với phiên trước.\n\nTheo đó, nhà đầu tư nước ngoài đã mua ròng 4,7 triệu đơn vị, giá trị mua ròng tương ứng đạt 243 tỷ đồng, giảm 83,9% về lượng và giảm 66,2% về giá trị so với phiên trước đó.\n\nHôm nay, khối ngoại mua ròng mạnh nhất cổ phiếu SBT với khối lượng 9,49 triệu đơn vị, giá trị mua ròng tương ứng đạt 230,9 tỷ đồng. Theo sau là FPT được mua ròng 119,3 tỷ đồng và BSR được mua ròng 112,6 tỷ đồng.\n\nMặt khác, khối này vẫn tập trung bán mạnh 2 cổ phiếu lớn nhà Vin, gồm VHM bị bán ròng 205,6 tỷ đồng và VIC bị bán ròng 149,2 tỷ đồng.\n\nTrên sàn giao dịch HNX, khối ngoại mua vào 2,32 triệu đơn vị, giá trị đạt 76,03 tỷ đồng, tăng 79% về lượng và tăng 104,5% về giá trị so với phiên trước đó.\n\nỞ chiều ngược lại, khối này bán ra 2,48 triệu đơn vị, giá trị bán ra đạt 73,14 tỷ đồng, tăng 107,8% về lượng và 90,2% về giá trị so với phiên trước.\n\nDo đó, nhà đầu tư nước ngoài đã bán ròng 0,16 triệu đơn vị, giá trị là mua ròng 2,89 tỷ đồng; trong khi phiên trước đó mua ròng 0,1 triệu đơn vị, tổng giá trị là bán ròng 1,28 tỷ đồng.\n\nHôm nay, khối ngoại mua ròng mạnh nhất cổ phiếu PVS với khối lượng 90,71 triệu đơn vị, giá trị mua ròng đạt 24,64 tỷ đồng; trong khi bán ròng mạnh nhất ",
+   "expected": [
+    "FPT",
+    "PVS",
+    "VHM",
+    "VIC"
+   ],
+   "note": ""
+  },
+  {
+   "id": 71,
+   "source": "vnexpress",
+   "title": "Nhà đầu tư ngoại gom hàng trước ngày nâng hạng chứng khoán",
+   "body": "Một tuần trước khi chứng khoán Việt Nam chính thức nâng hạng, khối ngoại mua ròng hơn 30 triệu cổ phiếu, mức cao nhất kể từ tháng 4.\n\nChứng khoán Việt Nam sẽ chính thức được FTSE Russell nâng hạng từ nhóm cận bên lên mới nổi thứ cấp vào ngày 21/9. Các quỹ mô phỏng chỉ số được dự đoán giải ngân đợt đầu tiên khoảng 240 triệu USD vào cuối tuần này. Song, thực tế cho thấy dòng tiền nước ngoài đã nhập cuộc ngay những phiên đầu tuần.\n\nKhối ngoại đang rót tiền hai phiên liên tiếp với giá trị mua ròng tổng cộng 1.500 tỷ đồng, còn khối lượng hơn 55 triệu cổ phiếu. Riêng hôm nay, khối ngoại gom ròng hơn 30 triệu cổ phiếu, mức cao nhất 5 tháng qua.\n\nDòng tiền nước ngoài chủ yếu chảy vào cổ phiếu ngân hàng. VPB, MBB, SHB, SSB, VCB, CTG và BID lần lượt góp mặt trong danh sách được mua nhiều nhất.\n\nĐiều này góp phần giúp chỉ số đại diện cho sàn TP HCM cắt chuỗi điều chỉnh mạnh, lấy lại sắc xanh với mức tăng gần 23 điểm. VN-Index đóng cửa tại 1.811 điểm, còn VN30 vượt 1.950 điểm. Sàn TP HCM được bao phủ bởi sắc xanh khi có 222 mã tăng, còn bên giảm chỉ 86 mã.\n\nTheo nhóm phân tích Công ty Chứng khoán Rồng Việt, tác động của sự kiện nâng hạng tới điểm số VN-Index không quá lớn nhưng nghiêng về phía tích cực. Ảnh hưởng sẽ rõ nét hơn ở từng cổ phiếu khi phải hấp thụ lực cung hoặc cầu lớn so với thanh khoản.\n\nDiễn biến tại những thị trường từng được FTSE Russell nâng hạng cho thấy thanh khoản trong tháng nâng hạng có hiệu lực cao gấp 1-3 lần bình quân 12 tháng trước đó. Sau đó, dòng tiền thường ",
+   "expected": [
+    "BID",
+    "CTG",
+    "MBB",
+    "SHB",
+    "SSB",
+    "VCB",
+    "VPB"
+   ],
+   "note": ""
+  },
+  {
+   "id": 72,
+   "source": "cafef",
+   "title": "Doanh nghiệp của đại gia Nguyễn Đức Tài vừa lập kỷ lục chưa từng có",
+   "body": "CTCP Đầu tư Thế Giới Di Động (HoSE: MWG) do ông Nguyễn Đức Tài sáng lập vừa cập nhật tình hình kinh doanh 8 tháng đầu năm 2026, ghi nhận đà tăng trưởng tích cực ở các chuỗi bán lẻ.\n\nTheo đó, doanh thu hợp nhất của MWG trong 8 tháng đạt khoảng 129.431 tỷ đồng, tăng 30% so với cùng kỳ năm trước, hoàn thành 70% kế hoạch doanh thu 185.000 tỷ đồng cả năm.\n\nTrong cơ cấu doanh thu, Thế Giới Di Động đóng góp 22,5%, Điện máy Xanh 44,5%, Bách Hóa Xanh 31% và các hoạt động khác chiếm 2%.\n\nĐáng chú ý, Bách Hóa Xanh tiếp tục ghi nhận tốc độ tăng trưởng cao. Doanh thu lũy kế 8 tháng đạt khoảng 40.100 tỷ đồng, tăng gần 32% so với cùng kỳ. Đây là lần đầu tiên trong năm nay tốc độ tăng doanh thu lũy kế của chuỗi vượt mốc 30%.\n\nRiêng tháng 8, Bách Hóa Xanh đạt khoảng 6.200 tỷ đồng doanh thu, tăng 55% so với cùng kỳ và tăng 11% so với tháng trước. Đây là mức doanh thu cao nhất trong một tháng kể từ khi chuỗi đi vào hoạt động. Tính bình quân, mỗi ngày Bách Hóa Xanh ghi nhận khoảng 200 tỷ đồng doanh thu.\n\nTheo MWG, tăng trưởng của chuỗi chủ yếu đến từ hai ngành hàng là thực phẩm tươi sống và hàng tiêu dùng nhanh (FMCG).\n\nCùng với tăng trưởng doanh thu, Bách Hóa Xanh cũng đẩy nhanh tốc độ mở rộng mạng lưới. Trong 7 tháng đầu năm, chuỗi mở mới 819 cửa hàng. Riêng tháng 8, gần 200 điểm bán được bổ sung, đưa tổng số cửa hàng mở mới trong 8 tháng lên hơn 1.000.\n\nĐáng chú ý, nhóm cửa hàng mới đã ghi nhận lợi nhuận hoạt động dương ở cấp độ cửa hàng sau khi tính cả chi phí kho vận. Đến cuối tháng 8/2026,",
+   "expected": [
+    "MWG"
+   ],
+   "note": ""
+  },
+  {
+   "id": 76,
+   "source": "cafef",
+   "title": "Doanh nghiệp gần 100.000 tỷ triệu tập họp bất thường, dự kiến chào bán trái phiếu kèm chứng quyền",
+   "body": "CTCP Đầu tư Điện máy xanh (DMX) vừa công bố Nghị quyết HĐQT về việc triệu tập Đại hội đồng cổ đông (ĐHĐCĐ) bất thường năm 2026.\n\nTheo đó, ĐHĐCĐ bất thường dự kiến được tổ chức vào ngày 29/10/2026. Ngày đăng ký cuối cùng để chốt danh sách cổ đông tham dự là 5/10/2026. Cuộc họp được tổ chức theo hình thức kết hợp trực tiếp và trực tuyến.\n\nMột trong những nội dung đáng chú ý tại đại hội là phương án chi trả cổ tức bằng tiền mặt từ nguồn lợi nhuận chưa phân phối năm 2026. Bên cạnh đó, HĐQT DMX cũng dự kiến trình cổ đông thông qua phương án chào bán trái phiếu kèm chứng quyền riêng lẻ.\n\nNgoài các nội dung trên, đại hội cũng sẽ xem xét một số vấn đề khác thuộc thẩm quyền quyết định của Chủ tịch HĐQT đưa vào chương trình họp. Các nội dung chi tiết về thời gian, địa điểm tổ chức và tài liệu đại hội sẽ được DMX công bố trong thư mời họp gửi tới cổ đông.\n\nỞ một diễn biến khác, ông Đoàn Văn Hiểu Em, Tổng Giám đốc DMX mới đây đăng ký mua vào 732.000 cổ phiếu DMX trong thời gian từ 10/9 đến 9/10/2026 nhằm mục đích tăng sở hữu. Nếu mua thành công lượng cổ phiếu trên, ông Đoàn Văn Hiểu Em sẽ nâng sở hữu từ 4,1 triệu cổ phiếu lên 4,83 triệu cổ phiếu, tương đương tỷ lệ sở hữu tăng từ 0,32% lên 0,38% vốn Điện Máy Xanh.\n\nĐiện Máy Xanh là công ty con của CTCP Đầu tư Thế Giới Di Động (mã: MWG, sàn HoSE). Công ty này quản lý các chuỗi bán lẻ điện thoại, điện máy và thiết bị di động. Ngoài hoạt động bán lẻ cốt lõi, doanh nghiệp còn mở rộng nguồn thu từ dịch vụ tài chính, bảo hành, sửa chữa và lắp đ",
+   "expected": [
+    "DMX",
+    "MWG"
+   ],
+   "note": "thân bài nêu đích danh 'CTCP Đầu tư Điện máy xanh (DMX)'; nhãn ban đầu chỉ đọc tiêu đề nên thiếu DMX"
+  },
+  {
+   "id": 79,
+   "source": "vnexpress",
+   "title": "Một cổ phiếu ngân hàng lên cao nhất 3 năm",
+   "body": "SSB của SeABank liên tục tăng trần và lên mức cao nhất kể từ tháng 7/2023 nhờ được nhiều quỹ nước ngoài thêm vào rổ chỉ số.\n\nCổ phiếu của Ngân hàng Đông Nam Á (SeABank, mã chứng khoán: SSB) đang nối chuỗi tăng 4 phiên liên tiếp, trong đó hai phiên gần nhất đều chạm trần. Mã này hiện quanh 20.900 đồng và không có bên bán, trong khi khối lượng chờ mua giá trần xấp xỉ một triệu đơn vị.\n\nNhịp tăng của SSB được kích hoạt từ cuối tháng 8, khi FTSE Russell công bố kết quả kỳ rà soát bán niên và đưa cổ phiếu này vào rổ chỉ số FTSE Global All Cap Index. Thay đổi dự kiến có hiệu lực từ ngày 21/9, cùng thời điểm thị trường chứng khoán được nâng hạng từ cận biên lên mới nổi thứ cấp.\n\nSSB là đại diện duy nhất của Việt Nam được thêm vào MarketVector Vietnam Local Index - chỉ số tham chiếu của quỹ VanEck Vietnam ETF. Trong giai đoạn tái cơ cấu danh mục, quỹ dự tính mua khoảng 13,2 triệu cổ phiếu SSB.\n\n\"Điều này có thể giúp SSB được nhiều quỹ và nhà đầu tư quốc tế theo dõi hơn, kéo theo cơ hội gia tăng thanh khoản, thu hút dòng tiền và hỗ trợ giá cổ phiếu\", SeABank viết trong thông cáo báo chí ngày 26/8.\n\nSSB đã tăng 40% so với \"chân sóng\" cách đây 3 tuần. Mức này vượt xa hiệu suất cùng giai đoạn của các mã đầu ngành như VCB (+4%), BID (+2%), CTG (-3%). Vốn hóa thị trường của ngân hàng nhờ đó vượt 72.000 tỷ đồng.\n\nSSB hút mạnh dòng tiền trong lẫn ngoài nước giữa sóng tăng. Phiên hôm qua ghi nhận giá trị sang tay đột biến với gần 800 tỷ đồng. Nhà đầu tư nước ngoài đang có chuỗi mua ròng 4 phi",
+   "expected": [
+    "BID",
+    "CTG",
+    "SSB",
+    "VCB"
+   ],
+   "note": ""
+  },
+  {
+   "id": 80,
+   "source": "cafef",
+   "title": "Ông Đặng Phan Tường bị khởi tố, doanh nghiệp triệu tập họp bất thường",
+   "body": "Tổng công ty Thiết bị điện Đông Anh - CTCP (EEMC, mã chứng khoán: TBD) vừa công bố nghị quyết HĐQT về việc triệu tập Đại hội đồng cổ đông bất thường năm 2026.\n\nTheo nghị quyết được ban hành ngày 15/9, ngày đăng ký cuối cùng để cổ đông thực hiện quyền tham dự đại hội là 6/10. Cuộc họp dự kiến diễn ra ngày 7/11 tại trụ sở chính của EEMC, số 189 đường Lâm Tiên, xã Thư Lâm, Hà Nội.\n\nTrước đó, ngày 13/9, Tổng Công ty Thiết bị điện Đông Anh - Công ty Cổ phần (EEMC) đã công bố thông tin bất thường liên quan đến ông Đặng Phan Tường - Thành viên Hội đồng quản trị Công ty.\n\nTheo thông báo từ EEMC, doanh nghiệp đã nhận được thông báo của Cơ quan Cảnh sát Điều tra Bộ Công an (C01) về việc khởi tố bị can đối với ông Đặng Phan Tường trong quá trình điều tra vụ án hình sự xảy ra tại Tổng công ty Truyền tải điện Quốc gia (EVNNPT), Công ty Cổ phần Tập đoàn PC1 và các công ty có liên quan.\n\nĐược biết, ông Đặng Phan Tường sinh năm 1965, tại Hà Nội. Ông giữ chức thành viên HĐQT Tổng Công ty Thiết bị điện Đông Anh từ tháng 11/2024. Ông có nhiều năm giữ chức Chủ tịch HĐTV Tổng Công ty Truyền tải điện Quốc gia.\n\nTới ngày ngày 14/9, Tập đoàn GELEX cũng đã thông tin liên quan đến ông Đặng Phan Tường - giữ chức vụ Thành viên Hội đồng quản trị Công ty Cổ phần Điện lực GELEX (GELEX Electric) và một số công ty thành viên trong hệ thống.\n\nTheo GELEX, vụ việc liên quan đến cá nhân ông Tường, phát sinh từ giai đoạn trước khi ông tham gia công tác tại hệ thống GELEX. Tập đoàn khẳng định vụ việc không liên qu",
+   "expected": [
+    "GEX"
+   ],
+   "note": ""
+  },
+  {
+   "id": 84,
+   "source": "cafef",
+   "title": "Tỷ phú Trần Đình Long đầu tư vào xe điện",
+   "body": "Ngày 14/9/2026, Công ty Thép Hòa Phát Dung Quất tiếp nhận hàng loạt phương tiện điện hóa, bao gồm máy xúc lật điện và xe đầu kéo điện. Đây là hoạt động nằm trong chiến lược chuyển đổi sử dụng phương tiện, thiết bị sử dụng điện, hướng tới xanh hóa sản xuất và phát triển bền vững.\n\nCụ thể hơn, Công ty Cổ phần Thép Hòa Phát Dung Quất phối hợp với Công ty TNHH Máy Móc FULI Việt Nam, đại lý ủy quyền của Tập đoàn SANY tại Việt Nam, tổ chức bàn giao 20 phương tiện điện mới.\n\nLô phương tiện gồm 10 máy xúc lật điện SANY SW956E và 10 xe đầu kéo điện SANY EV550-425. Các phương tiện này sẽ phục vụ hoạt động sản xuất và vận chuyển trong khu liên hợp. Việc chuyển dần từ phương tiện sử dụng nhiên liệu hóa thạch sang thiết bị chạy điện được kỳ vọng góp phần giảm tiêu thụ nhiên liệu, hạn chế phát thải trực tiếp trong quá trình vận hành và cải thiện môi trường làm việc.\n\nPhát biểu tại sự kiện, ông Hoàng Ngọc Phượng – Phó Giám đốc Thép Hòa Phát Dung Quất cho biết, Công ty đầu tư đội phương tiện hiện đại, sử dụng công nghệ xanh giúp giảm tiêu thụ nhiên liệu hóa thạch, hạn chế phát thải lên môi trường và góp phần tối ưu chi phí vận hành của Khu liên hợp. Điều này cho thấy trách nhiệm xã hội và cam kết của Công ty trong việc chuyển đổi xanh, giúp doanh nghiệp nâng cao năng lực cạnh tranh, đáp ứng các tiêu chuẩn môi trường ngày càng khắt khe của thị trường trong nước và quốc tế.\n\nViệc điện hóa đội phương tiện diễn ra trong bối cảnh Hòa Phát đang đẩy mạnh nhiều giải pháp tiết kiệm và tự chủ năng lượ",
+   "expected": [
+    "HPG"
+   ],
+   "note": ""
+  },
+  {
+   "id": 85,
+   "source": "tinnhanhchungkhoan",
+   "title": "Phiên giao dịch chiều 16/9: Tâm điểm SSB, VN-Index giằng co quanh 1.810 điểm",
+   "body": "Sau phiên hồi phục mạnh trước đó, VN-Index bước vào phiên 16/9 trong trạng thái giằng co khi tiến sát vùng kháng cự 1.830-1.840 điểm. Dòng tiền chưa thực sự trở lại mạnh, nhưng vẫn luân chuyển giữa một số nhóm cổ phiếu, với dầu khí là nhóm thu hút sự chú ý trong phiên sáng.\n\nSang phiên chiều, trạng thái thận trọng tiếp tục chi phối. VN-Index chủ yếu dao động quanh tham chiếu. Đáng chú ý, đồ thị trong phiên xuất hiện một nhịp rơi rất mạnh về cuối phiên, song lực cầu nhanh chóng nhập cuộc giúp chỉ số hồi phục, qua đó hạn chế đáng kể mức giảm khi đóng cửa.\n\nChốt phiên sáng, VN-Index giảm 1,04 điểm (-0,06%) xuống 1.810,11 điểm với 116 mã tăng, bằng phiên sáng, trong khi số mã giảm là 194 mã, nhiều hơn 10 mã so với phiên sáng. Tổng khối lượng giao dịch đạt 593 triệu đơn vị, giá trị 14.845 tỷ đồng, giảm gần 8% về khối lượng và 11% về giá trị so với phiên hôm qua. Trong đó, giao dịch thỏa thuận đóng góp 146 triệu đơn vị, giá trị 2.848,5 tỷ đồng. Đây là phiên có thanh khoản thấp nhất trong 4 phiên gần đây.\n\nTâm điểm đáng chú ý nhất trên HOSE là SSB. Sau 4 phiên tăng liên tiếp với tổng mức tăng hơn 18%, trong đó có 2 phiên tăng trần, cổ phiếu này chịu áp lực chốt lời mạnh và có thời điểm bị kéo xuống giá sàn 19.450 đồng. Tuy nhiên, lực cầu nhanh chóng hấp thụ lượng cung, giúp SSB đảo chiều mạnh và đóng cửa ở mức kịch trần 22.350 đồng, với hơn 6,2 triệu đơn vị được sang tay.\n\nDiễn biến của SSB cho thấy dòng tiền vẫn sẵn sàng tham gia ở những cổ phiếu có câu chuyện và động lượng riêng, ",
+   "expected": [
+    "SSB"
+   ],
+   "note": ""
+  },
+  {
+   "id": 90,
+   "source": "vnexpress",
+   "title": "Ngân hàng Nhà nước nâng tỷ giá trung tâm lên kỷ lục",
+   "body": "Tỷ giá tham chiếu USD/VND tăng vọt lên mức kỷ lục 25.617 đồng trước cuộc họp quan trọng của Cục Dự trữ liên bang Mỹ (Fed).\n\nSau hai tuần giảm nhiệt, tỷ giá trung tâm đã bật mạnh trở lại. Ngân hàng Nhà nước sáng 15/9 nâng mức tham chiếu cho mỗi đồng bạc xanh lên 25.617 đồng, tăng 10 đồng so với hôm qua và vượt đỉnh cũ thiết lập vào cuối tháng trước (tỷ giá trung tâm từng lên cao nhất 25.615 đồng vào ngày 25/8 và lặp lại vào 3/9).\n\nNhà điều hành tăng mạnh tỷ giá trung tâm trong bối cảnh quyết định lãi suất của Fed sẽ được đưa ra sau cuộc họp hôm nay và ngày mai. Nhiều tổ chức trong lẫn ngoài nước đang đặt cược vào khả năng Fed tăng lãi suất thêm 25 điểm cơ bản, đánh dấu lần nâng lãi đầu tiên kể từ 2023.\n\n\"Quyết định của Fed là yếu tố chi phối chính với chỉ số DXY (thước đo sức mạnh đồng bạc xanh) và tỷ giá USD/VND tuần này\", nhóm phân tích Công ty Chứng khoán Yuanta Việt Nam viết trong báo cáo tiền tệ công bố hôm qua.\n\nĐồng quan điểm, Trung tâm kinh doanh ngoại hối VietinBank cho rằng thị trường có thể biến động mạnh quanh thời điểm Fed công bố quyết định. Nếu cơ quan này đưa ra thông điệp cứng rắn hơn dự kiến, đồng bạc xanh có khả năng mở rộng đà tăng.\n\nTỷ giá trung tâm được Ngân hàng Nhà nước cập nhật hàng ngày và tính toán dựa trên diễn biến tỷ giá thị trường liên ngân hàng, rổ tiền tệ các đối tác thương mại lớn, cân đối vĩ mô và mục tiêu chính sách. Đây là tham chiếu để các ngân hàng thương mại điều chỉnh giá giao dịch thực tế trong biên độ 5%.\n\nGiá USD ngân hàng sáng nay c",
+   "expected": [
+    "CTG"
+   ],
+   "note": "VND trong 'USD/VND' là đơn vị tiền tệ - rule B2"
+  },
+  {
+   "id": 94,
+   "source": "vnexpress",
+   "title": "Sắp diễn ra hội nghị đầu tư Techcombank tại Hà Nội",
+   "body": "Hội nghị đầu tư Techcombank 2026 với chủ đề \"Việt Nam phồn vinh: Kiến tạo và trao truyền giá trị qua các thế hệ\", dự kiến diễn ra ngày 19/9 tại khách sạn Fairmont.\n\nTechcombank Investment Summit là diễn đàn đầu tư thường niên do Techcombank tổ chức, tập trung thảo luận các động lực tăng trưởng, cơ hội đầu tư và những vấn đề kinh tế dài hạn của Việt Nam. Năm nay, sự kiện dự kiến có sự tham gia của đại diện lãnh đạo cấp cao Chính phủ, các nhà đầu tư, chuyên gia kinh tế và lãnh đạo doanh nghiệp trong, ngoài nước.\n\nTheo ban tổ chức, các phiên thảo luận sẽ tập trung vào phát triển hạ tầng, thị trường vốn, tài chính và vai trò của khu vực doanh nghiệp trong việc huy động, phân bổ nguồn lực cho tăng trưởng. Diễn đàn cũng đặt vấn đề về cách chuyển hóa các cơ hội phát triển thành năng lực cạnh tranh và giá trị dài hạn cho nền kinh tế.\n\nBước sang năm 2026, Việt Nam đứng trước yêu cầu chuyển hóa khát vọng tăng trưởng thành những chương trình hành động cụ thể, đòi hỏi năng lực triển khai quyết liệt từ Chính phủ, các địa phương, tổ chức ngành nghề cùng những doanh nghiệp dẫn dắt.\n\nTrong bối cảnh đó, Techcombank Summit 2026 tập trung tìm kiếm những động lực có thể tạo bước tiến mới cho nền kinh tế, từ đổi mới sáng tạo, công nghệ, nguồn nhân lực chất lượng cao đến thị trường vốn và hội nhập quốc tế.\n\nTheo ban tổ chức, một trong những nội dung trọng tâm của hội nghị là tìm lời giải cho bài toán duy trì tốc độ tăng trưởng cao nhưng đồng thời củng cố năng lực nội sinh của nền kinh tế. Trong đó",
+   "expected": [
+    "TCB"
+   ],
+   "note": ""
+  },
+  {
+   "id": 103,
+   "source": "cafef",
+   "title": "Vừa bán sạch PNJ một tháng trước, hai quỹ do Dragon Capital quản lý bất ngờ ‘quay xe’ mua lại",
+   "body": "DCDS và DCDE mở lại vị thế với tỷ trọng thấp\n\nCuối tháng 8, Quỹ Đầu tư Chứng khoán Năng động DC (DCDS) nắm 690.000 cổ phiếu PNJ, còn Quỹ Đầu tư Cổ phiếu Tập trung Cổ tức DC (DCDE) sở hữu 55.100 cổ phiếu. Tổng lượng mua mới của hai quỹ do Dragon Capital quản lý đạt 745.100 đơn vị.\n\nTính theo mức giá 42.100 đồng/cp tại phiên cuối tháng, hai khoản đầu tư có tổng giá trị khoảng 31,4 tỷ đồng, gồm hơn 29 tỷ đồng tại DCDS và khoảng 2,3 tỷ đồng tại DCDE. Tỷ trọng PNJ tương ứng đạt khoảng 0,5% giá trị tài sản ròng của DCDS và 0,27% tại DCDE, thấp hơn đáng kể so với giai đoạn trước.\n\nMột tháng trước đó, cả DCDS và DCDE đều đã bán hết PNJ sau quá trình liên tục giảm tỷ trọng. Riêng DCDS thoái toàn bộ số cổ phiếu còn lại ở vùng giá khoảng 47.000-48.000 đồng/cp khi Dragon Capital tăng cường quản trị rủi ro trước những diễn biến tại doanh nghiệp.\n\nPNJ trở lại danh mục của cả DCDS và DCDE trong tháng 8 với quy mô phân bổ thấp hơn nhiều so với trước. Hai quỹ chuyển từ trạng thái không còn nắm giữ sang mở lại vị thế chỉ trong vòng một tháng.\n\nPNJ giảm hơn 50% trước khi DCDS, DCDE và một số tổ chức ngoại tăng sở hữu\n\nTháng 7 là giai đoạn biến động mạnh của PNJ. Cổ phiếu giảm từ 63.000 đồng/cp cuối tháng 6 xuống 31.000 đồng/cp cuối tháng 7, mất hơn 50% giá trị; khối ngoại bán ròng khoảng 28,4 triệu cổ phiếu, trị giá hơn 1.057 tỷ đồng.\n\nSố quỹ sở hữu PNJ giảm từ 50 xuống 26 trong cùng tháng, còn tổng lượng cổ phiếu nắm giữ thu hẹp từ hơn 64,45 triệu xuống khoảng 28 triệu đơn vị. Lượng PNJ trong ",
+   "expected": [
+    "PNJ"
+   ],
+   "note": ""
+  },
+  {
+   "id": 107,
+   "source": "cafef",
+   "title": "Khối ngoại trở lại trước giờ G, cổ phiếu nào được săn đón nhất?",
+   "body": "Thị trường chứng khoán Việt Nam đang bước vào tuần giao dịch có ý nghĩa quan trọng khi ngày nâng hạng chính thức đã cận kề. Bên cạnh diễn biến hồi phục của VN-Index và sự trở lại của nhóm cổ phiếu vốn hóa lớn, một tín hiệu đáng chú ý khác đến từ dòng tiền ngoại.\n\nSau thời gian liên tục bán ròng, nhà đầu tư nước ngoài bắt đầu có động thái mua vào trở lại, tập trung ở những cổ phiếu có quy mô lớn và được kỳ vọng hưởng lợi từ quá trình nâng hạng.\n\nDòng tiền này chưa đủ để khẳng định xu hướng bán ròng đã hoàn toàn đảo chiều. Tuy nhiên, việc khối ngoại mua ròng trong hai phiên gần đây, cùng thời điểm nhóm ngân hàng và nhiều blue-chip hồi phục, đang tạo thêm điểm tựa cho thị trường trước các phiên giao dịch được dự báo có biến động lớn.\n\nDanh sách được nhà đầu tư nước ngoài quan tâm trong những phiên gần đây có sự hiện diện đáng kể của các cổ phiếu ngân hàng như VCB, BID, SSB, HDB, VPB, SHB cùng một số mã khác như FPT, VPL.\n\nĐây đều là những cổ phiếu có vốn hóa hoặc thanh khoản lớn, đồng thời nằm trong nhóm được thị trường theo dõi sát trước thời điểm FTSE Russell nâng hạng chứng khoán Việt Nam.\n\nViệc dòng tiền ngoại quay lại các mã này vì thế không chỉ mang ý nghĩa hỗ trợ giá trong ngắn hạn, mà còn cho thấy hoạt động cơ cấu danh mục đang bắt đầu được phản ánh rõ hơn trên thị trường.\n\nDù vậy, dòng tiền chưa phân bổ đồng đều cho toàn bộ nhóm cổ phiếu được kỳ vọng hưởng lợi từ nâng hạng. Một số mã nằm trong danh sách dự kiến được các quỹ mua vào mạnh vẫn chưa ghi nhận lực cầu nổi bật",
+   "expected": [
+    "BID",
+    "FPT",
+    "HDB",
+    "SHB",
+    "SSB",
+    "VCB",
+    "VPB"
+   ],
+   "note": ""
+  },
+  {
+   "id": 109,
+   "source": "vnexpress",
+   "title": "Ngân hàng nào đang cho vay kinh doanh bất động sản nhiều nhất?",
+   "body": "VPBank, SHB, Techcombank và MB có gần 900.000 tỷ đồng dư nợ kinh doanh bất động sản, còn VIB, TPBank dẫn đầu về tốc độ tăng trong nửa đầu năm.\n\nTheo báo cáo tài chính hợp nhất 6 tháng đầu năm, 4 nhà băng VPBank, SHB, Techcombank và MB có dư nợ cho vay kinh doanh bất động sản lớn nhất hệ thống.\n\nTính đến cuối quý II, quy mô cho vay mảng này tại VPBank khoảng 296.000 tỷ đồng, cao nhất toàn ngành. SHB và Techcombank cùng trên 200.000 tỷ đồng, còn MB khoảng 167.000 tỷ.\n\nTổng cộng, 4 nhà băng này có gần 900.000 tỷ đồng dư nợ kinh doanh bất động sản, tương đương khoảng 36% toàn ngành cho vay cùng mảng này. Theo Ngân hàng Nhà nước, dư nợ tín dụng kinh doanh bất động sản của toàn hệ thống đến cuối tháng 6 vượt 2,5 triệu tỷ đồng, ước tăng khoảng 25% so với đầu năm.\n\nDù cùng nằm trong nhóm dẫn đầu, tốc độ tăng cho vay lĩnh vực này có sự phân hóa giữa 4 nhà băng. Nửa đầu năm nay, VPBank và MB tiếp tục đẩy mạnh giải ngân cho kinh doanh bất động sản. Theo số liệu của Chứng khoán Kỹ thương (TCBS), dư nợ cho vay mảng này của VPBank tăng 42% còn MB tăng 38%.\n\nỞ chiều ngược lại, Techcombank và SHB lại ghi nhận mức tăng cho vay kinh doanh bất động sản thấp hơn hẳn so với mặt bằng, lần lượt chỉ tăng khoảng 2,6% và 8% so với đầu năm. Tại Techcombank, lãnh đạo nhà băng từng chia sẻ về chủ trương chủ động tái phân bổ nguồn vốn sang những lĩnh vực có nhu cầu vốn bền vững, mục tiêu đưa tỷ trọng cho vay bất động sản giảm về quanh 20-25% vào năm 2030.\n\nCũng theo thống kê của TCBS, xét về mức độ tập tr",
+   "expected": [
+    "SHB",
+    "TCB",
+    "TPB",
+    "VIB",
+    "VPB"
+   ],
+   "note": ""
+  },
+  {
+   "id": 114,
+   "source": "cafef",
+   "title": "Nỗi buồn mang tên cổ phiếu IPO",
+   "body": "Một thực trạng đang tồn tại xuất hiện trên thị trường chứng khoán Việt Nam: IPO sôi động trở lại nhưng không đồng nghĩa với niềm vui đến với nhà đầu tư tham gia.\n\nNhìn vào 7 thương vụ IPO đình đám giai đoạn 2025-2026, có tới 6/7 cổ phiếu đang giao dịch dưới giá IPO tính đến ngày 15/9/2026. Thậm chí, nhiều cổ phiếu còn giảm khoảng 30% so với giá IPO. Chỉ có TCBS là trường hợp hiếm hoi có thị giá đang cao hơn giá IPO, nhưng mức tăng cũng chỉ vỏn vẹn 1%.\n\nNói cách khác, nếu bỏ qua câu chuyện phân bổ cổ phiếu, thời điểm bán và biến động trong phiên, một nhà đầu tư mua và nắm giữ các cổ phiếu này từ giá IPO đến nay phần lớn đang chịu thua lỗ. Điều đáng nói là đây không hẳn là câu chuyện của riêng từng doanh nghiệp, mà phản ánh một số vấn đề mang tính cấu trúc của thị trường Việt Nam.\n\nIPO nhưng không phải lúc nào cũng là “hàng mới”\n\nMột trong những lý do đầu tiên là các doanh nghiệp IPO gần đây chưa tạo ra cảm giác về một thế hệ tài sản hoàn toàn mới cho thị trường. TCBS, VPBankS, VPS hay LPBS đều là những CTCK thuộc các tập đoàn tài chính lớn đã có cổ phiếu niêm yết trên thị trường.\n\nCái tên rất được chờ đợi là Điện Máy Xanh cũng là một thương hiệu quá quen thuộc với nhà đầu tư thông qua hệ sinh thái MWG. Trong khi đó, Hòa Phát Agri lại nằm trong hệ sinh thái Hòa Phát, còn GELEX Infra cũng gắn với hệ sinh thái GELEX.\n\nMột số doanh nghiệp khác cũng thực hiện chào bán lần đầu như Masan Consumer (MCH), F88 nhưng đều là những cái tên không còn xa lạ với nhà đầu tư khi giao dịch trên ",
+   "expected": [
+    "GEX",
+    "HPG",
+    "MSN",
+    "MWG"
+   ],
+   "note": "bài về IPO: MWG nêu đích danh; 'Điện Máy Xanh' là thương hiệu dùng chung nên không suy ra DMX khi không có mã trần"
+  },
+  {
+   "id": 115,
+   "source": "tinnhanhchungkhoan",
+   "title": "Bancassurance chuyển hướng",
+   "body": "Trong hơn một thập kỷ qua, bán bảo hiểm qua ngân hàng (bancassurance) là bệ phóng tăng trưởng của không ít doanh nghiệp bảo hiểm nhân thọ tại Việt Nam, với những hợp đồng hợp tác độc quyền từng được ký giá trị hàng trăm triệu USD.\n\nTuy nhiên, những bất cập trong cách tư vấn, bán chéo sản phẩm thời gian qua đã kéo theo hàng loạt quy định siết chặt: Ghi âm, ghi hình bắt buộc quá trình tư vấn, giám sát chéo giữa các bên, ràng buộc chặt hơn với nhân viên ngân hàng khi giới thiệu sản phẩm… Do đó, bancassurance không còn là kênh có thể mở rộng quy mô dễ dàng như trước và doanh nghiệp bảo hiểm không thể tiếp tục đặt cược phần lớn chiến lược tăng trưởng vào một ngân hàng đối tác độc quyền. Dẫu vậy, không phải ai cũng sẵn sàng “buông tay”.\n\nTheo ông Phạm Trường Khánh - Tổng giám đốc Affina Việt Nam, doanh nghiệp hoạt động trong lĩnh vực công nghệ bảo hiểm (Insurtech), các ngân hàng sẽ không từ bỏ “chiếc bánh béo bở” mang tên bancassurance, mà tìm chiến lược phát triển mới và một hướng đi rõ nét là tự thành lập công ty bảo hiểm của riêng mình.\n\nTrên thực tế, danh sách ngân hàng hiện thực hóa hướng đi này đang dài thêm khi một loạt công ty bảo hiểm trực thuộc ngân hàng đã ra đời như ACB Insurance, Sacom Life, TechcomInsurance (TCGIns), Techcom Life (TCLife)… Hiện tại, TPBank đã thông qua việc thành lập công ty bảo hiểm phi nhân thọ, VPBank lên kế hoạch lập công ty bảo hiểm nhân thọ mới…\n\nĐiểm chung của làn sóng này là các ngân hàng muốn kiểm soát toàn bộ chuỗi giá trị “end-to-end”, từ t",
+   "expected": [
+    "ACB",
+    "TPB",
+    "VPB"
+   ],
+   "note": "ACB/TPBank/VPBank là chủ thể của tin lập công ty bảo hiểm, không phải nguồn trích dẫn"
+  },
+  {
+   "id": 118,
+   "source": "cafef",
+   "title": "Nóng: PNJ giảm thời gian thanh toán khi mua lại sản phẩm từ khách hàng",
+   "body": "Ngày 15/9, CTCP Vàng bạc Đá quý Phú Nhuận (PNJ) công bố nghị quyết HĐQT thông qua chủ trương điều chỉnh giảm thời gian thanh toán so với quy định hiện hành khi công ty thực hiện mua lại sản phẩm từ khách hàng.\n\nPNJ cho biết, việc điều chỉnh được áp dụng khác nhau theo từng dòng sản phẩm trên cơ sở đảm bảo cân đối tình hình tài chính thực tế của công ty.\n\nPNJ chưa công bố chi tiết phương án điều chỉnh. Tuy nhiên, động thái này có thể hiểu rằng thời gian thanh toán sẽ được rút ngắn so với mốc 120 ngày như phương án trước đó.",
+   "expected": [
+    "PNJ"
+   ],
+   "note": ""
+  },
+  {
+   "id": 123,
+   "source": "thanhnien",
+   "title": "Hơn 2,1 tỉ USD vốn ngoại chuẩn bị đổ bộ vào cổ phiếu",
+   "body": "Theo cập nhật mới nhất của FTSE Russell, tỷ trọng Việt Nam trong các chỉ số mô phỏng đã tăng đáng kể so với công bố trước đó. Trong đó, tỷ trọng tại FTSE Emerging All Cap tăng từ 0,329% lên 0,488%, còn FTSE Emerging tăng từ 0,192% lên 0,309%. Sự thay đổi đến từ mặt bằng giá cổ phiếu cao hơn, cập nhật tỷ lệ cổ phiếu tự do chuyển nhượng (free-float) và hạn mức ngoại giúp cải thiện khả năng đầu tư, cùng việc số lượng cổ phiếu trong rổ mô phỏng tăng từ 23 lên 27 mã.\n\nTừ đó, Công ty Rồng Việt nâng ước tính giá trị đầu tư vào Việt Nam từ một số quỹ thụ động tiêu biểu từ hơn 1,5 tỉ USD lên khoảng 2,114 tỉ USD, tăng 38,5%. Tuy nhiên, dòng vốn này không được dự kiến giải ngân cùng lúc mà phân bổ qua 4 đợt đến tháng 9.2027. Cụ thể, ngày 21.9.2026, ước tính vốn phân bổ 211,9 triệu USD, tương đương 10%; tháng 3.2027 khoảng 423,5 triệu USD, tương đương 20%; tháng 6.2027 khoảng 740,1 triệu USD, tương đương 35%; tháng 9.2027 khoảng 738,9 triệu USD, tương đương 35%.\n\nĐiểm đáng chú ý là 58% giá trị giải ngân dự kiến tập trung vào 5 cổ phiếu lớn nhất gồm VIC, VHM, MCH, MSN và VNM; riêng VIC và VHM chiếm khoảng 45,4% tổng giá trị của cả 4 đợt. Điều này cho thấy dòng vốn nâng hạng có mức độ tập trung cao, thay vì lan tỏa đồng đều trên toàn thị trường.\n\nTrước ngày nâng hạng có hiệu lực 21.9, tuần 14 - 18/9 được Rồng Việt xác định là cao điểm tái cơ cấu. Đây là thời điểm đợt giải ngân đầu tiên của FTSE GEIS diễn ra đồng thời với kỳ cơ cấu của Fubon Vietnam ETF, tạo nên những tác động khác nhau ở t",
+   "expected": [
+    "MSN",
+    "VHM",
+    "VIC",
+    "VNM"
+   ],
+   "note": "VNM trong danh sách 5 cổ phiếu vốn hoá lớn - là Vinamilk thật"
+  },
+  {
+   "id": 131,
+   "source": "cafef",
+   "title": "Nhóm Gelex 'thoát hiểm', cổ phiếu dầu khí đồng loạt bứt phá",
+   "body": "Thị trường chứng khoán có màn đảo chiều đáng chú ý khi VN-Index tăng gần 23 điểm, qua đó trở lại trên mốc 1.800 điểm chỉ sau một phiên bị đẩy xuống dưới ngưỡng này.\n\nNgay từ đầu phiên, lực cầu đã xuất hiện tại nhiều nhóm cổ phiếu. Tuy nhiên, đà tăng không thực sự bứt phá cho tới phiên chiều, khi dòng tiền nhập cuộc mạnh hơn và lan rộng sang các cổ phiếu vốn hóa lớn.\n\nKết phiên, VN-Index tăng 22,92 điểm, tương đương 1,28%, lên 1.811 điểm.\n\nĐiểm đáng chú ý nhất là diễn biến tại nhóm dầu khí. Nhiều cổ phiếu trong ngành đồng loạt tăng mạnh, trong đó BSR, PVD, PVS, PVC và các mã liên quan năng lượng trở thành những điểm sáng trên bảng điện.\n\nĐà tăng của nhóm này diễn ra trong bối cảnh giá dầu thế giới duy trì ở vùng cao. Sức hút từ nhóm dầu khí góp phần cải thiện tâm lý thị trường sau phiên bán mạnh trước đó.\n\nKhông chỉ dầu khí, nhóm ngân hàng và chứng khoán cũng đồng loạt hồi phục. Nhiều cổ phiếu ngân hàng vốn hóa lớn tăng giá, tạo lực đỡ đáng kể cho chỉ số. Nhóm chứng khoán cũng ghi nhận nhiều mã tăng mạnh khi dòng tiền quay lại các cổ phiếu có tính thị trường cao.\n\nSự cải thiện của nhóm trụ giúp sắc xanh lan rộng hơn về cuối phiên. Trên toàn thị trường, số cổ phiếu tăng giá chiếm ưu thế, trái ngược hoàn toàn với trạng thái bán áp đảo trong phiên 14/9.\n\nĐáng chú ý, sau phiên giảm sâu trước đó, loạt cổ phiếu thuộc hệ sinh thái Gelex bất ngờ hồi phục mạnh trong phiên 15/9, với GEE và GEL tăng kịch biên độ, còn GEX tăng hơn 3%.\n\nThanh khoản cũng được cải thiện khi nhà đầu tư tăng g",
+   "expected": [
+    "GEX",
+    "PVD",
+    "PVS"
+   ],
+   "note": ""
+  },
+  {
+   "id": 137,
+   "source": "tuoitre",
+   "title": "Hai quỹ Dragon Capital mua lại gần 750.000 cổ phiếu PNJ chỉ một tháng sau khi bán hết",
+   "body": "Báo cáo danh mục cuối tháng 8 của Dragon Capital ghi nhận Quỹ đầu tư chứng khoán Năng động DC (DCDS) sở hữu 690.000 cổ phiếu PNJ, còn Quỹ đầu tư cổ phiếu Tập trung cổ tức DC (DCDE) nắm 55.100 cổ phiếu.\n\nTrong khi trước đó, cuối tháng 7, cả hai quỹ đều đã bán hết cổ phiếu này.\n\nVới mức giá 42.100 đồng/cổ phiếu tại thời điểm cuối tháng 8, lượng PNJ trong danh mục DCDS có giá trị hơn 29 tỉ đồng. Tổng giá trị tài sản ròng (NAV) của quỹ đạt gần 6.020 tỉ đồng, tương ứng khoản đầu tư PNJ chiếm khoảng 0,48% NAV.\n\nTại DCDE, 55.100 cổ phiếu PNJ có giá trị gần 2,32 tỉ đồng, tương đương khoảng 0,26% trên tổng NAV 890,9 tỉ đồng. Mức phân bổ này thấp hơn đáng kể so với 10 khoản đầu tư lớn nhất của quỹ, với tỉ trọng từ 3,4% đến 7,6% NAV mỗi mã.\n\nTổng giá trị PNJ do hai quỹ nắm giữ cuối tháng 8 vào khoảng 31,4 tỉ đồng, với tỉ trọng tại mỗi quỹ đều dưới 0,5% NAV.\n\nTháng 8 cũng là thời điểm DCDE tăng giải ngân trở lại. NAV trên mỗi chứng chỉ quỹ tăng 3%, còn tỉ trọng tiền mặt giảm từ 27,1% cuối tháng 7 xuống 4% cuối tháng 8. Dragon Capital cho biết quỹ đã từng bước quay lại giải ngân khi cơ hội đầu tư trở nên rõ ràng hơn.\n\nDCDS tăng 4,1% trong tháng 8, so với mức tăng 5,6% của VN-Index. Quỹ cơ cấu lại danh mục, giảm tỉ trọng một số cổ phiếu có triển vọng ngắn hạn còn hạn chế và chuyển vốn sang nhóm được kỳ vọng hưởng lợi từ dòng vốn FTSE cùng các cổ phiếu có hệ số beta cao hơn.\n\nLũy kế từ đầu năm, DCDS giảm 10,6%.\n\nĐộng thái mua lại PNJ diễn ra sau một tháng biến động mạnh của cổ phiếu này. Cu",
+   "expected": [
+    "PNJ"
+   ],
+   "note": ""
+  },
+  {
+   "id": 148,
+   "source": "tinnhanhchungkhoan",
+   "title": "Đảo chiều Dragon Capital bất ngờ gom lại cổ phiếu PNJ chỉ sau một tháng bán ra",
+   "body": "Sau một tháng sau khi bán toàn bộ và đưa tỷ trọng phân bổ PNJ về 0% trong tháng 7, hai quỹ là Quỹ đầu tư Chứng khoán Năng động DC (DCDS) và Quỹ đầu tư Doanh nghiệp Hàng đầu DC (DCDE) đã quay trở lại mua gom mã cổ phiếu này trong tháng 8/2026.\n\nDCDS đã mua lại 690.000 cổ phiếu PNJ, tương đương giá trị thị trường khoảng 29 tỷ đồng (chiếm tỷ trọng 0,5% giá trị tài sản ròng - NAV của quỹ). Trong khi đó, DCDE cũng mua vào 55.100 cổ phiếu, giá trị ước tính khoảng 2,3 tỷ đồng (tương ứng 0,27% NAV). Tổng cộng, hai quỹ này đã mua lại 745.100 cổ phiếu PNJ, tương đương quy mô giải ngân khoảng 31,4 tỷ đồng tính theo vùng thị giá cuối tháng 8.\n\nMặc dù hai quỹ thành viên DCDS và DCDE có động thái mua lại, nhưng xét trên tổng thể cả nhóm Dragon Capital, lượng nắm giữ cổ phiếu PNJ lại tiếp tục xu hướng giảm nhẹ.\n\nTheo đó, tổng lượng cổ phiếu PNJ do nhóm các quỹ ngoại này nắm giữ đã giảm đi 539.200 đơn vị, lùi từ mức hơn 28 triệu cổ phiếu xuống còn 27,47 triệu cổ phiếu. Kéo theo đó, tỷ lệ sở hữu trên tổng số cổ phiếu lưu hành của Dragon Capital tại PNJ cũng sụt giảm từ 5,47% xuống còn 5,37%.\n\nMột tháng trước đó, cả DCDS và DCDE đều đã bán hết PNJ sau quá trình liên tục giảm tỷ trọng. Riêng DCDS thoái toàn bộ số cổ phiếu còn lại ở vùng giá khoảng 47.000-48.000 đồng/cp khi Dragon Capital tăng cường quản trị rủi ro trước những diễn biến tại doanh nghiệp.\n\nTháng 7 và tháng 8 vừa qua chứng kiến sự biến động mạnh mẽ của cổ phiếu PNJ trên sàn HOSE. Sau khi trải qua nhịp điều chỉnh sâu, cổ phiếu PNJ ",
+   "expected": [
+    "PNJ"
+   ],
+   "note": ""
+  },
+  {
+   "id": 160,
+   "source": "tuoitre",
+   "title": "'Hồi hộp' Fed trước giờ quyết định lãi suất, Việt Nam sẽ chịu tác động thế nào nếu chốt tăng?",
+   "body": "Nếu diễn biến đúng kỳ vọng, đây sẽ là lần tăng lãi suất đầu tiên của Fed sau hơn ba năm. Tuy nhiên, sự chú ý của giới đầu tư không chỉ nằm ở quyết định lần này, mà còn ở tín hiệu về đường hướng chính sách tiếp theo.\n\nLiệu Fed chỉ tăng lãi suất một lần nhằm ứng phó với áp lực lạm phát hay đây sẽ là bước khởi đầu cho một chu kỳ thắt chặt tiền tệ mới.\n\nQuyết định của Fed dự kiến được công bố vào rạng sáng 17-9 theo giờ Việt Nam. Trao đổi với Tuổi Trẻ, bà Hoàng Thúy Lương, Kinh tế trưởng Chứng khoán Vietcap, nhận định nếu Fed thực sự tăng lãi suất, tác động đối với Việt Nam trong ngắn hạn cũng sẽ không quá lớn.\n\nVới tỉ giá, lãi suất USD tăng có thể hỗ trợ đồng bạc xanh, qua đó tạo thêm áp lực lên cặp USD/VND. Tuy nhiên, theo bà Lương, VND hiện vẫn được hỗ trợ bởi một số yếu tố.\n\nTrong đó, tỉ giá trên thị trường tự do có xu hướng giảm thời gian gần đây; giá vàng trong nước và nhu cầu đầu tư vàng đã hạ nhiệt; dòng vốn FDI tiếp tục duy trì ổn định. Bên cạnh đó là triển vọng thu hút thêm dòng vốn đầu tư gián tiếp nước ngoài sau khi thị trường chứng khoán Việt Nam được nâng hạng.\n\nCòn đối với lãi suất, chuyên gia Vietcap cho rằng việc Fed tăng lãi suất có thể khiến chênh lệch lãi suất VND - USD thu hẹp, qua đó phần nào làm giảm dư địa nới lỏng chính sách tiền tệ của Ngân hàng Nhà nước.\n\nDù vậy, tác động lên mặt bằng lãi suất trong nước trong ngắn hạn được dự báo tương đối hạn chế, trừ trường hợp tỉ giá USD/VND quay đầu tăng mạnh trở lại.\n\nỞ góc nhìn thận trọng, bà Trần Thị Khánh Hiền,",
+   "expected": [],
+   "note": "VND là đơn vị tiền tệ; 'Chứng khoán Vietcap' là cụm trích dẫn nguồn"
+  },
+  {
+   "id": 161,
+   "source": "tuoitre",
+   "title": "Khối ngoại liên tục mua ròng, một mã ngân hàng tăng gần 50% trong một tháng",
+   "body": "Thị trường chứng khoán kết phiên 16-9 trong trạng thái giằng co khi áp lực bán tại một số cổ phiếu vốn hóa lớn khiến VN-Index giảm nhẹ, trong khi dòng tiền tiếp tục phân hóa giữa các nhóm ngành.\n\nKết phiên 16-9, cổ phiếu SSB của Ngân hàng Đông Nam Á - SeABank - tiếp tục tăng trần lên 22.350 đồng/cổ phiếu, ghi nhận phiên tăng trần thứ ba liên tiếp và là phiên tăng thứ năm liên tục. Trước đó, trong hai phiên 14-9 và 15-9, SSB đều tăng hết biên độ.\n\nĐây là mức giá cao nhất trong 52 tuần của SSB. Chỉ sau 5 phiên, thị giá cổ phiếu này đã tăng hơn 24%; còn nếu tính trong một tháng, mức tăng lên tới 47%. Từ vùng giá khoảng 15.000 đồng hồi giữa tháng 8, SSB đã tăng gần 50% chỉ trong chưa đầy một tháng.\n\nĐà tăng mạnh đưa vốn hóa SeABank lên khoảng 76.634 tỉ đồng, tăng gần 24.859 tỉ đồng so với trước nhịp tăng.\n\nĐà tăng của SSB cũng giúp cổ phiếu này trở thành mã đóng góp tích cực nhất cho VN-Index trong phiên, với mức đóng góp 1,11 điểm. Bên cạnh SSB, GVR đóng góp 0,99 điểm, DMX 0,97 điểm, ACB 0,62 điểm, MBB 0,59 điểm và MCH 0,55 điểm.\n\nTrong khi đó, VCB là cổ phiếu kéo chỉ số xuống mạnh nhất với 1,21 điểm, tiếp đến là GAS với 0,98 điểm, VHM 0,68 điểm, BID 0,67 điểm và LPB 0,58 điểm.\n\nNhóm cổ phiếu dầu khí tiếp tục duy trì đà tăng. PLX tăng 2,28%, PVT tăng 1,75%, OIL tăng 3,45%, trong khi BSR tăng 0,49%, PVD tăng 0,25% và PVS tăng 0,29%.\n\nDiễn biến này nối tiếp phiên tăng mạnh của nhiều cổ phiếu dầu khí trong ngày 15-9, khi nhóm năng lượng là một trong những động lực chính giúp VN-Ind",
+   "expected": [
+    "ACB",
+    "BID",
+    "DMX",
+    "GAS",
+    "GVR",
+    "LPB",
+    "MBB",
+    "PLX",
+    "PVD",
+    "PVS",
+    "SSB",
+    "VCB",
+    "VHM"
+   ],
+   "note": "bảng đóng góp điểm số VN-Index, các mã đều nêu đích danh"
+  },
+  {
+   "id": 163,
+   "source": "tuoitre",
+   "title": "Một công ty sách mang hơn 1.000 tỉ cho vay ngắn hạn lãi suất 12%",
+   "body": "Theo báo cáo tài chính bán niên năm 2026 soát xét, Công ty CP Sách Việt Nam (VNB) ghi nhận 13,4 tỉ đồng doanh thu bán hàng và cung cấp dịch vụ trong 6 tháng đầu năm, giảm 3,6% so với cùng kỳ năm trước. Trong đó doanh thu từ bán sách, hàng hóa là 7,3 tỉ đồng và 6,1 tỉ đồng từ dịch vụ cho thuê.\n\nGiá vốn hàng bán ở mức 6,9 tỉ đồng, giúp công ty thu về 6,5 tỉ đồng lợi nhuận gộp, gần như đi ngang so với cùng kỳ.\n\nĐiểm đáng chú ý trong kỳ nằm ở hoạt động tài chính. Mảng này ghi nhận 63,6 tỉ đồng doanh thu, tăng 5,1% so với cùng kỳ.\n\nLãi cho vay đạt gần 60 tỉ đồng, lãi tiền gửi 3,6 tỉ đồng và phần nhỏ còn lại đến từ chênh lệch tỉ giá.\n\nChi phí tài chính hơn 2,8 triệu đồng, giảm mạnh so với mức 74,4 triệu đồng cùng kỳ.\n\nSau khi trừ các chi phí hoạt động kinh doanh và thuế, Sách Việt Nam ghi nhận 43 tỉ đồng lợi nhuận sau thuế, tăng gần 2,4% so với nửa đầu năm 2025.\n\nBức tranh tài sản của doanh nghiệp phản ánh rõ hoạt động tài chính. Đến cuối tháng 6, tổng tài sản công ty đạt 1.245 tỉ đồng, tăng nhẹ 2,3% so với đầu năm. Trong đó tài sản ngắn hạn ở mức 1.225,8 tỉ đồng, chiếm tỉ trọng 98,4%.\n\nTiền và các khoản tương đương tiền đạt 18,9 tỉ đồng, gấp 7,6 lần so với đầu năm. Khoản đầu tư tài chính ngắn hạn tăng vọt từ 172,6 tỉ đồng lên 1.195,5 tỉ đồng. Ngược lại, đầu tư tài chính dài hạn giảm từ 1.012,3 tỉ đồng xuống 4,3 tỉ.\n\nThuyết minh chi tiết cho thấy doanh nghiệp dành 157,4 tỉ đồng gửi tiết kiệm tại VietinBank và 1.038,1 tỉ đồng cho vay ngắn hạn các đối tác doanh nghiệp có tài sản đảm ",
+   "expected": [
+    "CTG"
+   ],
+   "note": ""
+  },
+  {
+   "id": 178,
+   "source": "tuoitre",
+   "title": "Techcombank Summit 2026: ra mắt Techcom Wealth - kiến tạo và trao truyền giá trị qua thế hệ",
+   "body": "Nếu trước đây câu chuyện wealth chủ yếu xoay quanh việc tạo dựng và tích lũy của cải, thì ngày nay trọng tâm đang dịch chuyển sang những bài toán phức tạp hơn: làm thế nào để quản trị tài sản trong một thế giới nhiều biến động, làm thế nào để gìn giữ thành quả đã tạo dựng, và làm thế nào để những giá trị đó tiếp tục được phát triển qua nhiều thế hệ.\n\nTheo The Wealth Report 2026 của Knight Frank, Việt Nam hiện có khoảng 1.233 cá nhân siêu giàu (UHNWI) sở hữu tài sản trên 30 triệu USD. Con số này được dự báo tăng 59%, lên gần 1.960 cá nhân vào năm 2031, đưa Việt Nam vào nhóm thị trường tăng trưởng tài sản nhanh nhất khu vực.\n\nTrong khi đó, theo McKinsey, tổng tài sản tài chính cá nhân tại Việt Nam được dự báo đạt khoảng 600 tỉ USD vào năm 2027, tăng gần gấp đôi so với năm 2022. Riêng tổng tài sản của nhóm UHNWI có thể đạt khoảng 790 tỉ USD vào năm 2031, đồng thời tạo ra từ 65 đến 75 tỉ USD tài sản quản lý mới cho ngành quản lý gia sản.\n\nKhông chỉ là sự chuyển giao thế hệ, đằng sau những con số ấn tượng ấy là những chuyển dịch mang tính cấu trúc. Thế hệ doanh nhân đầu tiên tạo dựng cơ nghiệp sau Đổi mới đang bắt đầu chuẩn bị cho hành trình chuyển giao.\n\nCấu trúc tài sản ngày nay không chỉ đa dạng mà còn ngày càng đa tầng và phức tạp. Một gia đình có thể đồng thời sở hữu doanh nghiệp vận hành tại nhiều thị trường, danh mục đầu tư tài chính trong và ngoài nước, các khoản đầu tư tư nhân, tài sản bất động sản và những giá trị vô hình được tích lũy qua nhiều thế hệ.\n\nSự gia tăng về q",
+   "expected": [
+    "TCB"
+   ],
+   "note": ""
+  },
+  {
+   "id": 185,
+   "source": "tuoitre",
+   "title": "Chứng khoán 16-9: Tiền đổ vào dầu khí, ngân hàng, VN-Index bước vào nhịp tăng mới?",
+   "body": "VN-Index đóng cửa phiên 15-9 tại 1.811,15 điểm, tăng gần 23 điểm. Độ rộng thị trường nghiêng rõ về bên mua khi 17/18 nhóm ngành tăng điểm. Dầu khí tăng mạnh nhất, tiếp đến là tiện ích và hàng hóa, dịch vụ công nghiệp.\n\nTheo Chứng khoán Yuanta Việt Nam, động lực hồi phục phiên 16-9 chủ yếu đến từ dầu khí và ngân hàng. Khối ngoại tiếp tục mua ròng trên HoSE khoảng 719 tỉ đồng, tập trung ở ngân hàng và dầu khí. Một số cổ phiếu được mua ròng mạnh gồm VCB 229 tỉ đồng, BSR 158 tỉ đồng, BID 125 tỉ đồng, TCB 105 tỉ đồng và MBB 98 tỉ đồng.\n\nNhóm dầu khí trở thành điểm sáng đáng chú ý sau nhịp hồi phục 15-9. Yuanta Việt Nam cho rằng nhà đầu tư có thể chờ những nhịp điều chỉnh để xem xét giải ngân tại một số cổ phiếu dầu khí.\n\nVề kỹ thuật, Chứng khoán Tiên Phong (TPS) đánh giá VN-Index đã tạm thời vượt lên toàn bộ hệ thống đường trung bình giá, qua đó bảo toàn xu hướng tăng. Tuy nhiên, thanh khoản phiên hồi phục chưa đủ lớn để phủ định 2 phiên phân phối mạnh trước đó.\n\nChứng khoán HSC cũng cho rằng dòng tiền đã cải thiện và lan tỏa tốt hơn, nhưng thanh khoản chưa thực sự bứt phá. Do đó, chưa đủ cơ sở xác nhận thị trường đã bước sang một xu hướng tăng mới.\n\nCác công ty chứng khoán nhìn chung cho rằng nhịp hồi phục có thể tiếp diễn, nhưng thị trường vẫn có khả năng rung lắc khi tiến vào các vùng kháng cự.\n\nYuanta Việt Nam dự báo VN-Index có thể kiểm định vùng 1.820 - 1.825 điểm trong các phiên tới, trong khi HSC lưu ý vùng kháng cự 1.820 - 1.850 điểm.\n\nĐây cũng là giai đoạn thị trường chu",
+   "expected": [
+    "BID",
+    "MBB",
+    "TCB",
+    "VCB"
+   ],
+   "note": ""
+  },
+  {
+   "id": 189,
+   "source": "tuoitre",
+   "title": "Chân dung những quỹ ngoại trăm tỉ USD bắt đầu tính đến cổ phiếu Việt Nam",
+   "body": "Từ ngày 21-9, Việt Nam sẽ chính thức chuyển từ thị trường cận biên lên thị trường mới nổi thứ cấp theo phân loại của FTSE Russell.\n\nCùng thời điểm, 27 cổ phiếu Việt Nam được bổ sung vào FTSE Global All Cap, gồm VCB, VIC, VHM ở nhóm vốn hóa lớn; BID, HPG, VPB ở nhóm vốn hóa vừa và 21 mã vốn hóa nhỏ như FPT, MSN, VNM, SSI, VRE, VIX, VCI, VND.\n\nViệc có mặt trong FTSE Global All Cap mở ra một thay đổi đáng chú ý: cổ phiếu Việt Nam bắt đầu đi vào các bộ chỉ số được nhiều quỹ toàn cầu sử dụng để phân bổ vốn. Khi tiền vào hoặc rút khỏi những quỹ này, phần danh mục dành cho Việt Nam cũng có thể được điều chỉnh theo.\n\nFTSE Russell chia quá trình đưa Việt Nam vào hệ thống chỉ số toàn cầu thành bốn đợt, bắt đầu với 10% tỉ trọng có thể đầu tư trong tháng 9-2026, sau đó thêm 20% vào tháng 3-2027, 35% vào tháng 6-2027 và 35% còn lại vào tháng 9-2027.\n\nMBS Research ước tính riêng đợt đầu có thể tạo ra khoảng 180 triệu USD mua ròng từ các quỹ ETF, còn tổng dòng vốn thụ động liên quan đến 27 cổ phiếu có thể đạt khoảng 1,8 tỉ USD trong một năm tới.\n\nTrong số những quỹ sử dụng các chỉ số FTSE làm chuẩn có nhiều sản phẩm quy mô rất lớn. Đơn cử Vanguard FTSE Emerging Markets ETF (VWO), quản lý khoảng 127,3 tỉ USD tài sản ròng và theo dõi một chỉ số bao phủ cổ phiếu vốn hóa lớn, vừa và nhỏ tại các thị trường mới nổi.\n\nVanguard Total International Stock ETF (VXUS) có quy mô khoảng 164,9 tỉ USD và đầu tư vào hàng nghìn doanh nghiệp ngoài Mỹ.\n\nQuỹ này bám theo FTSE Global All Cap ex US, nên việc Việt",
+   "expected": [
+    "BID",
+    "FPT",
+    "HPG",
+    "MSN",
+    "SSI",
+    "VCB",
+    "VCI",
+    "VHM",
+    "VIC",
+    "VND",
+    "VNM",
+    "VPB",
+    "VRE"
+   ],
+   "note": "VND nằm trong danh sách mã vốn hoá nhỏ 'VRE, VIX, VCI, VND' - đây là VNDIRECT thật"
+  }
+ ]
+}

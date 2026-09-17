@@ -1,0 +1,1044 @@
+{
+  "_meta": {
+    "file": "tagger_corpus_qa.json",
+    "purpose": "Corpus gán nhãn ĐỘC LẬP do QA tạo, dùng làm CỔNG NGHIỆM THU precision cho tagger.",
+    "WARNING_DO_NOT_EDIT": "FILE NÀY LÀ CỔNG NGHIỆM THU. Người viết tagger KHÔNG được sửa, thêm, bớt hay chỉnh nhãn trong file này. Nếu cần bổ sung mẫu, phải yêu cầu QA. Lý do: corpus cũ (tagger_corpus.json) do chính tác giả tagger gán nhãn nên cho precision 100% - đó là đo trên tập tuning, không có giá trị nghiệm thu.",
+    "created_by": "QA Engineer (độc lập với người viết tagger)",
+    "created_at": "2026-09-16",
+    "round": "QA vòng 2",
+    "sampling_method": "Nhóm A: quần thể 179 bài thật đã publish; 67 bài có >=1 mã. Loại 37 bài trùng tagger_corpus.json (khớp theo tiêu đề chuẩn hoá, vì trường id của corpus cũ KHÔNG ánh xạ đúng sang articles.id - 39/50 trỏ nhầm bài), còn 30 bài đủ điều kiện. Rút ngẫu nhiên 20 bài bằng random.Random(20260916).sample. Over-sample vneconomy.vn theo chủ đích vì corpus cũ đã loại toàn bộ nguồn này. Nhóm B: toàn bộ 7 bài còn lại mang tag tầng T3 (score=0.400) chưa nằm trong nhóm A - đây là phép ĐẾM TOÀN BỘ tầng T3, không phải lấy mẫu.",
+    "adjudication_method": "Mỗi bài: resolve /r/{code} -> fetch bài gốc thật (curl --compressed) -> bóc riêng thân bài theo selector từng nguồn, LOẠI BỎ sidebar/related/tag/share/nav/aside -> đối chiếu từng mã và alias công ty trên thân bài. Mã chỉ xuất hiện ở rail 'bài liên quan' được tính là SAI.",
+    "field_semantics": {
+      "body": "Thân bài đã bóc và đã loại sidebar. Đủ để chạy tagger offline, không cần mạng.",
+      "expected": "Nhãn ĐÚNG do QA adjudicate. Dùng làm chuẩn tính precision và recall.",
+      "must_not_tag": "Mã mà tagger HIỆN ĐANG gắn nhưng QA xác định là SAI. Gắn lại = false positive.",
+      "uncertain": "Tag QA không chắc. PHẢI LOẠI khỏi mọi phép tính, không tính đúng cũng không tính sai.",
+      "expected rỗng []": "Bài KHÔNG có mã nào là nhãn đúng - mẫu quan trọng nhất để bắt false positive. Chỉ các id trong 'verified_empty_expected_ids' là rỗng-đã-xác-minh; bài 78 rỗng vì tag duy nhất bị xếp uncertain, không dùng làm mẫu bắt false positive."
+    },
+    "scoring_rule": "precision = (số tag tagger sinh ra có trong 'expected') / (tổng tag tagger sinh ra, SAU KHI loại các tag nằm trong 'uncertain'). recall = (số tag trong 'expected' được tagger sinh ra) / (tổng tag trong 'expected').",
+    "recall_caveat": "Nhãn 'expected' được adjudicate ĐẦY ĐỦ cho precision (mọi tag tagger sinh ra đều đã được chấm), nhưng CHƯA quét vét cạn toàn bộ mã có thể có trong bài. Vì vậy corpus này ĐỦ TIN CẬY ĐỂ ĐO PRECISION, và chỉ dùng recall như chỉ báo tham khảo (sẽ hơi lạc quan). Ví dụ đã biết: bài 191 có nêu BSR nhưng chưa đưa vào expected.",
+    "baseline_at_creation": {
+      "measured_precision_round2": "80.5% - 83.2% (91-94 đúng / 113 tag, nhóm A)",
+      "prd_threshold": ">= 96%",
+      "primary_only": "96.8% - 98.4% (ĐẠT)",
+      "mentioned_only": "60.0% - 64.0% (KHÔNG ĐẠT)",
+      "t3_tier_score_0.40": "38/38 tag SAI trên toàn DB - phép đếm toàn bộ, tạo trần cứng precision <= 86.7%",
+      "corpus_baseline_precision": "95/137 = 69.3%",
+      "corpus_baseline_if_t3_disabled": "95/99 = 95.96% (chạm ngưỡng, chưa vượt 96%)",
+      "IMPORTANT_not_a_population_estimate": "Con số 69.3% trên corpus này THẤP HƠN precision quần thể (80.5-83.2%) một cách CÓ CHỦ Ý: nhóm B gồm toàn bộ 7 bài tầng T3 nên corpus được làm giàu false positive để làm cổng chặn nhạy. ĐỪNG trích con số này như 'precision của sản phẩm'. Dùng nó làm ngưỡng gate, không phải làm chỉ số báo cáo."
+    },
+    "counts": {
+      "samples": 27,
+      "expected_tags": 96,
+      "must_not_tag_tags": 42,
+      "uncertain_tags_excluded": 3,
+      "samples_with_empty_expected": 12,
+      "empty_expected_ids": [
+        32,
+        62,
+        70,
+        78,
+        82,
+        105,
+        118,
+        121,
+        130,
+        159,
+        162,
+        168
+      ],
+      "by_source_domain": {
+        "vneconomy.vn": 14,
+        "vnexpress.net": 6,
+        "tinnhanhchungkhoan.vn": 4,
+        "tuoitre.vn": 3
+      },
+      "verified_empty_expected_ids": [
+        32,
+        62,
+        70,
+        82,
+        105,
+        118,
+        121,
+        130,
+        159,
+        168
+      ],
+      "verified_empty_expected": 10
+    },
+    "actionable_finding": "38/42 tag sai đến từ đúng MỘT tầng: score=0.400 (T3 ngữ cảnh ngành). Tắt hẳn tầng này đưa precision trên corpus từ 69.3% lên 95.96% (95/99) - CHẠM ngưỡng nhưng chưa vượt 96%. Sửa nốt 4 tag sai còn lại (2x va chạm alias khi bỏ dấu 'Khí Việt Nam'/'Khi Việt Nam'; 1x negative_aliases không áp ở score 0.90 cho 'FPT Retail'; 1x VND là đơn vị tiền tệ, vi phạm G-02) đưa corpus lên 95/95 = 100%. Hai việc này cộng lại là toàn bộ khoảng cách tới ngưỡng PRD.",
+    "revision": "r2 (QA vòng 3, 16/09/2026) — thêm 1 nhãn expected: #108 MWG/mentioned",
+    "changelog": [
+      "r1 (vòng 2): 27 mẫu, 95 expected, 42 must_not_tag, 3 uncertain.",
+      "r2 (vòng 3): +1 expected (#108 MWG/mentioned). Tagger sau khi sửa lớp lỗi bỏ dấu đã sinh ra tag này; QA phân xử là ĐÚNG. Tổng: 27 mẫu, 96 expected, 42 must_not_tag, 3 uncertain. BE phải cập nhật hằng số chốt cứng trong TestTaggerPrecisionOnQACorpus từ 95 -> 96 expected."
+    ]
+  },
+  "samples": [
+    {
+      "id": 21,
+      "source_domain": "vneconomy.vn",
+      "title": "Blog chứng khoán: Dòng tiền “nín thở”",
+      "url": "https://vneconomy.vn/blog-chung-khoan-dong-tien-nin-tho.htm",
+      "body": "VNI hôm nay gần như đi ngang nhưng cổ phiếu điều chỉnh diện rộng và khá mạnh. Đặc biệt thanh khoản khớp lệnh hai sàn lại giảm mạnh xuống còn chưa tới 12,6k tỷ, nếu trừ đi 5 cổ phiếu giao dịch lớn nhất thậm chí còn dưới 10k tỷ.\n \n \n \n Tranh minh họa.\n \n \n Sự ổn định ở chỉ số không phản ánh hết trạng thái giá cổ phiếu.\nRất nhiều cổ phiếu vừa và nhỏ giảm sâu dù blue-chips tương đối ổn định. Thống kê\nhơn 28% số cổ phiếu có giao dịch của VNI đóng cửa giảm quá 1% giá trị.\nDiễn biến này cũng là bình thường vì phiên phục hồi mạnh bất\nngờ hôm qua không phải cổ phiếu nào cũng hưởng lợi, chưa kể đến nhịp điều chỉnh\nchớm thủng 1800 điểm trước đó cổ phiếu vừa và nhỏ điều chỉnh mạnh hơn, khiến áp\nlực lên danh mục ở nhóm này cao hơn so với blue-chips.\nTuy khả năng ổn định điểm số của cổ phiếu VN30 và nhất là nhóm\ntrụ gồm ngân hàng, dầu khí và Vin là tích cực, nhưng trừ khi nắm giữ đúng cổ\nphiếu hoặc đầu tư vào chỉ số, bằng không sức ép cắt lỗ vẫn xuất hiện. Sẽ có hoạt\nđộng cơ cấu lại danh mục và trong bối cảnh dòng tiền tổng thể đang yếu, biến động\ngiá sẽ không giống nhau.\nPhiên tăng mạnh bất ngờ hôm qua xuất phát từ sức mạnh của nhóm\ncổ phiếu ngân hàng, nhưng còn đủ lực để kéo dài hay không là chuyện khác. Tổng\nthanh khoản khớp lệnh của cổ phiếu ngân hàng ở HSX hôm nay đã giảm mạnh trở lại\n31% so với hôm qua, phần lớn đã quay đầu giảm, số tăng mang tính cá biệt như\nSSB, NAB, ACB, MBB, PCB, đều ít ảnh hưởng. Trong khi đó tỷ lệ tăng/giảm tổng thể\ncủa cổ phiếu trong VNI là 0,6/1 kết hợp với số lớn mã giảm sâu cho thấy diễn biến\nmột ngày vẫn thiếu độ tin cậy.\nTuần này hội tụ nhiều diễn biến “đáng” để dòng tiền chờ đợi\nvà hạn chế hoạt động: FED sẽ công bố quyết định lãi suất vào đầu giờ sáng mai,\nphiên đáo hạn phái sinh và đợt tái cơ cấu ETF. Nếu sau diễn biến tuần này thị\ntrường vẫn giữ được sự cân bằng và phân hóa thì tình hình sẽ sáng dần lên. Bất\nkể là thông tin thế nào, quan trọng nhất vẫn là sự xác nhận từ phản ứng trên thị\ntrường. Nếu kịch bản ổn định với thanh khoản thấp, kéo theo phân hóa thì khả năng\nsẽ tích lũy. Ngược lại, ngay cả khi giảm mạnh, “bẻ trend” mà vẫn có dòng tiền vào\nđỡ tạo thanh khoản tốt thì sớm muộn cũng cân bằng lại. Tuy nhiên cho tới lúc đó\nvẫn chưa cần phải đặt cược quá sớm.\nThị trường phái sinh sắp đáo hạn F1 và thanh khoản giảm xuống\nmức thấp nhất kể từ đầu tháng 8. VN30 hôm nay không có cổ phiếu dẫn dắt rõ ràng,\nphần lớn thời gian dao động rất nhỏ và khó chịu. Vùng biên độ chính của chỉ số\nnày là từ 1945.xx tới 1955.xx nhưng phần lớn thời gian là lấp lửng gần 1945.xx\nnên rất khó giao dịch.\nCác setup Long quanh 1945.xx đều có phản ứng basis dương\ntrong khi quán tính chỉ số không có do mất trụ nên các vị thế đều nhiễu. Duy nhất\nnhịp cuối sau 2h có FPT, TCB, ACB kéo lên là khá “mượt” nhưng basis cũng “lỗ” đến\ngần 4 điểm, trong khi cản của VN30 quanh 1955.xx. Như vậy rủi ro/lợi nhuận gần\nnhư bằng nhau, không phù hợp để vào.\nSự kiện quan trọng nhất tuần này là việc FED công bố quyết định\nlãi suất ngày mai. Dao động có thể mở rộng cả hai chiều, có thể trading được với\nphái sinh, còn cơ sở nên tạm nghỉ.\nVN30 đóng cửa hôm nay tại 1954.29. Cản gần nhất ngày mai là\n1955; 1968; 1974; 1984; 1992; 2003; 2013; 2026. Hỗ trợ 1945; 1936; 1923; 1913;\n1902; 1893; 1884.\n“Blog chứng khoán” mang tính chất cá\nnhân và không đại diện cho ý kiến của VnEconomy. Những quan điểm, đánh giá là của\ncá nhân nhà đầu tư và VnEconomy tôn trọng quan điểm cũng như văn phong của tác\ngiả. VnEconomy và tác giả không chịu trách nhiệm về những vấn đề phát sinh liên\nquan đến các đánh giá và quan điểm đầu tư được đăng tải.",
+      "expected": [
+        {
+          "symbol": "ACB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "FPT",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "MBB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "NAB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "SSB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "TCB",
+          "relevance": "mentioned"
+        }
+      ],
+      "must_not_tag": [],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 27,
+      "source_domain": "vneconomy.vn",
+      "title": "Cổ phiếu vừa và nhỏ điều chỉnh mạnh, khối ngoại duy trì mua ròng",
+      "url": "https://vneconomy.vn/co-phieu-vua-va-nho-dieu-chinh-manh-khoi-ngoai-duy-tri-mua-rong.htm",
+      "body": "Khả năng cân bằng của nhóm blue-chips vẫn đủ ổn định điểm số, nhưng không thể hỗ trợ giao dịch ở phần lớn thị trường. Trong 103 cổ phiếu giảm sâu quá 1% hôm nay, đại đa số là các mã vừa và nhỏ.\n \n \n \n VN-Index vẫn đang được các blue-chips giữ cân bằng.\n \n \n VN-Index đóng cửa giảm nhẹ 0,06% (-1,04 điểm) tức là gần như\nđi ngang so với mức chốt buổi sáng (tăng 0,1%/+1,89 điểm). Nguyên nhân là các cổ\nphiếu vốn hóa lớn biến động rất nhỏ, lại cân bằng được với nhau bên điểm số\nthay đổi ít.\nCụ thể, VIC, VHM, VCB suy yếu nhẹ trong phiên chiều: VIC lùi\n0,7% so với mức chốt buổi sáng, đảo chiều thành giảm 0,04% so với tham chiếu;\nVHM lùi 0,7% thành giảm 0,56%. VCB tuy đóng cửa giảm mạnh 1,17% nhưng thực tế\nchiều nay chỉ giảm thêm 0,5%, còn lại đã yếu sẵn từ sáng.\nGAS là cổ phiếu duy nhất trong top 10 vốn hóa giảm rõ nét.\nChốt phiên sáng GAS mới giảm 0,11%, vừa vào phiên chiều đã bị xả. Nhiều lần nỗ\nlực phục hồi thất bại, đóng cửa cổ phiếu này giảm 2,19% so với tham chiếu, tức\nlà riêng phiên chiều giảm 2,08%. Một mã dầu khí khác trong rổ VN30 là BSR cũng\ntrượt giảm mạnh 1,92% so với phiên sáng nhưng chốt vẫn trên tham chiếu 0,49%.\nỞ phía ngược lại, ảnh hưởng của GAS, VIC, VHM, VCB được đỡ lại\ntừ một số blue-chips tầm trung. ACB có nhịp phục hồi ấn tượng, tăng 2,49% so với\nphiên sáng để đóng cửa vượt tham chiếu 2,26%. CTG cũng đảo chiều thành công, tăng\n1,98% chiều nay và chốt tăng 0,98%. Ấn tượng nhất về thanh khoản là FPT, cổ phiếu\nnày ghi nhận thanh khoản tăng 57% so với phiên sáng và giá leo dốc trọn buổi\nchiều. Đóng cửa FPT tăng 1,51%, tức là riêng chiều nay đã tăng tới 2,93%. Mạnh\nnhất về cường độ giá chiều nay là SSB, chốt phiên sáng đã tăng 3,11%, chiều nay\nleo lên kịch trần.\nThống kê rổ VN30 chiều nay có 16 cổ phiếu tăng giá so với\nphiên sáng và 14 mã khác tụt giá. Tiếc rằng nhóm tăng giá chủ yếu là vốn hóa\ntrung bình, khiến VN-Index mất đi động lực. Trong khi đó VN30-Index hưởng lợi rõ\nhơn, đóng cửa vẫn tăng 0,16% dù chỉ có 11 mã xanh và 16 mã đỏ.\nSố ít cổ phiếu có dòng tiền đẩy giá lên chiều nay, phần lớn là thanh khoản tăng do sức ép từ bên bán.\nVới nhóm vừa và nhỏ, tình hình khá “bi đát” trong buổi chiều.\nChốt phiên sáng cả sàn HoSE mới có 74 cổ phiếu giảm quá 1%, đóng cửa lên tới\n103 mã, trong đó VN30 đóng góp 8 mã. Khá nhiều cổ phiếu chịu sức ép bán nổi bật\nvà giá giảm sâu như VIX giảm 1,94% khớp 317,2 tỷ đồng; VCI giảm 2,78% với 173,2\ntỷ, CII giảm 1,93% với 113,4 tỷ; DXG giảm 1,86% với 111,8 tỷ; VND giảm 1,36% với\n104,1 tỷ; DGW giảm 3,46% với 66,8 tỷ…\nĐộ rộng sàn HoSE chiều nay không thay đổi quá nhiều, ghi nhận\n116 mã xanh và 194 mã giảm (phiên sáng 116 mã xanh và 184 mã đỏ), nhưng mặt bằng\ngiá cổ phiếu lại thấp đi đáng kể, biểu hiện rõ nhất là số lượng cổ phiếu giảm\nquá 1% tăng lên. Cùng với đó, thanh khoản sàn này buổi chiều tăng hơn 59% so với\nphiên sáng. Đây là biểu hiện của áp lực bán hạ giá chủ động đã mạnh lên rõ nét.\nTrong 116 cổ phiếu còn xanh cuối ngày, khá nhiều mã cũng xuất\nhiện thanh khoản cao. Diễn biến này là tiếp nối từ sáng khi mức độ tập trung vốn\nrất cao. 12 mã đạt thanh khoản trên trăm tỷ đồng với giá tăng quá 1% chiếm hầu\nhết giao dịch ở nhóm này. Ngoài vài blue-chips là FPT, MBB, ACB, GVR, SSB, MCH,\ncó thêm PLX tăng 2,28%, PVT tăng 1,75%, DCL tăng 6,93%, NVL tăng 2,08%, VPI tăng\n1,64% và GEE tăng 1,94%.\nNhà đầu tư nước ngoài chiều nay giao dịch sôi động hơn hẳn\nbuổi sáng, tăng mua và bán đều gấp đôi, nhưng mua vẫn mạnh hơn. Vị thế ròng đạt\n+138,2 tỷ đồng so với 82,9 tỷ đồng trong buổi sáng. Các mã được mua tốt là SBT\n+216,5 tỷ, FPT +117,1 tỷ, BSR +112,5 tỷ, MBB +95,9 tỷ, MCH +95,1 tỷ, ACB +72,1\ntỷ, SSB +56,8 tỷ. Phía bán ròng có VHM -205,6 tỷ, VIC -149,5 tỷ, VIX -67,1 tỷ.",
+      "expected": [
+        {
+          "symbol": "ACB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "FPT",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "GAS",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "MBB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "SSB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "VCB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "VHM",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "VIC",
+          "relevance": "primary"
+        }
+      ],
+      "must_not_tag": [],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 32,
+      "source_domain": "vnexpress.net",
+      "title": "Tập đoàn Trung Quốc muốn đầu tư năng lượng, đường sắt tại Việt Nam",
+      "url": "https://vnexpress.net/tap-doan-trung-quoc-muon-dau-tu-nang-luong-duong-sat-tai-viet-nam-5121081.html",
+      "body": "Tập đoàn Trung Quốc muốn đầu tư năng lượng, đường sắt tại Việt Nam\nTập đoàn Trung Quốc muốn đầu tư năng lượng, đường sắt tại Việt Nam \nHuawei, CCCC và CEEC đề xuất tham gia các dự án năng lượng xanh, lưu trữ điện và đường sắt kết nối Việt Nam - Trung Quốc. Các đề xuất được lãnh đạo ba tập đoàn Trung Quốc nêu tại cuộc gặp Phó thủ tướng Thường trực Phạm Gia Túc, tại Nam Ninh, ngày 16/9, nhân dịp Hội chợ Trung Quốc - ASEAN (CAEXPO).Tại cuộc gặp, lãnh đạo Tập đoàn Xây dựng Năng lượng Trung Quốc (CEEC) cho biết muốn mở rộng đầu tư vào năng lượng tái tạo, điện khí và các nguồn điện mới. Doanh nghiệp cũng đề xuất tham gia nghiên cứu giải pháp phát triển, tăng năng lực hệ thống truyền tải, đáp ứng yêu cầu nguồn điện và phát triển kinh tế-xã hội.Ngoài lĩnh vực điện, CEEC quan tâm đầu tư 3 tuyến đường sắt kết nối Việt Nam - Trung Quốc, gồm Lào Cai - Hà Nội - Hải Phòng, Đồng Đăng - Hà Nội và Móng Cái - Hạ Long - Hải Phòng.Tương tự, Tập đoàn Xây dựng Giao thông Trung Quốc (CCCC) muốn tham gia tuyến đường sắt tốc độ cao Lào Cai - Hà Nội - Hải Phòng, cùng các dự án cảng biển, logistics, giao thông đường bộ, đường thủy và năng lượng xanh. Tập đoàn này khẳng định sẵn sàng cùng với các bộ ngành, doanh nghiệp Việt nghiên cứu dự án phù hợp.Phó thủ tướng Thường trực Phạm Gia Túc cho biết Việt Nam đang triển khai nhiều dự án lớn về đường bộ, đường sắt, hàng không và cảng biển. Ông đề nghị CCCC, CEEC làm việc với các bộ, ngành, cập nhật quy hoạch và xây dựng phương án hợp tác cụ thể.\nPhó thủ tướng Thường trực Phạm Gia Túc tiếp ông Zhang Deliang, Phó tổng giám đốc Tập đoàn Xây dựng Năng lượng Trung Quốc (CEEC). Ảnh: VGP\nVới Huawei, hãng công nghệ này đề xuất hợp tác phát triển năng lượng xanh, hệ thống lưu trữ điện và ứng dụng trí tuệ nhân tạo (AI) trong các lĩnh vực kinh tế. Tập đoàn cũng muốn tiếp tục tham gia phát triển kinh tế số, chuyển đổi số và đào tạo nhân lực công nghệ cao tại Việt Nam.Phó thủ tướng đề nghị Huawei chuyển từ cung cấp sản phẩm, thiết bị sang hợp tác nghiên cứu, phát triển và cùng doanh nghiệp Việt Nam xây dựng các giải pháp công nghệ. Hai bên có thể lựa chọn một số dự án thí điểm mang tính đột phá trong AI, công nghệ số và năng lượng xanh.Theo Phó thủ tướng, Việt Nam xác định khoa học - công nghệ, đổi mới sáng tạo, chuyển đổi số và AI là những động lực quan trọng của tăng trưởng. Việt Nam mong muốn hợp tác với các doanh nghiệp công nghệ lớn, trong đó có Huawei, để ứng dụng công nghệ, nâng năng suất, năng lực quản trị và phát triển các ngành, lĩnh vực mới.Phương Dung\nHuawei, CCCC và CEEC đề xuất tham gia các dự án năng lượng xanh, lưu trữ điện và đường sắt kết nối Việt Nam - Trung Quốc.",
+      "expected": [],
+      "must_not_tag": [
+        {
+          "symbol": "CMG",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "FPT",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        }
+      ],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 35,
+      "source_domain": "vnexpress.net",
+      "title": "Big Tech - những 'tài sản chiến lược' nghìn tỷ USD của Mỹ",
+      "url": "https://vnexpress.net/big-tech-nhung-tai-san-chien-luoc-nghin-ty-usd-cua-my-5121002.html",
+      "body": "Big Tech - những 'tài sản chiến lược' nghìn tỷ USD của Mỹ\nBig Tech - những 'tài sản chiến lược' nghìn tỷ USD của Mỹ \nMicrosoft, Amazon, Meta hay Nvidia đang vượt khỏi vai trò của những tập đoàn công nghệ đơn thuần, trở thành động lực đầu tư, hạ tầng số và lợi thế cạnh tranh ngày càng quan trọng của kinh tế Mỹ. Sức mạnh kinh tế của Mỹ trong hai thập niên qua không chỉ đến từ thể chế hay thị trường vốn sâu rộng, mà được củng cố bởi một nhóm doanh nghiệp công nghệ có quy mô và ảnh hưởng vượt xa biên giới quốc gia.Microsoft, Amazon, Meta hay Nvidia hiện nắm giữ những mắt xích quan trọng của kinh tế số toàn cầu, từ điện toán đám mây, thương mại điện tử, quảng cáo đến chip và hạ tầng trí tuệ nhân tạo (AI). Khi cuộc đua AI bước sang giai đoạn cần lượng vốn đầu tư ngày càng lớn, ảnh hưởng của các tập đoàn này cũng lan sang nhiều lĩnh vực truyền thống như xây dựng, năng lượng, bán dẫn hay logistics.Microsoft là một trong những ví dụ rõ nhất. Năm tài khóa 2026, doanh thu Azure lần đầu vượt 100 tỷ USD. Riêng quý IV, kết thúc ngày 30/6, doanh thu Azure và các dịch vụ đám mây khác tăng 43% so với cùng kỳ; Microsoft Cloud đạt 59,3 tỷ USD, tăng 27%, còn Intelligent Cloud đạt 39,3 tỷ USD, tăng 32%.\nMicrosoft cung cấp dịch vụ cho hàng chục triệu doanh nghiệp trên thế giới. Ảnh: Microsoft\nSức ảnh hưởng của Microsoft còn thể hiện ở quy mô nhu cầu dài hạn của khách hàng doanh nghiệp. Giá trị các nghĩa vụ thực hiện còn lại trong hợp đồng thương mại đạt 678 tỷ USD, tăng 84% so với cùng kỳ, trong khi Microsoft 365 Copilot đã vượt 30 triệu tài khoản trả phí.Để đáp ứng nhu cầu cloud và AI, Microsoft chi gần 116 tỷ USD cho tài sản và thiết bị trong năm tài khóa 2026, gần gấp đôi năm trước. Quy mô đầu tư này cho thấy tập đoàn không chỉ bán phần mềm, mà đang trực tiếp mở rộng năng lực trung tâm dữ liệu, điện toán và AI - những lớp hạ tầng ngày càng thiết yếu với doanh nghiệp, tổ chức và nền kinh tế số toàn cầu.Trong khi Microsoft tác động tới hàng triệu doanh nghiệp, Amazon đã thay đổi cách thế giới mua sắm, lưu trữ dữ liệu và vận hành hạ tầng số. Quý II/2026, doanh thu AWS tăng 37%, mức nhanh nhất trong 18 quý, lên 42,2 tỷ USD; lợi nhuận hoạt động đạt 16,6 tỷ USD, chiếm hơn 60% lợi nhuận hoạt động của toàn tập đoàn. Mảng quảng cáo cũng tăng 26%, đạt gần 19,8 tỷ USD, đưa doanh thu 12 tháng gần nhất vượt 76 tỷ USD.\nMột nhân viên kho hàng của Amazon. Ảnh: France24\nTừ một sàn thương mại điện tử, Amazon đã trở thành mắt xích quan trọng của kinh tế số Mỹ và toàn cầu, khi cùng lúc hiện diện ở bán lẻ, logistics, quảng cáo, điện toán đám mây, chip và AI. Trong 12 tháng (tính đến cuối tháng 6/2026), tập đoàn chi ròng khoảng 169 tỷ USD cho tài sản và thiết bị, chủ yếu phục vụ AI, qua đó tạo thêm nhu cầu cho trung tâm dữ liệu, điện năng, chip và chuỗi cung ứng công nghệ. Vốn hóa Amazon cũng lần đầu vượt 3.000 tỷ USD trong phiên 3/8/2026, trở thành doanh nghiệp thứ năm trên thế giới đạt được cột mốc lịch sử này sau Apple, Microsoft, Nvidia và Alphabet.Nếu Microsoft và Amazon nắm phần lớn lớp hạ tầng tính toán, Meta lại sở hữu một trong những mạng lưới phân phối nội dung và quảng cáo lớn nhất thế giới. Facebook, Instagram, WhatsApp và Messenger hiện kết nối trung bình khoảng 3,6 tỷ người hoạt động mỗi ngày. Doanh thu quý II/2026 đạt 60,8 tỷ USD, tăng 28%, trong đó riêng quảng cáo mang về 59,36 tỷ USD. Meta đồng thời dự kiến chi 130-145 tỷ USD vốn đầu tư trong năm 2026, chủ yếu để mở rộng hạ tầng AI và năng lực tính toán.Với quy mô người dùng lớn hơn dân số bất kỳ quốc gia nào, các nền tảng của Meta đã trở thành kênh tiếp cận khách hàng và phân phối nội dung quan trọng đối với doanh nghiệp, nhà quảng cáo và nhà sáng tạo trên toàn cầu.Trong khi các tập đoàn như Microsoft, Amazon hay Meta là bên xây dựng và vận hành các nền tảng AI, Nvidia lại giữ vai trò cung cấp phần cứng cốt lõi cho làn sóng này. Từ một hãng sản xuất GPU cho máy tính cá nhân, Nvidia đã trở thành nhà cung ứng chip AI hàng đầu cho các trung tâm dữ liệu toàn cầu.Quý IV tài khóa 2025, kết thúc ngày 25/1/2026, Nvidia ghi nhận doanh thu kỷ lục 68,1 tỷ USD, tăng 73% so với cùng kỳ; lợi nhuận ròng đạt 42,96 tỷ USD, hơn gấp đôi năm trước. Riêng mảng trung tâm dữ liệu mang về 62,3 tỷ USD, tăng 75%, chiếm hơn 90% tổng doanh thu quý. Tính cả năm tài khóa, doanh thu Nvidia đạt 215,9 tỷ USD, tăng 65%, trong đó trung tâm dữ liệu đóng góp 193,7 tỷ USD.Sự bùng nổ của nhu cầu chip phục vụ huấn luyện và vận hành mô hình AI đã đưa Nvidia trở thành doanh nghiệp niêm yết giá trị nhất thế giới, với vốn hóa vượt 4.700 tỷ USD. Vị thế này khiến Nvidia không còn là một doanh nghiệp bán dẫn, mà trở thành mắt xích chiến lược trong chuỗi cung ứng AI toàn cầu và các chính sách kiểm soát công nghệ giữa những nền kinh tế lớn.\nJensen Huang, CEO Nvidia tại Triển lãm Computex 2025 tại Đài Loan. Ảnh: Reuters \nTác động của Big Tech tới tăng trưởng MỹẢnh hưởng của nhóm công nghệ lớn không chỉ thể hiện qua doanh thu hay vốn hóa, mà ngày càng hiện rõ trong đầu tư của kinh tế Mỹ.Theo phân tích của GS. Jason Furman, Đại học Harvard, đầu tư vào thiết bị xử lý thông tin và phần mềm - nhóm chi tiêu gắn nhiều với hạ tầng AI - đóng góp tới 92% mức tăng GDP Mỹ trong nửa đầu năm 2025, dù chỉ chiếm khoảng 4% quy mô nền kinh tế. Nếu loại trừ nhóm đầu tư này, tăng trưởng trong giai đoạn trên gần như đi ngang.Lisa Shalett, Giám đốc đầu tư Morgan Stanley Wealth Management, cũng cho rằng quy mô đầu tư của các \"hyperscaler\" - nhóm doanh nghiệp chi mạnh cho hạ tầng tính toán, lưu trữ và kết nối dữ liệu đang ngày càng mở rộng. Theo bà, chi tiêu vốn cho trung tâm dữ liệu và hạ tầng liên quan đã tăng gấp bốn lần trong vài năm, tiến sát 400 tỷ USD mỗi năm. Riêng chi tiêu liên quan đến trung tâm dữ liệu được ước tính đóng góp khoảng một điểm phần trăm vào tăng trưởng GDP thực của Mỹ.Việc xây dựng trung tâm dữ liệu kéo theo nhu cầu lớn về máy chủ, chip, thiết bị điện, hệ thống làm mát, xây dựng và năng lượng, qua đó tạo thêm đơn hàng và việc làm cho nhiều ngành. Ở chiều ngược lại, cloud, AI, thương mại điện tử và quảng cáo số giúp doanh nghiệp tài chính, sản xuất, bán lẻ hay logistics tự động hóa quy trình, giảm chi phí và mở rộng thị trường. Big Tech vì thế vừa tạo lực kéo cho đầu tư, vừa góp phần nâng năng suất của phần còn lại trong nền kinh tế.Sức ảnh hưởng của nhóm này cũng vượt ra ngoài biên giới Mỹ. Đơn cử, Microsoft bán phần mềm và dịch vụ cloud cho doanh nghiệp toàn cầu; Amazon kiếm doanh thu từ thương mại, quảng cáo và AWS; Meta sở hữu mạng lưới hàng tỷ người dùng; Nvidia hưởng lợi từ làn sóng đầu tư AI tại nhiều thị trường. Nguồn doanh thu và lợi nhuận toàn cầu lại tiếp tục tạo dư địa cho các chu kỳ nghiên cứu và đầu tư mới.Nhìn tổng thể, sức mạnh của Big Tech Mỹ không nằm ở từng doanh nghiệp riêng lẻ, mà ở khả năng tạo thành một hệ sinh thái gần như hoàn chỉnh của kinh tế số. Vai trò này cũng phần nào lý giải việc lãnh đạo các tập đoàn công nghệ lớn thường xuất hiện cùng Tổng thống Mỹ trong những chuyến công du hay sự kiện đối ngoại. Khi công nghệ ngày càng gắn với năng lực cạnh tranh, chuỗi cung ứng và an ninh kinh tế, các doanh nghiệp này không còn đơn thuần là những công ty nghìn tỷ USD, mà trở thành một phần trong lợi thế chiến lược của nước Mỹ.\nTỷ phú Elon Musk, Jensen Huang cùng nhiều lãnh đạo các doanh nghiệp nghìn tỷ USD tháp tùng tổng thống Mỹ đến thăm Trung Quốc. Ảnh: Reuters\nTừ góc nhìn quốc tế, bài học từ Mỹ cho thấy vai trò của doanh nghiệp quy mô lớn không chỉ nằm ở doanh thu hay vốn hóa, mà ở khả năng dẫn dắt công nghệ, mở rộng ra toàn cầu và tạo hiệu ứng lan tỏa cho nền kinh tế. Tại Việt Nam, Nghị quyết 68 về phát triển kinh tế tư nhân và Nghị quyết 57 về khoa học, công nghệ, đổi mới sáng tạo đang tạo nền tảng chính sách theo hướng này.Hiện tại, Bộ Công thương đang triển khai chương trình \"Go Global\" giai đoạn 2026 - 2030 chuyển trọng tâm từ chỉ thúc đẩy xuất khẩu sang xây dựng doanh nghiệp toàn cầu thực thụ, với mục tiêu đào tạo 10.000 doanh nghiệp, hỗ trợ 1.000 doanh nghiệp xây dựng chiến lược toàn cầu và 100 doanh nghiệp đầu tư ra nước ngoài.Việt Nam hiện có nhiều doanh nghiệp lớn như Viettel, Vingroup, Vinamilk, FPT, Techcombank, Masterise Group, Masan Group... đang mở rộng quy mô trong các lĩnh vực công nghệ, tài chính, công nghiệp, tiêu dùng và bất động sản.Các chuyên gia cho rằng, nếu tiếp tục được tạo điều kiện phát triển, những doanh nghiệp này có thể trở thành \"doanh nghiệp quốc gia\", giữ vai trò đầu tàu, góp phần cùng Chính phủ thúc đẩy tăng trưởng, nâng cao năng lực cạnh tranh và hướng tới mục tiêu đưa Việt Nam trở thành nước phát triển, thu nhập cao.Minh Đăng\nMicrosoft, Amazon, Meta hay Nvidia đang vượt khỏi vai trò của những tập đoàn công nghệ đơn thuần, trở thành động lực đầu tư, hạ tầng số và lợi thế cạnh tranh ngày càng quan trọng của kinh tế Mỹ.",
+      "expected": [
+        {
+          "symbol": "FPT",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "MSN",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "TCB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "VIC",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "VNM",
+          "relevance": "mentioned"
+        }
+      ],
+      "must_not_tag": [],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 36,
+      "source_domain": "vneconomy.vn",
+      "title": "Một cổ phiếu dự báo được các ETF mua ròng hơn 1.000 tỷ trong tuần này",
+      "url": "https://vneconomy.vn/mot-co-phieu-du-bao-duoc-cac-etf-mua-rong-hon-1000-ty-trong-tuan-nay.htm",
+      "body": "Theo ước tính, tổng giá trị mua ròng của 20 cổ phiếu đứng đầu đạt khoảng 7.023 tỷ đồng, trong khi 20 cổ phiếu bị bán ròng có tổng giá trị khoảng 1.180 tỷ đồng trong kỳ cơ cấu tuần này của các ETF... \n \n \n \n Tuần từ 14/9 đến 18/9/2026 là tuần cơ cấu của một loạt quỹ ETF. Các quỹ được xác định sẽ hoàn tất tái cơ cấu trong ngày 18/9, bao gồm Fubon Vietnam ETF, VanEck Vectors Vietnam ETF, Xtrackers Vietnam Swap UCITS ETF và các quỹ Vanguard ETF mô phỏng các chỉ số toàn cầu của FTSE (FTSE GEIS).\nĐây là thời điểm dòng tiền ETF có thể tạo ra những biến động đáng chú ý tại các cổ phiếu nằm trong danh mục cơ cấu. Các giao dịch được dự kiến hoàn tất trong phiên cuối tuần, ngày 18/9.\nTheo ước tính của Yuanta Việt Nam, tổng giá trị mua ròng của 20 cổ phiếu đứng đầu đạt khoảng 7.023 tỷ đồng, trong khi 20 cổ phiếu bị bán ròng có tổng giá trị khoảng 1.180 tỷ đồng.\nTrong nhóm 20 cổ phiếu được dự kiến mua ròng nhiều nhất trong tuần cơ cấu, FPT đứng đầu với giá trị khoảng 1.017 tỷ đồng, tương đương khoảng 2,55 phiên giao dịch dựa trên thanh khoản hiện tại.\nĐứng thứ hai là VPB, với giá trị mua ròng dự kiến 824 tỷ đồng, tương đương 1,74 phiên giao dịch. HPG đứng thứ ba với khoảng 671 tỷ đồng, tương đương 1,56 phiên. Tiếp theo là VHM với 592 tỷ đồng và MSN với 482 tỷ đồng.\nNhóm cổ phiếu ngân hàng tiếp tục xuất hiện với nhiều cái tên trong danh sách được dự báo hút dòng tiền ETF. STB được dự kiến mua ròng khoảng 433 tỷ đồng, ACB khoảng 354 tỷ đồng, SSB khoảng 315 tỷ đồng, VCB khoảng 241 tỷ đồng, SHB khoảng 160 tỷ đồng và HDB khoảng 131 tỷ đồng.\nNgoài ra, danh sách còn có VPL với giá trị mua ròng dự kiến 316 tỷ đồng, VNM 311 tỷ đồng, MCH 243 tỷ đồng, SSI 238 tỷ đồng, VIX 222 tỷ đồng, NVL 208 tỷ đồng, GEX 107 tỷ đồng, VJC 93 tỷ đồng và MSB 64 tỷ đồng.\nTính chung, 20 cổ phiếu đứng đầu danh sách mua ròng được dự phóng nhận khoảng 7.023 tỷ đồng từ hoạt động cơ cấu ETF trong tuần. Trong đó, FPT là cổ phiếu dẫn đầu về quy mô dòng tiền dự kiến, trong khi SSB có thời gian giao dịch ước tính dài nhất, lên tới 7,22 phiên.\nĐáng chú ý, ngoài SSB, một số cổ phiếu cũng có số phiên giao dịch tương đối lớn để hoàn tất lượng mua dự kiến. VPL cần khoảng 4,85 phiên, MCH khoảng 4,37 phiên, FPT 2,55 phiên và ACB 2,25 phiên. \nChỉ số “số ngày giao dịch” được sử dụng nhằm thể hiện số phiên trung bình cần thiết để hoàn tất lượng giao dịch dự kiến nếu so với thanh khoản hiện tại.\nỞ chiều ngược lại, VIC đứng đầu danh sách 20 cổ phiếu được dự kiến bán ròng với giá trị khoảng 301 tỷ đồng. Tuy nhiên, xét trên thanh khoản hiện tại, lượng bán này tương đương chỉ khoảng 0,21 phiên giao dịch.\nĐứng sau VIC là VCK, với giá trị bán ròng dự kiến 198 tỷ đồng và khoảng 3,25 phiên giao dịch; VND bị dự kiến bán ròng 124 tỷ đồng, tương đương 0,79 phiên; KBC 95 tỷ đồng, tương đương 2,93 phiên; và KDH 77 tỷ đồng, tương đương 0,86 phiên.\nDanh sách bán ròng tiếp tục có VCI với 69 tỷ đồng, FTS 63 tỷ đồng, GEE 52 tỷ đồng, CEO 48 tỷ đồng và BVH 29 tỷ đồng.\nỞ nhóm còn lại, POW được dự kiến bán ròng 26 tỷ đồng, NKG 25 tỷ đồng, DXG 24 tỷ đồng, VRE 18 tỷ đồng và VHC 13 tỷ đồng. Các mã TCX, HAG, BSR, TPB và FRT cũng nằm trong danh sách nhưng giá trị bán ròng dự kiến tương đối nhỏ, từ 2-10 tỷ đồng.\nTổng giá trị của 20 cổ phiếu nằm trong nhóm bị bán ròng nhiều nhất được dự phóng khoảng 1.180 tỷ đồng. Trong nhóm này, FTS có số phiên giao dịch dự kiến lớn nhất, khoảng 3,82 phiên, tiếp theo là VCK 3,25 phiên và KBC 2,93 phiên.\nNgày 18/9 sẽ là mốc đáng chú ý đối với diễn biến giao dịch của các cổ phiếu nằm trong danh sách cơ cấu ETF. Dự kiến dòng tiền dự kiến tập trung mạnh ở FPT, VPB, HPG, VHM và MSN ở chiều mua, trong khi VIC, VCK, VND, KBC và KDH nằm trong nhóm chịu áp lực bán. \nTuy nhiên, lưu ý rằng đây chỉ là ước tính giao dịch cơ cấu của các quỹ ETF và có thể thay đổi theo diễn biến thực tế của thị trường, do đó quy mô mua bán cuối cùng có thể khác so với dự phóng.\nTheo đánh giá của Yuanta Việt Nam, VN-Index đã củng cố vùng hỗ trợ 1.780 điểm và có khả năng tiếp tục kiểm định vùng 1.820-1.825 điểm trong các phiên kế tiếp, trước cuộc họp Fed và thời điểm đáo hạn phái sinh.",
+      "expected": [
+        {
+          "symbol": "ACB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "FPT",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "HPG",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "KDH",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "MSN",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "SSB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "VHM",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "VIC",
+          "relevance": "primary"
+        }
+      ],
+      "must_not_tag": [],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 50,
+      "source_domain": "vneconomy.vn",
+      "title": "Lợi nhuận tăng cao nhưng nhiều cổ phiếu ngân hàng vẫn giảm mạnh từ đầu năm, vì đâu?",
+      "url": "https://vneconomy.vn/loi-nhuan-tang-cao-nhung-nhieu-co-phieu-ngan-hang-van-giam-manh-tu-dau-nam-vi-dau.htm",
+      "body": "Mức giảm sâu hơn được ghi nhận ở CTG và TPB, cùng khoảng 14%. VIB giảm khoảng 16%, trong khi EIB là cổ phiếu có mức giảm mạnh nhất trong nhóm được thể hiện trên biểu đồ, khoảng 21% so với đầu năm 2026.\n \n \n \n Thống kê diễn biến thị giá cổ phiếu nhóm ngân hàng từ đầu năm đến nay cho thấy đang có sự phân hóa sâu sắc giữa các cổ phiếu trong nhóm nhà băng.\nTheo đó, STB là cổ phiếu có diễn biến nổi bật nhất khi mức tăng vào khoảng 32%, vượt xa phần còn lại của nhóm ngân hàng trong biểu đồ. Sau STB, ACB tăng khoảng 5%, trong khi VCB tăng khoảng 1% so với đầu năm.\nỞ chiều ngược lại, phần lớn cổ phiếu ngân hàng trong biểu đồ đang có mức giá thấp hơn so với đầu năm. MBB giảm khoảng 3%, VPB giảm khoảng 4%, BID giảm khoảng 7% và HDB, TCB cùng giảm khoảng 8%.\nMức giảm sâu hơn được ghi nhận ở CTG và TPB, cùng khoảng 14%. VIB giảm khoảng 16%, trong khi EIB là cổ phiếu có mức giảm mạnh nhất trong nhóm được thể hiện trên biểu đồ, khoảng 21% so với đầu năm 2026.\nNhư vậy, bức tranh giá cổ phiếu ngân hàng hiện cho thấy không có sự đồng thuận về xu hướng giữa các mã. Trong khi STB duy trì mức tăng đáng kể, ACB, VNI và VCB vẫn cao hơn đầu năm thì nhiều cổ phiếu ngân hàng vốn hóa lớn khác lại đang thấp hơn mức đầu năm, với mức giảm từ khoảng 3% đến 21%.\nĐiểm đáng chú ý là sự phân hóa này diễn ra ngay cả trong các nhóm ngân hàng có đặc điểm tương đồng, cho thấy diễn biến giá trong năm 2026 không chỉ phụ thuộc vào xu hướng chung của ngành mà còn thể hiện sự khác biệt đáng kể giữa từng cổ phiếu.\nNhận định về xu hướng giá cổ phiếu nhóm ngân hàng mới đây, Mirae Asset cho rằng xu hướng giá có phần kém tích cực của nhóm ngân hàng so với thị trường chung không phải chỉ do lợi nhuận tăng có phần thấp hơn, mà còn do chỉ số thị trường được dẫn dắt bởi một số cổ phiếu vốn hóa lớn và một vài cổ phiếu có câu chuyện riêng. \nLợi nhuận ngân hàng tăng tốc trong quý 2/2026, nhưng vẫn còn thấp hơn một số nhóm ngành lớn. Lợi nhuận trước thuế của các ngân hàng niêm yết tăng 24,5% so với cùng kỳ trong quý 2/2026 và 19,6% trong 6 tháng đầu năm 2026, thấp hơn đáng kể so với mức tăng trưởng lợi nhuận của các ngành như dầu khí (+246,7%), Bất động sản (+172,3%) và bán lẻ (+109,2%) trong quý 2/2026. \nVề triển vọng thời gian tới, theo Mirae Asset, sẽ có những thông tin sau nhà đầu tư nên chú ý.\nThứ nhất, lãi suất khó giảm. Kỳ vọng Fed giảm lãi suất trước đây đã bị đảo chiều khi rủi ro lạm phát quay trở lại và thị trường lao động Mỹ vẫn duy trì tích cực. Kỳ vọng thị trường hiện cho thấy có khoảng 58-68% xác suất cho một đợt tăng 25đcb của Fed tại cuộc họp tháng 9, và có thể còn một đợt tăng trong tháng 12. Quyết định này có thể tiếp tục gây áp lực lên đồng nội tệ và chi phí huy động, khiến mặt bằng lãi suất trong nước khó giảm từ mức hiện tại.\nCác Ngân hàng tư nhân gần đây ghi nhận thu hút dòng tiền tốt hơn nhờ tiềm năng tăng trưởng cao. Vai trò định hình mặt bằng lãi suất cho vay của nhóm Ngân hàng Quốc dân cũng phần nào hạn chế khả năng điều chỉnh biên lợi suất của các ngân hàng này, vốn có NIM tương đối mỏng. \nĐiều này khiến khả năng duy trì NIM phụ thuộc nhiều hơn vào quản lý chi phí huy động và tận dụng tối đa dư địa cơ cấu bảng cân đối, nếu phải tiếp tục duy trì vai trò chiến lược. \nNgược lại, các Ngân hàng Tư nhân lớn nhìn chung có khả năng điều chỉnh lãi suất linh hoạt hơn và tỷ lệ CASA có phần cao hơn, qua đó vẫn có dư địa hơn để bảo vệ NIM. Nguồn thu nhập phí đa dạng cũng giúp bù đắp áp lực NIM giảm đối với lợi nhuận.\nMirae Asset đánh giá cơ hội đầu tư mở rộng đối với các ngân hàng niêm yết ngoại trừ một số ít các ngân hàng đã được định giá vượt trội. \nSau gần 9 tháng năm 2026, hiện vẫn chưa có những cú sốc đối với các khoản vay liên quan đến bất động sản do những lo ngại về hạn chế tăng trưởng tín dụng đối với nhóm này và lãi suất leo cao. \nNgoài ra, dù tình hình giao dịch có phần ảm đạm và giá bất động sản vẫn neo ở vùng cao, các chủ đầu tư đang đưa ra các chính sách ưu đãi nhằm tăng thanh khoản cho thị trường nhờ nghĩa vụ thanh toán thực tế có phần dễ tiếp cận hơn.\nVì vậy, rủi ro liên quan đến bất động sản, đặc biệt là đối với các chủ đầu tư được giảm thiểu phần nào. Bên cạnh đó, định giá của các ngân hàng đã vào vùng hấp dẫn, đa phần dưới -1đlc so với trung bình dài hạn.\nDù các rủi ro tập trung giảm thiểu, Ngân hàng quốc doanh và những Ngân hàng tư nhân có chiến lược tăng trưởng thận trọng vẫn nằm trong nhóm ưu tiên. \nCác tiêu chí lựa chọn chính bao gồm: định giá hấp dẫn, đặc biệt ở nhóm ngân hàng quốc doanh; bộ đệm dự phòng cao cho khả năng hấp thụ chi phí tín dụng cao hơn nếu lãi suất tiếp tục leo thang; chỉ số hiệu quả hoạt động tương đối tốt hơn; và tỷ trọng dư nợ được đa dạng hóa. \nNgoài ra, Mirae Asset vẫn tương đối thận trọng đối với những ngân hàng có dư nợ liên quan đến bất động sản cao, vì mặc dù Ngân hàng Nhà nước cho phép miễn trừ dư nợ trong tính toán hạn mức tín dụng đối với một số dự án chiến lược, những khoản tín dụng này vẫn không hoàn toàn phi rủi ro trong dài hạn.",
+      "expected": [
+        {
+          "symbol": "ACB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "BID",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "CTG",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "HDB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "STB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "TPB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "VCB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "VIB",
+          "relevance": "primary"
+        }
+      ],
+      "must_not_tag": [],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 54,
+      "source_domain": "vneconomy.vn",
+      "title": "Nhà đầu tư cá nhân hạn chế mở tài khoản bất chấp VN-Index tăng gần 100 điểm trong tháng 8",
+      "url": "https://vneconomy.vn/nha-dau-tu-ca-nhan-han-che-mo-tai-khoan-bat-chap-vn-index-tang-gan-100-diem-trong-thang-8.htm",
+      "body": "Số lượng tài khoản mở mới trong tháng 8 tăng nhẹ so với tháng 7 vừa qua và thấp hơn chủ yếu so với các tháng còn lại tính từ đầu năm 2026 đến nay.\n \n \n \n Số tài khoản nhà đầu tư cá nhân tính theo tháng từ đầu năm 2026. \n \n \n Số liệu mới nhất từ Tổng công ty Lưu lý và bù trừ chứng khoán Việt Nam cho thấy, trong tháng 8 vừa qua, toàn thị trường có thêm 229.765 tài khoản đầu tư. Trong đó, nhà đầu tư cá nhân trong nước mở mới 229.538 tài khoản còn nhà đầu tư tổ chức trong nước mở mới 153 tài khoản.Nhà đầu tư cá nhân nước ngoài mở mới 208 tài khoản và tổ chức nước ngoài mở mới 19 tài khoản. \nSố lượng tài khoản mở mới trong tháng 8 tăng nhẹ so với tháng 7 vừa qua và thấp hơn chủ yếu so với các tháng còn lại tính từ đầu năm 2026 đến nay.\nTheo số liệu tại ngày 31/8/2026, tổng số tài khoản nhà đầu tư trên thị trường đạt 13.887.603 tài khoản, tăng đáng kể so với mức 12.116.647 tài khoản vào cuối tháng 1/2026. Như vậy, chỉ sau 8 tháng, số lượng tài khoản đã tăng thêm 1.770.956 tài khoản, tương đương khoảng 14,6% so với cuối tháng 1.\nTrong tổng số tài khoản tại ngày 31/8, nhà đầu tư cá nhân trong nước chiếm phần lớn, với 13.814.693 tài khoản. Số lượng tài khoản của nhà đầu tư tổ chức trong nước đạt 20.277 tài khoản.\nĐối với nhà đầu tư nước ngoài, số tài khoản cá nhân đạt 47.719 tài khoản, trong khi số tài khoản tổ chức đạt 4.914 tài khoản. Tổng số tài khoản của nhà đầu tư nước ngoài theo đó đạt 52.633 tài khoản.\nSố tài khoản mở mới tăng nhẹ trong bối cảnh VN-Index khép lại tháng 8/2026 tại 1.832,12 điểm, tăng 96,34 điểm (+5,55%) so với cuối tháng 7, qua đó hồi phục đáng kể sau nhịp điều chỉnh mạnh của tháng trước (-6,68%).\nTuy vậy, mức tăng trong tháng không hoàn toàn phản ánh sự cải thiện đồng đều của toàn thị trường, khi động lực chính vẫn tập trung ở một số cổ phiếu vốn hóa lớn.\nThanh khoản tiếp tục chưa thực sự tích cực. Giá trị giao dịch khớp lệnh bình quân trên Sở Giao dịch Chứng khoán Thành phố Hồ Chí Minh (HOSE) đạt 14.206 tỷ đồng/phiên, giảm 2,15% so với tháng trước và thấp hơn 30,48% so với bình quân 5 tháng. Trên toàn thị trường, giá trị giao dịch khớp lệnh bình quân đạt 15.273 tỷ đồng/phiên, giảm 3,63% so với tháng 7 và thấp hơn 27,68% so với trung bình 5 tháng.\nNhà đầu tư cá nhân mua ròng 682,4 tỷ đồng, trong đó họ mua ròng 902,5 tỷ đồng qua khớp lệnh.\nTính riêng giao dịch khớp lệnh, họ mua ròng 10/18 ngành, chủ yếu là ngành ngân hàng. Top mua ròng của nhà đầu tư cá nhân tập trung gồm: ACB, VHM, VPB, VCB, NVL, POW, STB, TCX, DCM, MSB.\nPhía bán ròng khớp lệnh, nhà đầu tư cá nhân bán ròng 8/18 ngành, chủ yếu là nhóm ngành công nghệ thông tin, bán lẻ. Top bán ròng có: VIC, FPT, MBB, LPB, VNM, SSI, VIX, PNJ, GAS.",
+      "expected": [
+        {
+          "symbol": "ACB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "FPT",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "GAS",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "LPB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "MBB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "MSB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "PNJ",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "POW",
+          "relevance": "mentioned"
+        }
+      ],
+      "must_not_tag": [],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 61,
+      "source_domain": "vneconomy.vn",
+      "title": "Thị trường chững lại chờ tin, thanh khoản xuống đáy 20 phiên",
+      "url": "https://vneconomy.vn/thi-truong-chung-lai-cho-tin-thanh-khoan-xuong-day-20-phien.htm",
+      "body": "Đà tăng đã dừng lại sau phiên bùng nổ hôm qua, một phần vì nhóm cổ phiếu dẫn dắt là ngân hàng, dầu khí chững lại, một phần vì dòng tiền chờ đợi kết quả cuộc họp FED tối nay. Thanh khoản khớp lệnh hai sàn đã xuống mức thấp nhất trong 20 phiên sáng trở lại đây.\n \n \n \n Nhóm cổ phiếu ngân hàng điều chỉnh nhẹ sáng nay, sau phiên tăng bùng nổ hôm qua.\n \n \n VN-Index chốt phiên gần như đứng im, chỉ tăng 0,1% tương đương\n1,89 điểm. VN30-Index giảm 0,21% với 10 mã tăng và 18 mã giảm. Nhóm cổ phiếu ngân\nhàng “dừng thở” sau phiên đột biến hôm qua kết hợp với nhóm Vin cũng yếu, khiến\nđộng lực tăng của điểm số không còn.\nVIC tăng 0,66%, VHM tăng 0,14%, MBB tăng 0,25%, MCH tăng\n0,14% là 4 mã duy nhất trong Top 10 vốn hóa còn xanh sáng nay. VCB đã giảm\n0,67%, BID giảm 0,54%, CTG giảm 0,98%, TCB giảm 0,31%, GAS giảm 0,11%, VPB giảm\n0,54%. Có thể thấy VN-Index đã mất động lực đáng kể, ngay cả VIC đỡ lại khoảng\n2,5 điểm cũng không thay đổi được nhiều.\nKhá may mắn cho chỉ số này là các cổ phiếu giảm mạnh nhất\ntrong nhóm blue-chips không phải là những mã vốn hóa lớn nhất: VPL giảm 1,99%,\nFPT giảm 1,38%, LPB giảm 1,26%, TCX giảm 1,04% chủ yếu ảnh hưởng đến VN30-Index,\ncòn với VN-Index thậm chí còn ít điểm hơn cả VIC.\nThanh khoản rổ VN30 sáng nay sụt giảm tới 25% so với sáng hôm\nqua, chỉ đạt hơn 2.344 tỷ đồng, mức thấp nhất 20 phiên. Điều này xác nhận các\nnhà đầu tư lớn cũng đang tạm dừng giao dịch. BSR là cổ phiếu tốt nhất rổ\nblue-chips, vừa có thanh khoản lớn nhất với 283,2 tỷ đồng, vừa tăng khỏe nhất\n+2,46%. Còn lại chỉ có GVR tăng 4,2%, SSB tăng 3,11%, STB tăng 1,05% là đáng kể,\nthanh khoản cũng hạn chế.\nToàn sàn HoSE sáng nay khớp lệnh cũng giảm hơn 14% so với sáng\nhôm qua, đạt 4.629 tỷ đồng, cũng thấp nhất 20 phiên. Phần lớn mức giảm thanh khoản\nđến từ sự suy giảm của VN30. Dù vậy các cổ phiếu vừa và nhỏ cũng không nhiều cổ\nphiếu thu hút được dòng tiền nổi bật. Sàn này có 12 cổ phiếu khớp vượt trăm tỷ đồng\nthì ngoài blue-chips chỉ có PLX với 312,8 tỷ đồng, giá tăng 3,08%; PVD với\n140,2 tỷ, giá tăng 1,53%; PVT với 117,8 tỷ, giá tăng 2,63%; DPM với 100,8 tỷ,\ngiá tăng 1,52% và DCL với 100 tỷ, giá tăng 4,62%.\nDiễn biến VN-Index sáng nay.\nĐại đa số cổ phiếu đang tăng giá còn lại có thanh khoản rất\nnhỏ. Khoảng chục cổ phiếu khác giao dịch từ 10 tỷ đồng trở lên và giá tăng được\nhơn 1% không có nhiều tính đại diện. Dĩ nhiên dầu khí, cao su vẫn là nhóm có lực\nđỡ tích cực ở thời điểm giá dầu tăng mạnh. Trong 116 cổ phiếu xanh cuối phiên sáng,\ncó 58 mã tăng từ 1% trở lên, chiếm 33,4% thanh khoản cả sàn. Dù vậy tỷ trọng rất\ncao tập trung vào số lượng nhỏ cổ phiếu, với 31% sàn dồn vào 15 cổ phiếu thanh\nkhoản cao nhất.\nỞ phía giảm tuy số lượng cổ phiếu nhiều (184 mã) nhưng chủ yếu\ncũng chỉ giảm nhẹ. 14 mã trong số này giảm quá 1% với giao dịch từ 10 tỷ đồng\ntrở lên và duy nhất FPT khớp trên trăm tỷ đồng. NVL giảm 2,08%, CII giảm 1,93%,\nDXG giảm 2,79% là vài cổ phiếu khác khớp tương đối nhiều.\nThống kê biến động giá cổ phiếu trong VN-Index sáng nay chỉ\nkhoảng một phần ba có dao động rộng nhất trên 2%. Đây là mức biến động rất hẹp đối\nvới giá trong ngày. Rổ VN30 chỉ có 8 mã tương tự. Điều này tương thích với dao động\nrất hẹp của các chỉ số. Khi kết hợp với nền thanh khoản cực nhỏ, dao động hẹp\nphản ánh sự cân bằng cung cầu tạm thời.\nHiện thị trường đang chờ đợi kết quả cuộc họp của FED, dự kiến\ncông bố sáng sớm mai, tức là trước khi phiên chứng khoán châu Á mở cửa. Nói cách\nkhác, chậm lại một nhịp là bình thường vì nhà đầu tư vẫn có điều kiện phản ánh\nthông tin vào phiên giao dịch mới một cách đầy đủ.",
+      "expected": [
+        {
+          "symbol": "BID",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "CTG",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "DXG",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "FPT",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "GAS",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "GVR",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "LPB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "VIC",
+          "relevance": "primary"
+        }
+      ],
+      "must_not_tag": [],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 70,
+      "source_domain": "vneconomy.vn",
+      "title": "Giá vật liệu xi măng và thép tăng, lợi nhuận doanh nghiệp xây dựng có ảnh hưởng?",
+      "url": "https://vneconomy.vn/gia-vat-lieu-xi-mang-va-thep-tang-loi-nhuan-doanh-nghiep-xay-dung-co-anh-huong.htm",
+      "body": "Áp lực chi phí đầu vào vẫn đáng kể khi giá thép xây dựng tăng 8%-10% so với cùng kỳ, trong khi giá xi măng tăng 3%-4%. Chi phí vật liệu tăng đang hạn chế khả năng cải thiện biên lợi nhuận của các doanh nghiệp xây dựng trong bối cảnh nhu cầu cao.\n \n \n \n Theo cập nhật 6 tháng đầu năm 2026 của VIS Rating, nhu cầu xây dựng tại Việt Nam đang tăng mạnh, được hỗ trợ bởi giải ngân đầu tư công tăng tốc và hoạt động xây dựng bất động sản nhà ở hồi phục. Các cải cách pháp lý lớn hơn được kỳ vọng tiếp tục hỗ trợ nhu cầu trong dài hạn.\nTuy nhiên, chi phí phân bón, vật liệu xây dựng và áp lực vốn tăng đang hạn chế khả năng cải thiện biên lợi nhuận của doanh nghiệp. Trong bối cảnh này, các nhà thầu lớn có xu hướng có vị thế tốt hơn nhờ năng lực triển khai, khả năng lựa chọn dự án và vị thế đàm phán, qua đó có dư địa hấp thụ áp lực chi phí và chuyển hóa giá trị hợp đồng chưa thực hiện thành doanh thu, dòng tiền cao hơn.\nNgược lại, các nhà thầu nhỏ và vừa phải đối mặt với nhiều khó khăn hơn khi biên lợi nhuận thu hẹp, mức độ linh hoạt tài chính hạn chế và áp lực thanh toán nợ gia tăng.\nMột trong những yếu tố hỗ trợ triển vọng ngành xây dựng là các cải cách pháp lý và việc đẩy mạnh đầu tư hạ tầng.\nLuật Xây dựng năm 2025 được đánh giá có tác động tích cực đến hoạt động xây dựng khi tinh gọn quy trình phê duyệt, tăng cường giám sát, miễn giấy phép xây dựng và áp dụng cơ chế đặc thù cho dự án đầu tư công. Những thay đổi này được kỳ vọng giúp giảm chậm trễ về thủ tục hành chính và hỗ trợ tiến độ triển khai dự án sau khi luật có hiệu lực từ ngày 1/7/2026.\nBên cạnh đó, Chính phủ tiếp tục đẩy mạnh đầu tư hạ tầng, đặc biệt đối với các dự án giao thông trọng điểm, nhà ở xã hội và nhà ở cho thuê. Cùng với các biện pháp tháo gỡ vướng mắc trong giải phóng mặt bằng, ổn định nguồn cung và chi phí vật liệu xây dựng cơ bản, những chính sách này đang hỗ trợ tăng trưởng của hoạt động xây dựng.\nTrong 6 tháng đầu năm 2026, hoạt động xây dựng tăng trưởng mạnh hơn. Tăng trưởng GDP thực của ngành xây dựng tăng từ 8,5% trong quý I/2026 lên 10,2% trong quý II/2026, cho thấy việc triển khai các dự án xây dựng được đẩy nhanh.\nSự phục hồi của nhu cầu xây dựng diễn ra trên diện rộng, dẫn dắt bởi dòng vốn đầu tư công. Trong 6 tháng đầu năm, 357 nghìn tỷ đồng vốn đầu tư công đã được giải ngân, tăng 12% so với cùng kỳ và tương đương 35,5% kế hoạch.\nTrong lĩnh vực bất động sản nhà ở, hoạt động mở bán dự án cũng cải thiện. Nguồn cung căn hộ tại Hà Nội và Thành phố Hồ Chí Minh lần lượt tăng 55% và 78% so với cùng kỳ.\nTuy nhiên, đà tăng trưởng của nhu cầu chưa hoàn toàn chuyển hóa thành cải thiện lợi nhuận. Áp lực chi phí đầu vào vẫn đáng kể khi giá thép xây dựng tăng 8%-10% so với cùng kỳ, trong khi giá xi măng tăng 3%-4%. Chi phí vật liệu tăng đang hạn chế khả năng cải thiện biên lợi nhuận của các doanh nghiệp xây dựng trong bối cảnh nhu cầu cao.\nKhả năng tiếp cận vốn của các doanh nghiệp xây dựng đang có sự phân hóa.\nTín dụng ngân hàng đối với ngành xây dựng đến cuối tháng 6/2026 tăng 6,36% so với cuối năm 2025, thấp hơn mức tăng trưởng tín dụng toàn hệ thống là 8,37%. Tín dụng dành cho ngành xây dựng chiếm 7,4% dư nợ tín dụng toàn nền kinh tế, gần như không thay đổi so với cuối năm 2025.\nDiễn biến này cho thấy các ngân hàng vẫn tiếp tục cấp tín dụng cho các nhà thầu, nhưng theo hướng chọn lọc hơn.\nTrong khi đó, hoạt động phát hành trái phiếu của ngành tương đối hạn chế trong 6 tháng đầu năm. Chỉ có các tổ chức phát hành như Coteccons (CTD) và Fecon (FCN, BB, ổn định) phát hành tổng cộng 1.525 tỷ đồng, chủ yếu để bổ sung vốn lưu động và tái cơ cấu nợ, thay vì mở rộng đầu tư.\nSự cải thiện của hoạt động xây dựng đang phản ánh rõ hơn vào doanh thu của các doanh nghiệp quy mô lớn. Đà tăng trưởng doanh thu từ tích cực, tăng 12,3% so với cùng kỳ trong 6 tháng đầu năm 2026, nhưng không đồng đều và chủ yếu đến từ các nhà thầu quy mô lớn và vừa, trong khi doanh thu của nhiều nhà thầu nhỏ suy giảm.\nQuy mô, năng lực triển khai và khả năng lựa chọn dự án đang tạo ra lợi thế đáng kể cho các nhà thầu lớn. Trong bối cảnh chi phí đầu vào tăng, những doanh nghiệp có vị thế tốt hơn có khả năng đàm phán và lựa chọn các dự án có chất lượng, qua đó giúp giảm tác động từ giá nguyên vật liệu.\nTuy nhiên, áp lực lên biên lợi nhuận đang gia tăng khi chi phí đầu vào cao hơn dần được phản ánh vào quá trình triển khai dự án. Có tới 16/30 công ty xây dựng niêm yết ghi nhận biên lợi nhuận gộp giảm trong quý II/2026.\nMột số nhà thầu lớn cho thấy khả năng chống chịu tốt hơn nhờ năng lực lựa chọn dự án, năng lực triển khai và vị thế đàm phán tốt để mua nguyên vật liệu với khối lượng lớn.\nÁp lực nợ vay đang gia tăng đối với các nhà thầu quy mô vừa đến lớn có lượng backlog cao.\nMặc dù dư nợ vay toàn ngành chỉ tăng 5% so với cùng kỳ, chi phí vay cao hơn khiến chi phí lãi vay tăng tới 25% so với cùng kỳ. Hệ số bao phủ lãi vay, được đo bằng EBIT/lãi vay, giảm xuống gần 1,9 lần vào cuối quý II/2026, từ mức 2,7 lần vào cuối năm 2025.\nTrong khi đó, khả năng trả nợ ngày càng phân hóa rõ nét giữa các doanh nghiệp. Sự phục hồi dòng tiền chủ yếu tập trung ở các nhà thầu lớn, với dòng tiền hoạt động trong 12 tháng gần nhất tại cuối quý II/2026 tăng khoảng 50% so với quý trước.\nTrái lại, dòng tiền hoạt động vẫn âm tại nhiều nhà thầu quy mô vừa và nhỏ. Điều này gây áp lực lên thanh khoản và làm gia tăng mức độ phân hóa tín nhiệm trong toàn ngành.",
+      "expected": [],
+      "must_not_tag": [
+        {
+          "symbol": "HPG",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "HSG",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "NKG",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "TIS",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        }
+      ],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 74,
+      "source_domain": "vneconomy.vn",
+      "title": "SSB là cổ phiếu duy nhất được thêm vào rổ MarketVector Vietnam Local Index",
+      "url": "https://vneconomy.vn/ssb-la-co-phieu-duy-nhat-duoc-them-vao-ro-marketvector-vietnam-local-index.htm",
+      "body": "Cổ phiếu SSB của Ngân hàng TMCP Đông Nam Á (SeABank, HOSE: SSB) vừa được MarketVector Indexes lựa chọn vào MarketVector Vietnam Local Index - chỉ số tham chiếu của VanEck Vectors Vietnam ETF (VNM ETF) - quỹ ETF ngoại có quy mô tài sản hơn 500 triệu USD. \n \n \n \n Đây là dấu mốc tiếp theo trong quá trình SSB gia tăng mức độ hiện diện trong các bộ chỉ số quốc tế, sau khi lần lượt được lựa chọn vào MSCI Frontier Markets Index và FTSE Global All Cap trong các kỳ rà soát gần đây.\nTheo kết quả rà soát quý 3/2026 được MarketVector Indexes công bố ngày 12/9, SSB là cổ phiếu duy nhất được thêm mới vào MarketVector Vietnam Local Index. Sau kỳ rà soát, danh mục của VNM ETF tiếp tục gồm 55 cổ phiếu và một chứng chỉ quỹ. Hoạt động cơ cấu danh mục dự kiến được hoàn tất trong phiên giao dịch ngày 18/9. \nMarketVector Vietnam Local Index là chỉ số tham chiếu của VanEck Vectors Vietnam ETF (VNM ETF). Tại ngày 10/9/2026, quy mô danh mục của quỹ đạt gần 520 triệu USD, tương đương khoảng 13.500 tỷ đồng. \nTheo ước tính, SSB có thể được phân bổ tỷ trọng khoảng 1,76% trong danh mục mới của VNM ETF. Với quy mô quỹ hiện tại, lượng mua SSB ước tính khoảng 9,2 triệu USD, tương đương khoảng 13 triệu cổ phiếu. Đây là dòng tiền dự kiến theo cơ cấu chỉ số, không phải lượng mua đã thực tế hoàn tất. \nTrước đó, trong kỳ rà soát tháng 8/2026, MSCI đã bổ sung SSB vào rổ MSCI Frontier Markets Index, hiệu lực từ ngày 1/9/2026. Bộ chỉ số này sử dụng các tiêu chí về vốn hóa, tỷ lệ cổ phiếu tự do chuyển nhượng, thanh khoản và khả năng tiếp cận thị trường để lựa chọn thành phần. \nSSB cũng nằm trong danh sách 27 cổ phiếu Việt Nam được bổ sung vào rổ FTSE Global All Cap trong kỳ rà soát bán niên tháng 9/2026, hiệu lực từ ngày 21/9/2026. Việc này có thể giúp SSB được nhiều quỹ và nhà đầu tư quốc tế theo dõi hơn, kéo theo cơ hội gia tăng thanh khoản, thu hút dòng tiền và hỗ trợ giá cổ phiếu.\nNhư vậy, trong các kỳ rà soát liên tiếp từ tháng 8 và 9/2026 SSB lần lượt được lựa chọn vào ba bộ chỉ số gồm MSCI Frontier Markets Index, FTSE Global All Cap và MarketVector Vietnam Local Index. Việc xuất hiện đồng thời trong nhiều bộ chỉ số sẽ giúp SSB tăng mức độ hiện diện trong danh mục theo dõi của các quỹ đầu tư quốc tế, đặc biệt là các quỹ đầu tư thụ động và quỹ ETF.\nỞ góc độ giao dịch, phiên 15/9 cho thấy thông tin về kỳ cơ cấu đã tạo hiệu ứng tích cực lên SSB khi cổ phiếu tăng trần 6,91% và tổng khối lượng giao lịch lên tới 11,87 triệu đơn vị, tương ứng giá trị gần 240 tỷ đồng. Với mức giá 20.900 đồng/cổ phiếu, vốn hóa SeABank đạt 72.498 tỷ đồng.\nDiễn biến giá cổ phiếu SSB trong 1 tháng vừa qua.\nTrước đó, Moody's Ratings đã nâng Xếp hạng Tín dụng Cơ bản (BCA) của SeABank lên Ba3, nâng Xếp hạng Rủi ro Đối tác (CRR) dài hạn lên Ba2 và điều chỉnh triển vọng của ngân hàng từ \"Ổn định\" lên \"Tích cực\". Bên cạnh đó SeABank cũng vừa được trao tặng Huân chương Lao động hạng Nhất và cá nhân Bà Nguyễn Thị Nga – Phó Chủ tịch thường trực HĐQT cũng được Tổng Bí thư, Chủ tịch nước Tô Lâm phong tặng danh hiệu Anh hùng Lao động thời kỳ đổi mới. Những đánh giá tích cực này cùng với việc SSB liên tiếp được đưa vào các bộ chỉ số quốc tế tạo thêm một lớp thông tin tham chiếu về quá trình nâng cao năng lực tài chính, uy tín thương hiệu và vị thế của SeABank trên thị trường.\nViệc SSB liên tiếp được lựa chọn vào các bộ chỉ số quốc tế trong các kỳ rà soát gần đây cho thấy cổ phiếu đã đáp ứng các tiêu chí khắt khe về quy mô vốn hóa, thanh khoản, sự minh bạch và tiềm năng phát triển và từng bước mở rộng phạm vi tiếp cận tới cộng đồng đầu tư toàn cầu. Đây cũng là một trong những dấu ấn mới trên hành trình nâng cao vị thế của SeABank trên thị trường vốn, song hành với quá trình củng cố nền tảng tài chính, chất lượng quản trị và năng lực cạnh tranh của Ngân hàng.",
+      "expected": [
+        {
+          "symbol": "SSB",
+          "relevance": "primary"
+        }
+      ],
+      "must_not_tag": [],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 78,
+      "source_domain": "vneconomy.vn",
+      "title": "Giá vàng tiếp tục giảm trong lúc chờ tin Fed, SPDR Gold Trust mua ròng",
+      "url": "https://vneconomy.vn/gia-vang-tiep-tuc-giam-trong-luc-cho-tin-fed-spdr-gold-trust-mua-rong.htm",
+      "body": "Mặc áp lực giảm giá lên kim loại quý đang lớn, quỹ vàng khổng lồ SPDR Gold Trust có động thái mua ròng trở lại sau mấy phiên nghe ngóng...\n \n \n \n Diễn biến giá vàng thế giới trong 1 năm qua. Đơn vị: USD/oz - Nguồn: Trading Economics.\n \n \n Giá vàng thế giới duy trì xu thế giảm trong phiên giao dịch ngày thứ Ba (15/9), khi mối lo về lãi suất cao hơn lâu hơn tiếp tục phủ bóng lên thị trường tài chính toàn cầu trong lúc nhà đầu tư chờ kết quả cuộc họp của Cục Dự trữ Liên bang Mỹ (Fed). \nMặc áp lực giảm giá lên kim loại quý đang lớn, quỹ vàng khổng lồ SPDR Gold Trust có động thái mua ròng trở lại sau mấy phiên nghe ngóng.\nLúc đóng cửa, giá vàng giao ngay tại thị trường New York còn 4.295 USD/oz, giảm hơn 5 USD/oz so với mức giá chốt của phiên ngày hôm trước, tương đương giảm 0,1% - theo dữ liệu từ sàn giao dịch Kitco.\nGiá bạc giao ngay đạt 63,8 USD/oz, tăng 0,42 USD/oz, tương đương tăng 0,7%.\nTrên sàn giao dịch hàng hóa tương lai COMEX, giá vàng giao tháng 12/2026 giảm 0,4%, chốt ở mức 4.332,8 USD/oz.\nTrong phiên, có lúc giá vàng giao ngay giảm còn 4.260 USD/oz, mức thấp nhất kể từ hôm 7/8.\nGiá dầu leo thang, đẩy cao áp lực lạm phát toàn cầu, củng cố khả năng Fed tăng lãi suất trong cuộc họp chính sách tiền tệ diễn ra trong hai ngày thứ Ba và thứ Tư. Khả năng Fed tăng lãi suất lớn đang hỗ trợ tích cực cho tỷ giá đồng USD. Ngoài ra, mối lo lạm phát khiến thị trường trái phiếu chính phủ toàn cầu bán tháo, đẩy lợi suất trái phiếu tăng lên những mức đỉnh mới, với lợi suất trái phiếu kho bạc Mỹ kỳ hạn 10 năm đạt cao nhất gần 2 thập kỷ.\nTất cả những dịch chuyển này đều không có lợi cho giá vàng, một tài sản không mang lãi suất và được định giá bằng đồng USD.\nTừ đầu tháng tới nay, giá dầu đã tăng hơn 20% do chiến sự ở Vùng Vịnh leo thang trở lại, đe dọa dẫn tới tình trạng gián đoạn nguồn cung năng lượng toàn cầu nghiêm trọng hơn và kéo dài hơn. Trong phiên ngày thứ Ba, có tin nói rằng Saudi Arabia buộc phải hủy kế hoạch giao hàng một số lô dầu thô xuất khẩu vì đường ống dẫn dầu chủ lực của nước này đang bị đóng cửa sau các vụ tấn công vào tuần trước. \nChốt phiên, giá dầu WTI giao sau tại Mỹ tăng hơn 4%, đạt mức cao nhất kể từ ngày 19/5. Giá dầu Brent giao sau tại London tăng gần 3%.\nChỉ số Dollar Index đo sức mạnh đồng USD so với một rổ gồm 6 đồng tiền chủ chốt khác tăng 0,22%, đóng cửa ở mức 99,61 điểm.\nTrên thị trường trái phiếu, lợi suất trái phiếu kho bạc Mỹ kỳ hạn 10 năm tăng 3 điểm cơ bản, đạt 5% vào cuối phiên. Trong phiên, có lúc lợi suất của kỳ hạn này tăng tới 5,041%, mức cao nhất kể từ tháng 7/2007.\nViệc lợi suất trái phiếu kho bạc Mỹ kỳ hạn 10 năm vượt mốc chủ chốt 5% được cho là có thể gây ra những ảnh hưởng sâu rộng trong nền kinh tế Mỹ, bởi đây là mức lãi suất tham chiếu cho các khoản vay tiêu dùng và vay kinh doanh.\nLợi suất của kỳ hạn 30 năm - kỳ hạn nhạy cảm hơn với rủi ro địa chính trị - tăng hơn 3 điểm cơ bản, đạt 5,367%. Trong phiên, có lúc lợi suất của kỳ hạn này đạt 5,401%, cao nhất từ tháng 6/2007.\nLợi suất của kỳ hạn 2 năm tăng hơn 3 điểm cơ bản, đạt 4,669%, sau khi chạm mức cao nhất từ tháng 7/2024 là 4,688%.\n“Giá năng lượng tăng cao làm tăng lạm phát. Lạm phát tăng có thể dẫn tới lãi suất tăng. Điều đó không có lợi cho giá vàng, khiến giá vàng giằng co trong thời gian gần đây. Vàng có thể bị bán mạnh hơn nữa nếu lãi suất tăng thêm”, chiến lược gia trưởng Daniel Pavilonis của công ty StoneX nhận xét.\nPhiên ngày thứ Tư, mọi sự chú ý của nhà đầu tư sẽ tập trung vào quyết định lãi suất của Fed, theo dự kiến sẽ được đưa ra vào lúc 2h chiều theo giờ Washington. Thị trường đang đặt cược gần như chắc chắn rằng Fed sẽ tăng lãi suất 0,25 điểm phần trăm trong cuộc họp này, đưa lãi suất quỹ liên bang lên mức 3,75-4%.\n“Tôi cho rằng phần lớn kỳ vọng về một động thái tăng lãi suất đã được phản ánh vào thị trường. Những gì xảy ra tiếp theo sẽ tùy thuộc vào việc Fed nói gì. Liệu họ có tiếp tục tăng lãi suất không, có theo dõi tình hình lạm phát không. Nói chung, câu chuyện đang bất lợi đối với vàng”, ông Pavilonis nói với hãng tin Reuters.\nTrong một báo cáo, các nhà phân tích của ngân hàng ING cũng cho rằng phần lớn khả năng Fed tăng lãi suất trong cuộc họp này đã được phản ánh vào giá tài sản. Tuy nhiên, báo cáo nhận định giá vàng vẫn còn ở thế rủi ro nếu Fed phát tín hiệu giữ lãi suất cao hơn lâu hơn.\nSau khi bán ròng vàng trong tuần trước và không có động thái mua bán ròng nào trong phiên ngày thứ Hai, quỹ ETF vàng lớn nhất thế giới SPDR Gold Trust đã mua ròng trong phiên ngày thứ Ba. Phiên này, quỹ mua ròng 2,9 tấn vàng, nâng khối lượng nắm giữ lên mức 1.050,3 tấn vàng.\nĐầu giờ sáng nay (16/9) tại thị trường châu Á, giá vàng tiếp tục đương đầu áp lực giảm trong khi giá bạc tăng nhẹ.\nLúc 6h25 theo giờ Việt Nam, giá vàng giao ngay giảm gần 0,2% so với đóng cửa phiên Mỹ, giao dịch ở mức 4.288 USD/oz. Giá bạc giao ngay tăng 0,02 USD/oz, đạt 63,82 USD/oz.\nMức giá trên của vàng giao ngay tương đương xấp xỉ 135 triệu đồng/lượng nếu được quy đổi theo tỷ giá USD bán ra tại ngân hàng Vietcombank, giảm 0,3 triệu đồng/lượng so với sáng qua.\nCùng thời điểm trên, website Vietcombank báo giá USD ở mức 25.720 đồng (mua vào) và 26.130 đồng (bán ra), giảm 50 đồng ở mỗi đầu giá so với sáng qua.",
+      "expected": [],
+      "must_not_tag": [],
+      "uncertain": [
+        {
+          "symbol": "VCB",
+          "relevance": "primary",
+          "reason": "mã chỉ xuất hiện trong cụm trích dẫn tổ chức phân tích hoặc công thức lãi suất tham chiếu"
+        }
+      ],
+      "group": "A_random_sample",
+      "note": "expected rỗng vì tag DUY NHẤT của bài (VCB primary) bị QA xếp 'uncertain' và loại khỏi phép tính - KHÁC với các bài rỗng do đã xác định chắc chắn là không có mã. Đừng dùng bài này làm mẫu bắt false positive."
+    },
+    {
+      "id": 89,
+      "source_domain": "vneconomy.vn",
+      "title": "Khối ngoại ồ ạt mua ròng cổ phiếu Việt Nam ngay trước thềm Fed công bố lãi suất",
+      "url": "https://vneconomy.vn/khoi-ngoai-o-at-mua-rong-co-phieu-viet-nam-ngay-truoc-them-fed-cong-bo-lai-suat.htm",
+      "body": "Vào những phiên nhà đầu tư nước ngoài mua ròng mạnh, thị trường thường có xu hướng tăng. Hôm nay nhà đầu tư nước ngoài mua ròng 731,9 tỷ đồng, tính riêng giao dịch khớp lệnh thì họ mua ròng 692,5 tỷ đồng. \n \n \n \n Thị trường có phiên hồi phục mạnh ngay trước thềm Fed được dự báo nhiều khả năng sẽ nâng lãi suất trong kỳ họp tháng 9 này. Những lo ngại rủi ro về lạm phát và lãi suất được cho là đã chiết khấu đầy đủ vào giá sau những phiên điều chỉnh liên tiếp gần đây, bất chấp chứng khoán thế giới vẫn đang điều chỉnh mạnh do giá dầu và lãi suất. \n VN-Index tăng mạnh gần 23 điểm lại một lần nữa vượt 1.800 tiến về giá 1.811,15 dưới sự dẫn dắt của nhóm ngân hàng và chứng khoán. Cổ phiếu nhà băng hôm nay đảo chiều tăng trên diện rộng với biên độ cực tốt, nhóm vốn hóa lớn trung bình tăng 2-3% như VCB, BID, CTG một vài mã tăng mạnh hơn so với mặt bằng chung như LPB hay SSB bật kịch trần phiên giao dịch thứ hai liên tiếp.\n Chứng khoán cũng tăng theo nhưng biên độ thấp hơn như SSI, TCX, HCM, VCK. Dầu khí năng lượng tiếp tục là tâm điểm của thị trường nhờ giá dầu thế giới liên tục vọt lên trong thời gian gần đây khi xung đột vẫn leo thang tại khu vực Trung Đông. BSR bật tăng kịch trần, gAS tăng 6,65%, nhiều mã tăng mạnh như PLX, PVS, PVB, PVD... \nĐối với nhóm phi tài chính như tiêu dùng, hàng không vận tải, công nghiệp, nguyên vật liệu mức tăng cũng rất khá trung bình hơn 1%. Riêng bất động sản hôm nay ghìm chân thị trường, đặc biệt nhóm VIC và VHM, VRE kéo một vài cổ phiếu bất động sản khác cũng điều chỉnh theo. \nĐộ rộng thị trường đang rất tốt, số mã tăng đang gần gấp 3 lần số mã giảm, 232/86. \nThanh khoản ba sàn khớp lệnh chưa đến 18.000 tỷ đồng cho thấy dòng tiền chưa vội đuổi giá cao khi Fed tăng lãi suất hay không vẫn là rủi ro lo ngại với thị trường.\nXét theo ngành, hầu hết các nhóm ngành tăng điểm ngoại trừ Bất động sản, trong đó thanh khoản tăng ở số ít ngành dẫn dắt như Dầu khí, Ngân hàng, Hóa chất, Khí đốt, Dược phẩm, ngược lại, đa số các nhóm ngành còn lại ghi nhận thanh khoản giảm so với phiên hôm qua.\nVào những phiên nhà đầu tư nước ngoài mua ròng mạnh, thị trường thường có xu hướng tăng. Hôm nay nhà đầu tư nước ngoài mua ròng 731,9 tỷ đồng, tính riêng giao dịch khớp lệnh thì họ mua ròng 692,5 tỷ đồng.\nMua ròng khớp lệnh chính của nước ngoài là nhóm Ngân hàng, Dầu khí. Top mua ròng khớp lệnh của nước ngoài gồm các mã: VCB, BSR, BID, TCB, MBB, CTG, SSB, HDB, FPT, PNJ. \nPhía bên bán ròng khớp lệnh của nước ngoài là nhóm Bất động sản, Dịch vụ tài chính. Top bán ròng khớp lệnh của nước ngoài gồm các mã: VIC, VHM, STB, VPI, HPG, VND, VCI, VIX, DMX. \nTự doanh bán ròng 160,0 tỷ đồng tính riêng khớp lệnh họ bán ròng 130,4 tỷ đồng.\nTính riêng giao dịch khớp lệnh: Tự doanh mua ròng 4/18 ngành. Nhóm mua ròng mạnh nhất là Dịch vụ tài chính, Xây dựng và Vật liệu. Top mua ròng khớp lệnh của tự doanh phiên ngày hôm nay gồm VPB, MBB, FUEVFVND, E1VFVN30, VIX, GEL, STB, CII, TCB, PVD.\nTop bán ròng là nhóm Thực phẩm và đồ uống. Top cố phiếu được bán ròng gồm MCH, VCB, FPT, MWG, VHM, VIC, CTG, ACB, NLG, HDB\nGiá trị giao dịch thỏa thuận đạt 3.332,3 tỷ đồng, giảm 20,4%, chiếm 18,7% tổng giá trị giao dịch. \nPhiên hôm nay ghi nhận giao dịch thỏa thuận đáng chú ý ở STB, GEX, VHM, HDB, PET được thực hiện giữa các nhà đầu tư trong nước.\nTỷ trọng dòng tiền tăng ở Ngân hàng, Dầu khí, Hóa chất, Khí đốt, Vận tải thủy, Hàng không, Nuôi trồng nông & hải sản, Dược phẩm, Bảo hiểm; trong khi giảm ở Bất động sản, Chứng khoán, Thực phẩm, Thiết bị điện, Thép, CNTT, Bán lẻ, Xây dựng, Kho bãi, Hàng cá nhân, Điện.\nTính riêng khớp lệnh, tỷ trọng phân bổ dòng tiền tăng ở nhóm vốn hóa lớn VN30 và nhỏ VNSML, giảm ở nhóm vốn hóa vừa VNMID.",
+      "expected": [
+        {
+          "symbol": "BID",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "CTG",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "FPT",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "HDB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "MBB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "PVD",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "SSB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "STB",
+          "relevance": "primary"
+        }
+      ],
+      "must_not_tag": [],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 108,
+      "source_domain": "vneconomy.vn",
+      "title": "Dynam Capital Limited: Tháng 9 hứa hẹn là một tháng đáng chú ý của thị trường chứng khoán Việt Nam",
+      "url": "https://vneconomy.vn/dynam-capital-limited-thang-9-hua-hen-la-mot-thang-dang-chu-y-cua-thi-truong-chung-khoan-viet-nam.htm",
+      "body": "Việc Việt Nam được FTSE nâng hạng đánh dấu một bước tiến nữa trong quá trình phát triển của một thị trường đã thay đổi mạnh mẽ trong 20 năm hoạt động của VNH, đồng thời diễn ra trong bối cảnh đất nước cần những nguồn vốn sâu rộng hơn để tài trợ cho các tham vọng phát triển.\n \n \n \n Ảnh minh họa. \n \n \n Dynam Capital Limited - đơn vị quản lý danh mục đầu tư của VietNam Holding Limited (VNH), vừa có báo cáo đầu tư của VNH tháng 8/2026 trong đó nhấn mạnh: Khi Việt Nam chuẩn bị chính thức gia nhập câu lạc bộ các thị trường mới nổi FTSE sau thời gian dài chờ đợi, tháng 9 hứa hẹn sẽ là một tháng đáng chú ý. \nThị trường chứng khoán Việt Nam đã phục hồi trong tháng 8 sau đợt bán tháo mạnh trong tháng 7. Chỉ số VN-Index tăng 5,6% trong tháng khi kết quả kinh doanh doanh nghiệp tích cực và mặt bằng định giá hấp dẫn hơn đã đưa dòng tiền trở lại thị trường, trong khi việc Việt Nam được nâng hạng FTSE càng gia tăng sự quan tâm của nhà đầu tư.\nGiá trị tài sản ròng (NAV) của VNH tăng 7,6%, vượt mức tăng 6,6% của Chỉ số Vietnam All Share. VNH đạt mức tăng trưởng vượt trội này mặc dù không có khoản đầu tư nào vào VIC – cổ phiếu đã tăng thêm 11,2% trong tháng 8 và hiện chiếm khoảng 20% VN-Index.\nNhóm ngân hàng là một trong những nhóm đóng góp tích cực nhất, với Techcombank (TCB) tăng 16,4%, MB Bank (MBB) tăng 13,9% và VPBank (VPB) tăng 13,1%. Các khoản đầu tư trong lĩnh vực bán lẻ cũng diễn biến tích cực, dẫn đầu là FPT Retail (FRT) tăng 18,3% và Digiworld (DGW) tăng 16,3%, trong khi Mobile World Group (MWG) cũng tăng giá.\nSau nhiều tháng khi diễn biến giá cổ phiếu và kết quả hoạt động của doanh nghiệp không đồng pha, tháng 8 đã chứng kiến khoảng cách này bắt đầu được thu hẹp phần nào.\nĐộng lực tăng trưởng của nền kinh tế Việt Nam tiếp tục được duy trì trong tháng 8. Xuất khẩu tăng 26% so với cùng kỳ năm trước, doanh số bán lẻ tăng 14,9%, trong khi chỉ số PMI ngành sản xuất cải thiện lên 53,3.\nGiải ngân đầu tư công đạt 21 tỷ USD trong 8 tháng đầu năm khi Chính phủ tiếp tục thúc đẩy chương trình phát triển cơ sở hạ tầng đầy tham vọng. Kết quả kinh doanh của các doanh nghiệp cũng ấn tượng không kém: sau khi tăng trưởng 36,6% trong quý II, lợi nhuận toàn thị trường hiện vẫn được kỳ vọng tăng khoảng 20% trong cả năm 2026.\nTín dụng tiếp tục tăng trưởng nhanh hơn đáng kể so với tiền gửi, gây áp lực lên thanh khoản và làm gia tăng cạnh tranh về nguồn vốn trong toàn hệ thống ngân hàng.\nTrong bối cảnh nhu cầu tín dụng vẫn ở mức cao, Dynam Capita cho rằng giai đoạn tiếp theo sẽ ngày càng ưu tiên những ngân hàng có khả năng đảm bảo và đa dạng hóa nguồn vốn, duy trì được biên lợi nhuận và chất lượng tài sản trong quá trình tăng trưởng.\nMBB, TCB và VPB nằm trong số những ngân hàng tư nhân có vị thế tốt để thích ứng với môi trường này. Cùng với VietinBank (CTG) và Asia Commercial Bank (ACB), nhóm ngân hàng hiện chiếm gần 40% danh mục đầu tư của VNH.\nDynam Capita nhấn mạnh: Các kế hoạch đầy tham vọng của Việt Nam về phát triển cơ sở hạ tầng và đầu tư sẽ đòi hỏi nguồn vốn khổng lồ, và không thể kỳ vọng các ngân hàng sẽ tự mình tài trợ cho giai đoạn phát triển tiếp theo của đất nước.\nCác thị trường trái phiếu và cổ phiếu cần phát triển sâu rộng hơn để ngày càng đảm nhận phần lớn hơn trong gánh nặng tài trợ vốn. Điều này khiến thời điểm Việt Nam được nâng hạng lên trạng thái Thị trường mới nổi thứ cấp (Secondary Emerging Market) của FTSE Russell trở nên đặc biệt phù hợp.\nSau nhiều năm được kỳ vọng, việc nâng hạng sẽ chính thức có hiệu lực từ ngày 21/9. Sự kiện này sẽ không thể ngay lập tức làm thay đổi hoàn toàn thị trường, và những tiến bộ tiếp theo về khả năng tiếp cận thị trường, thanh khoản cũng như tỷ lệ sở hữu nước ngoài vẫn sẽ rất quan trọng.\nTuy nhiên, đây là một bước tiến đáng kể nữa trong quá trình phát triển thị trường vốn Việt Nam, sau nhiều năm cải cách nhằm cải thiện khả năng tiếp cận của nhà đầu tư quốc tế. Việc nâng hạng cũng sẽ đưa cổ phiếu Việt Nam vào các bộ chỉ số thị trường mới nổi lớn trên toàn cầu.\nViệt Nam đã đạt được một trong những tốc độ tăng trưởng kinh tế mạnh nhất châu Á trong nhiều năm qua, nhưng các nhà đầu tư cổ phiếu quốc tế không phải lúc nào cũng nắm bắt được đầy đủ thành quả tăng trưởng đó. \nCác hạn chế về khả năng tiếp cận thị trường, cơ cấu chỉ số, pha loãng và sự thu hẹp định giá đều đóng một vai trò nhất định. Một số rào cản trong số này hiện đang dần được tháo gỡ, đúng vào thời điểm lợi nhuận doanh nghiệp tăng trưởng mạnh và định giá tại phần lớn thị trường vẫn ở mức hấp dẫn.\nLựa chọn cổ phiếu và kỷ luật đầu tư vẫn là trọng tâm trong phương pháp tiếp cận của quỹ. Tăng trưởng lợi nhuận là một yếu tố then chốt trong các quyết định đầu tư, bên cạnh quản trị doanh nghiệp, nền tảng cơ bản của doanh nghiệp và định giá.\nTại cuối tháng 8, danh mục đầu tư được giao dịch ở mức P/E dự phóng năm 2026 là 9,3 lần, so với 12 lần của Chỉ số Vietnam All Share. Định giá của toàn thị trường cũng ngày càng chịu ảnh hưởng bởi một số cổ phiếu có mức định giá vượt trội, đáng chú ý nhất là VIC, hiện giao dịch ở mức P/E 85 lần.\nDo đó, tháng 9 năm nay được kỳ vọng sẽ thu hút sự quan tâm nhiều hơn thường lệ. Việc Việt Nam được FTSE nâng hạng đánh dấu một bước tiến nữa trong quá trình phát triển của một thị trường đã thay đổi mạnh mẽ trong 20 năm hoạt động của VNH, đồng thời diễn ra trong bối cảnh đất nước cần những nguồn vốn sâu rộng hơn để tài trợ cho các tham vọng phát triển.\nChi phí huy động vốn cao hơn, những bất ổn toàn cầu và sự tập trung ở một số bộ phận của thị trường vẫn là những yếu tố cần được theo dõi chặt chẽ. Tuy nhiên, lợi nhuận doanh nghiệp vẫn tăng trưởng mạnh, định giá tại phần lớn danh mục vẫn hấp dẫn và tháng 8 đã mang lại những bằng chứng đáng khích lệ cho thấy các yếu tố cơ bản đang ngày càng có ảnh hưởng lớn hơn đến giá cổ phiếu.\n\"Sau những \"nỗi buồn mùa hè\" của tháng 7, tháng 8 đã thay đổi giai điệu. Khi Việt Nam chuẩn bị chính thức gia nhập câu lạc bộ các thị trường mới nổi FTSE sau thời gian dài chờ đợi, tháng 9 hứa hẹn sẽ là một tháng đáng chú ý\", quỹ ngoại nhấn mạnh.",
+      "expected": [
+        {
+          "symbol": "ACB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "CTG",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "MBB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "MWG",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "TCB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "VIC",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "VPB",
+          "relevance": "primary"
+        }
+      ],
+      "must_not_tag": [
+        {
+          "symbol": "FPT",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.9
+        },
+        {
+          "symbol": "GAS",
+          "tagged_relevance": "primary",
+          "tagger_score": 0.8
+        }
+      ],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": "PHÂN XỬ QA vòng 3 — MWG: expected/mentioned. Thân bài nêu đích danh kèm mã: \"...dẫn đầu là FPT Retail (FRT) tăng 18,3% và Digiworld (DGW) tăng 16,3%, trong khi Mobile World Group (MWG) cũng tăng giá.\" Cùng một dạng với TCB/MBB/VPB trong CHÍNH câu liền trước (\"Techcombank (TCB) tăng 16,4%, MB Bank (MBB) tăng 13,9% và VPBank (VPB) tăng 13,1%\") — các mã này đã được xếp expected từ vòng 2. Xếp FP sẽ mâu thuẫn nội bộ. Mức 'mentioned' chứ không 'primary' vì MWG chỉ là một khoản nắm giữ trong danh sách và không có số % riêng (\"cũng tăng giá\"). GHI CHÚ RECALL: cùng câu còn nêu FRT và DGW — hai mã này KHÔNG có trong từ điển seed (0 lần trong 0003_seed_tickers.sql) nên tagger không thể gắn. Đó là thiếu sót độ phủ từ điển, không phải lỗi tagger; KHÔNG đưa vào expected để không làm sai mẫu số của cổng precision."
+    },
+    {
+      "id": 112,
+      "source_domain": "vneconomy.vn",
+      "title": "Lực mua dâng cao, cổ phiếu tăng ào ạt, blue-chips dẫn sóng",
+      "url": "https://vneconomy.vn/luc-mua-dang-cao-co-phieu-tang-ao-at-blue-chips-dan-song.htm",
+      "body": "Dòng tiền đổ vào cổ phiếu VN30 chiều nay kéo thanh khoản tăng vọt 60% so với phiên sáng, thúc giá tăng mạnh hơn đáng kể. Nhóm ngân hàng có mạnh lên thêm nhưng không đột biến, bù lại rất nhiều cổ phiếu khác bùng nổ.\n \n \n \n VN-Index đã giành lại được mốc 1800 điểm và bảo toàn xu hướng tăng ngắn hạn.\n \n \n VN30-Index đóng cửa tăng 1,17%, chốt phiên sáng chỉ số này tăng\n0,78%. Tuy độ rộng rổ blue-chips không thay đổi, nhưng biên độ tăng giá tốt hơn\nnhiều. Cụ thể, chốt phiên sáng rổ VN30 có 11 cổ phiếu tăng từ 1% trở lên, trong\nđó 5 mã tăng vượt 2% thì đóng cửa có 21 mã, riêng số tăng vượt 2% là 9 mã.\nĐiều khá bất ngờ là cổ phiếu ngân hàng không mạnh thêm rõ rệt.\nSSB vẫn kịch trần từ sáng và duy nhất SHB tăng thêm 1,32% chiều nay, còn lại đều\ndưới 1%. STB thậm chí “đi lùi” 0,78%, đảo chiều thành giảm 0,52% lúc đóng cửa.\nTuy nhiên nhiều blue-chips khác lại diễn biến tích cực. \nHai cổ phiếu dầu khí là BSR và GAS chiều nay đều nhận thêm lực\ncầu rất ấn tượng. BSR khớp thêm tới 529,1 tỷ đồng, gấp 3 lần thanh khoản phiên\nsáng và giá “bay lên” kịch trần. Tính riêng buổi chiều BSR tăng thêm 4,82% so với\nphiên sáng. GAS cũng tăng thanh khoản gấp đôi, giá tăng thêm 3,04% nữa, đóng cửa\ntăng tổng cộng 6,65% so với tham chiếu. GVR, cổ phiếu cao su, cũng hưởng lợi từ\ndiễn biến giá dầu, tăng thêm 1,98%, chốt phiên tăng 3,34%. MWG tăng riêng chiều\nnay khoảng 1,28% và đóng cửa tăng 2,01%... Thống kê rổ VN30 có tới 24 cổ phiếu\ntăng giá cao hơn phiên sáng, chỉ 5 mã tụt giá. Cổ phiếu đi lùi có cả VIC lẫn\nVHM, đóng cửa giảm tương ứng 0,04% và 0,42%.\nNếu chiều nay nhóm ngân hàng cũng mạnh thêm rõ nét hơn thì\nthị trường đã có diễn biến bùng nổ thực sự. Dù vậy tất cả các cổ phiếu lớn nhất\nnhóm này tiếp tục duy trì biên độ tăng tích cực: VCB tăng 2,56%, BID tăng\n2,94%, CTG tăng 2,35%, TCB tăng 1,1%, VPB tăng 1,65%, MBB tăng 1,52%... Tính\nchung cả ngày, cổ phiếu ngân hàng chiếm 30,5% tổng giá trị khớp lệnh sàn HoSE,\nlà thị phần cao nhất 9 phiên trở lại đây. Với rổ VN30, cổ phiếu ngân hàng hôm\nnay đóng góp 48,4%, cao nhất 24 phiên.\nHiệu ứng tăng giá lan tỏa từ nhóm ngân hàng chiều nay là rất\ntích cực: Độ rộng sàn HoSE cuối phiên ghi nhận 232 mã tăng và 86 mã giảm, trong\nkhi chốt phiên sáng mới có 178 mã tăng/116 mã giảm. Chỉ riêng số cổ phiếu tăng\nquá 1% đã là 135 mã (phiên sáng 79 mã), trong đó 71 mã tăng vượt 2% (phiên sáng\n39 mã). Như vậy mặt bằng giá cổ phiếu cũng được nâng cao đáng kể, bên cạnh số\nlượng lớn cổ phiếu đổi màu.\nĐiểm không thay đổi chiều nay là mức độ tập trung vốn vào cổ\nphiếu ngân hàng, dầu khí vẫn rất cao. Một số mã liên quan đến giá dầu như phân\nbón hóa chất, cao su cũng mạnh lên rõ hơn: DCM tăng 4,16%, DPM tăng 4,54% với\nthanh khoản đều trên trăm tỷ đồng. Ngoài ra VIX tăng 2,38%, GEX tăng 3,14%, GEE\ntăng 6,93%, PNJ tăng 3,62% là những cổ phiếu midcap khác giao dịch lớn.\nNhà đầu tư nước ngoài chiều nay tiếp tục giải ngân mạnh mẽ,\nthậm chí tăng 43% so với phiên sáng. Tuy nhiên phía bán cũng tăng đáng kể, khiến\nvị thế ròng chỉ đạt +178,8 tỷ đồng, kém hơn mức 538,7 tỷ đồng trong buổi sáng.\nDù vậy hôm nay là phiên thứ hai liên tiếp khối này mua ròng rất tốt, sau ngày đầu\ntuần mua ròng 815 tỷ đồng với cổ phiếu sàn HoSE. Như vậy trong 4 phiên trở lại đây\nkhối này đã mua ròng 3 phiên với quy mô hàng trăm tỷ đồng mỗi ngày.\nCác cổ phiếu được mua ròng mạnh hôm nay xuất hiện nhiều mã\nngân hàng: VCB +228,6 tỷ, BID +124,9 tỷ, TCB +104,7 tỷ, MBB +98,4 tỷ, CTG +96,2\ntỷ, SSB +92 tỷ, HDB +83,9 tỷ. Ngoài ra có BSR +157,8 tỷ, FPT +82 tỷ, PNJ +58,7\ntỷ… Phía bán ròng có VIC -343,3 tỷ, VHM -212,4 tỷ, STB -66 tỷ.",
+      "expected": [
+        {
+          "symbol": "BID",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "CTG",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "GAS",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "MBB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "PNJ",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "SSB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "STB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "TCB",
+          "relevance": "primary"
+        }
+      ],
+      "must_not_tag": [],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 116,
+      "source_domain": "vneconomy.vn",
+      "title": "Các ETF tiếp tục rút ròng mạnh khỏi Việt Nam, riêng Fubon rút 3.400 tỷ từ đầu năm",
+      "url": "https://vneconomy.vn/cac-etf-tiep-tuc-rut-rong-manh-khoi-viet-nam-rieng-fubon-rut-3400-ty-tu-dau-nam.htm",
+      "body": "Dữ liệu FiinTrade tại ngày 11/9/2026 cho thấy dòng tiền tiếp tục rút khỏi nhóm quỹ hoán đổi danh mục (ETF), với tổng giá trị rút ròng trong ngày khoảng 20,3 tỷ đồng.\n \n \n \n Tính trong tuần 37/2026, các quỹ ETF rút ròng 214,2 tỷ đồng, trong khi riêng tháng 9, dòng tiền rút ròng lên tới 294,5 tỷ đồng. Lũy kế từ đầu năm 2026, tổng dòng tiền rút ròng khỏi các quỹ ETF đạt 5.917,7 tỷ đồng.\nXét theo nhóm, áp lực rút vốn vẫn tập trung chủ yếu tại các quỹ ETF nước ngoài. Nhóm này có tổng giá trị tài sản ròng khoảng 33.978,8 tỷ đồng, đồng thời ghi nhận rút ròng 4 tỷ đồng trong ngày 11/9, 186,8 tỷ đồng trong tuần 37 và 264,3 tỷ đồng trong tháng 9. Lũy kế từ đầu năm, dòng tiền rút ròng khỏi nhóm ETF ngoại đạt 4.285,9 tỷ đồng.\nTrong nhóm ETF nước ngoài, Xtrackers Vietnam Swap UCITS ETF 1C là quỹ chịu áp lực rút vốn đáng chú ý nhất trong ngày, với 25,1 tỷ đồng, nâng mức rút ròng trong tuần lên 145,8 tỷ đồng và trong tháng 9 lên 145,8 tỷ đồng. Từ đầu năm, quỹ này ghi nhận dòng tiền rút ròng tương đối thấp hơn, ở mức 75,5 tỷ đồng.\nFubon FTSE Vietnam ETF tiếp tục là một trong những quỹ có quy mô rút vốn lớn trong tháng, với 139,5 tỷ đồng, đồng thời lũy kế từ đầu năm rút ròng 3.342,9 tỷ đồng. Đây cũng là một trong những quỹ ngoại có quy mô tài sản lớn nhất trong bảng, đạt khoảng 9.047 tỷ đồng.\nỞ chiều ngược lại, một số quỹ vẫn ghi nhận dòng tiền vào. CGS Fullgoal Vietnam 30 Sector Cap ETF hút ròng 6,8 tỷ đồng trong ngày, nâng mức vào ròng trong tuần lên 9,1 tỷ đồng và trong tháng 9 lên 21,5 tỷ đồng. KIM ACE Vietnam VN30 ETF (Synth) cũng ghi nhận dòng tiền vào đáng chú ý, đạt 14,3 tỷ đồng trong ngày, 19,4 tỷ đồng trong tuần và 19,4 tỷ đồng trong tháng. Tuy nhiên, quy mô của các dòng tiền này chưa đủ để đảo chiều xu hướng chung của nhóm ETF ngoại.\nTại nhóm ETF trong nước, tổng giá trị tài sản ròng đạt 22.946,9 tỷ đồng. Dòng tiền tiếp tục ở trạng thái rút ròng với 16,3 tỷ đồng trong ngày 11/9, 27,4 tỷ đồng trong tuần và 30,2 tỷ đồng trong tháng 9. Lũy kế từ đầu năm, nhóm này rút ròng 1.631,8 tỷ đồng.\nTrong các quỹ nội, VFMVN Diamond ETF vẫn là quỹ có quy mô tài sản lớn nhất, đạt 11.036,5 tỷ đồng. Quỹ ghi nhận dòng tiền vào ròng 34 tỷ đồng trong tuần và 37,4 tỷ đồng trong tháng 9, dù dòng tiền trong ngày 11/9 gần như cân bằng. Ngược lại, VFM VN30 ETF chịu áp lực rút vốn khá mạnh với 13,9 tỷ đồng trong ngày, 45,7 tỷ đồng trong tuần và 63,5 tỷ đồng trong tháng. Lũy kế từ đầu năm, quỹ này rút ròng 536,5 tỷ đồng.\nĐáng chú ý, SSIAM VNFIN LEAD ETF đang có diễn biến tích cực hơn khi vào ròng 11,6 tỷ đồng trong tháng 9 và 83,4 tỷ đồng từ đầu năm. VinaCapital VN50 Growth ETF cũng ghi nhận mức vào ròng 108,8 tỷ đồng từ đầu năm, trong khi VinaCapital VN100 ETF vào ròng 64,7 tỷ đồng.\nDòng tiền từ Thái Lan thông qua chứng chỉ lưu ký (DRs): Nhà đầu tư Thái Lan bán ròng 435 nghìn chứng chỉ lưu ký dựa trên chứng chỉ quỹ VFMVN Diamond ETF (FUEVFVND01), tương đương 15,0 tỷ đồng. Đồng thời, 76 nghìn chứng chỉ lưu ký dựa trên chứng chỉ quỹ VFM VN30 ETF (E1VFVN3001) cũng được bán ròng, tương ứng 2,7 tỷ đồng.\nNhìn chung, dòng tiền ETF vẫn đang trong trạng thái thận trọng, với áp lực rút vốn kéo dài từ đầu năm và tập trung đáng kể ở các quỹ ngoại. Diễn biến này diễn ra trong bối cảnh các quỹ ETF ngoại đang chuẩn bị cho các đợt tái cơ cấu danh mục trong tháng 9. Theo SSI, nhiều quỹ ETF ngoại lớn như Xtrackers, VanEck và Fubon dự kiến cơ cấu vào ngày 18/9, đồng thời hoạt động này còn có thể chịu tác động từ việc mua các cổ phiếu trong rổ FTSE GEIS.\nDo đó, dòng tiền ETF trong những tuần tới có thể tiếp tục biến động mạnh hơn khi hoạt động tái cơ cấu diễn ra, đặc biệt tại các cổ phiếu có tỷ trọng lớn trong các bộ chỉ số mà các quỹ đang mô phỏng.\nSSI Research vừa đưa ra ước tính giá trị mua ròng của các quỹ này trong đợt giải ngân đầu tiên có giá trị 240 triệu USD với 27 cổ phiếu được mua vào.\nDo ngày 18/9 cũng là thời điểm các quỹ ETF ngoại lớn đã đầu tư vào thị trường Việt Nam như Xtrackers, VanEck, Fubon tái cơ cấu danh mục, do vậy giá trị mua bán tại từng mã cổ phiếu sẽ chịu ảnh hưởng đồng thời từ hoạt động thêm vào/loại ra và tái cơ cấu của tất cả các quỹ. Đáng chú ý là tuy cổ phiếu VIC được mua mạnh theo các quỹ của Vanguard, nhưng lại bị các ETF còn lại bán ròng, đặc biệt do việc tái cơ cấu của Xtrackers (thực hiện hạ tỷ trọng từ 31,6% về 15%).\nDưới đây là ước tính của SSI Research cho giao dịch của các quỹ ETF trong tuần tới (14-18/9).\nTheo giá trị giao dịch: 10 cổ phiếu được mua vào nhiều nhất: VPB (32,82 triệu USD), VHM (30,85 triệu USD), MCH (22,10 triệu USD), FPT (21,48 triệu USD), MSN (20,92 triệu USD), HPG (18,85 triệu USD), VNM (17,27 triệu USD), VIX (16,04 triệu USD), VPL (14,17 triệu USD), ACB (13,82 triệu USD).\n10 cổ phiếu bị bán ra nhiều nhất: VIC (-28,06 triệu USD), STB (-8,71 triệu USD), SHB (-3,97 triệu USD), KBC (- 3,24 triệu USD), KDH (-3,19 triệu USD), DXG (-1,73 triệu USD), CEO (-1,69 triệu USD), POW (-1,17 triệu USD), NKG (-0,81 triệu USD), BVH (-0,46 triệu USD).\nTheo số ngày giao dịch: 10 cổ phiếu được mua vào nhiều nhất: MCH (10,51 ngày), SSB (7,29 ngày), VPL (5,90 ngày), VCK (2,41 ngày), VNM (2,39 ngày), ACB (2,14 ngày), MSN (1,94 ngày), VPB (1,92 ngày), NVL (1,91 ngày), VHM (1,45 ngày).\n10 cổ phiếu bán ra nhiều nhất: KBC (-2,53 ngày), NKG (-1,44 ngày), KDH (-0,98 ngày), STB (-0,81 ngày), CEO (-0,57 ngày), VIC (-0,48 ngày), BVH (-0,42 ngày), VHC (-0,39 ngày), POW (-0,38 ngày), DXG (-0,35 ngày).",
+      "expected": [
+        {
+          "symbol": "ACB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "BVH",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "DXG",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "KDH",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "MSN",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "NKG",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "POW",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "STB",
+          "relevance": "primary"
+        }
+      ],
+      "must_not_tag": [],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 121,
+      "source_domain": "vnexpress.net",
+      "title": "Việt Nam xây dựng thương hiệu bò H'Mông để cạnh tranh với Wagyu",
+      "url": "https://vnexpress.net/viet-nam-xay-dung-thuong-hieu-bo-h-mong-de-canh-tranh-voi-wagyu-5120221.html",
+      "body": "Việt Nam xây dựng thương hiệu bò H'Mông để cạnh tranh với Wagyu\nViệt Nam xây dựng thương hiệu bò H'Mông để cạnh tranh với Wagyu \nCác chuyên gia quốc tế đánh giá bò H'Mông có tiềm năng về di truyền, tầm vóc và thể trạng, là cơ sở để Việt Nam chọn tạo giống bò thịt chất lượng cao, hướng tới cạnh tranh với các giống nổi tiếng. Thông tin được ông Phạm Kim Đăng, Phó cục trưởng Chăn nuôi và Thú y (Bộ Nông nghiệp và Môi trường) đưa ra tại họp báo về Hội nghị Khoa học Chăn nuôi Á - Úc lần thứ 21 (AAAP 2026), ngày 28-31/10 tại Trung tâm Hội nghị Quốc gia, Hà Nội.Theo ông Đăng, cơ quan chuyên môn đã mời các chuyên gia quốc tế đánh giá bò H’Mông trên nhiều phương diện như đặc điểm di truyền, tầm vóc, thể trạng. Kết quả cho thấy giống bò này có tiềm năng lớn, với \"điểm xuất phát\" được đánh giá thậm chí cao hơn Hanwoo, giống bò thịt nổi tiếng của Hàn Quốc.Hanwoo được Hàn Quốc đầu tư mạnh về chọn giống và công nghệ chăn nuôi, trở thành một trong những dòng bò thịt cao cấp của nước này. Theo ông Đăng, Việt Nam đã đưa một số công nghệ chăn nuôi vào thử nghiệm trên bò H’Mông và nhận thấy nhiều tiềm năng.\"Chúng tôi đang xây dựng công nghệ chiến lược, trong đó đặt hàng việc phải chọn và tạo được giống bò theo chất lượng thịt, hướng đến chất lượng cao\", ông nói.Một phần quan trọng của kế hoạch là xây dựng hệ thống đánh giá và xếp hạng chất lượng thịt bò, tham khảo hệ thống của Hàn Quốc và Nhật Bản. Theo ông Đăng, lâu nay Việt Nam thường nói sản phẩm chăn nuôi \"ngon\" nhưng chưa có tiêu chí cụ thể để xác định ngon ở mức nào.Trong khi đó, tại Hàn Quốc và Nhật Bản, chất lượng thịt được phân loại, xếp hạng dựa trên những tiêu chí cụ thể. Việc này giúp người nghiên cứu, chọn giống và chăn nuôi có mục tiêu rõ ràng, thay vì chỉ dựa vào kinh nghiệm.Theo lãnh đạo Cục Chăn nuôi và Thú y, nhiệm vụ chọn tạo giống bò thịt chất lượng cao đã được đặt trong nhóm công nghệ chiến lược. Tuy nhiên, việc triển khai đòi hỏi nguồn lực lớn về nhân lực, thiết bị và nghiên cứu, do đó cần sự tham gia của các viện, trường và đơn vị chuyên môn.\nBò H’Mông tại Hà Giang, tỉnh Tuyên Quang. Ảnh: Sở Nông nghiệp và Môi trường Tuyên Quang\nÔng cho biết đang định hướng giao các cơ sở nghiên cứu, trong đó có học viện và các đơn vị thuộc lĩnh vực thú y, phối hợp thực hiện, đồng thời xây dựng hướng dẫn để đưa công nghệ đến các vùng chăn nuôi.Bò H’Mông hiện được nuôi phổ biến ở nhiều tỉnh miền núi phía Bắc và được biết đến với khả năng thích nghi tốt với điều kiện địa phương. Theo ông Đăng, một số sản phẩm thịt bò H’Mông trên thị trường đã có giá cao, khoảng 1,2 triệu đồng một kg; một số chuỗi nhà hàng tại Hà Nội cũng bắt đầu đưa dòng thịt này vào kinh doanh.Ông cho rằng để nâng giá trị bò H’Mông, ngành chăn nuôi cần chuyển từ sản xuất dựa chủ yếu vào kinh nghiệm sang tổ chức sản xuất có kiểm soát, quản lý giống, dinh dưỡng và quá trình nuôi bằng công nghệ.\"Quản lý bằng chip, quản lý bằng giống\" là một trong những hướng được ông Đăng đề cập nhằm kiểm soát quá trình chăn nuôi và tạo ra sản phẩm có chất lượng ổn định.Ngoài bò H’Mông, ông Đăng cho biết ngành chăn nuôi đang nghiên cứu phát triển một số sản phẩm bản địa có tiềm năng thành hàng hóa giá trị cao, trong đó có nhung hươu Hương Sơn, Hà Tĩnh.Theo ông, Việt Nam hiện vẫn nhập hươu và các sản phẩm từ hươu của nước ngoài để chế biến thực phẩm bổ sung, trong khi Hương Sơn có truyền thống nuôi hươu và sản phẩm nhung hươu nổi tiếng. Cơ quan chuyên môn đang phối hợp với Hà Tĩnh nghiên cứu chọn giống, ứng dụng công nghệ chế biến và xây dựng thương hiệu cho sản phẩm này.Mục tiêu là tạo ra sản phẩm có giá trị cao và hướng tới thương hiệu quốc gia, tương tự cách một số nước xây dựng thương hiệu sản phẩm đặc trưng từ nguồn nguyên liệu bản địa.Hội nghị AAAP 2026 có chủ đề \"Chăn nuôi bền vững\", do Hội Chăn nuôi Việt Nam (AHAV) chủ trì tổ chức. Đến nay, khoảng 1.400 đại biểu đăng ký tham dự, trong đó khoảng 600 đại biểu quốc tế đến từ 42 quốc gia và vùng lãnh thổ. Thành phần tham dự gồm các nhà khoa học, chuyên gia, nhà quản lý, doanh nghiệp, hiệp hội và tổ chức quốc tế trong lĩnh vực chăn nuôi, thú y, môi trường và chế biến thực phẩm.Gia Chính\nCác chuyên gia quốc tế đánh giá bò H'Mông có tiềm năng về di truyền, tầm vóc và thể trạng, là cơ sở để Việt Nam chọn tạo giống bò thịt chất lượng cao, hướng tới cạnh tranh với các giống nổi tiếng.",
+      "expected": [],
+      "must_not_tag": [
+        {
+          "symbol": "BAF",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "DBC",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "HAG",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "MML",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        }
+      ],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 129,
+      "source_domain": "tinnhanhchungkhoan.vn",
+      "title": "Trung tâm tài chính quốc tế hướng tới những sản phẩm huy động vốn đầu tiên",
+      "url": "https://tinnhanhchungkhoan.vn/trung-tam-tai-chinh-quoc-te-huong-toi-nhung-san-pham-huy-dong-von-dau-tien-post397673.html",
+      "body": "Trung tâm tài chính quốc tế hướng tới những sản phẩm huy động vốn đầu tiên\n(ĐTCK) Đầu tuần qua (14/9) tại TP.HCM, Hội nghị Cấp cao Việt Nam - Vương quốc Anh về Dịch vụ Tài chính 2026 diễn ra trong khuôn khổ chuyến thăm chính thức Việt Nam của bà Dame Susan Langley, Thị trưởng Khu Tài chính London.\nHội nghị do Đại sứ quán Anh tại Hà Nội, Tổng Lãnh sự quán Anh tại TP.HCM, Hiệp hội Doanh nghiệp Anh tại Việt Nam (BritCham) và Dragon Capital phối hợp tổ chức, quy tụ hơn 150 đại biểu cấp cao từ các cơ quan chính phủ, doanh nghiệp, định chế tài chính, viện nghiên cứu và tổ chức chuyên môn hai nước. \nĐây là chuyến thăm Việt Nam thứ ba liên tiếp của Thị trưởng Tài chính Thành phố London, phản ánh mối quan hệ đối tác chiến lược ngày càng phát triển giữa Vương quốc Anh và Việt Nam trong các lĩnh vực tài chính, đầu tư, giáo dục và dịch vụ chuyên môn. Ba trọng tâm được bà khởi xướng tại hội nghị gồm nữ lãnh đạo, phát triển thị trường vốn, kỹ năng và nhân tài. \nPhát biểu tại hội nghị, bà Langley đánh giá những tiến bộ của Việt Nam đang được quốc tế ghi nhận, trong đó có việc FTSE Russell nâng hạng thị trường chứng khoán từ cận biên lên mới nổi thứ cấp, có hiệu lực trong tháng 9/2026. Bà khẳng định Khu Tài chính London (The City of London) là đối tác thân thiết của Trung tâm Tài chính Quốc tế Việt Nam. \nĐối với TP.HCM, yêu cầu đặt ra là kết nối nguồn vốn quốc tế với nhu cầu đầu tư dài hạn của thành phố. Trong bài phát biểu, ông Nguyễn Công Vinh, Phó Chủ tịch UBND TP.HCM, cho biết đầu tư hạ tầng giao thông, chuyển đổi xanh, chuyển đổi số và nâng cao năng lực cạnh tranh doanh nghiệp đều cần nguồn vốn đa dạng, có chi phí hợp lý. Trung tâm Tài chính Quốc tế Việt Nam tại TP.HCM (VIFC) đang chuyển từ xây dựng thể chế sang vận hành thực chất, hướng tới ra mắt những sản phẩm nền tảng đầu tiên trong năm 2026 như trái phiếu đô thị, trái phiếu công trình.\n \nTheo lãnh đạo thành phố, thành công của VIFC cần được thể hiện ở kết quả huy động và giải ngân vốn cho các dự án khả thi, khả năng đáp ứng nhu cầu dịch vụ tài chính của doanh nghiệp, mức độ an toàn và thuận tiện của giao dịch. Cùng với đó là năng lực của nhân sự trong nước trong việc thực hiện các nghiệp vụ quốc tế. \nĐể tiến tới những giao dịch cụ thể, thành phố mong muốn đối tác Anh tham gia từ khâu chuẩn bị dự án, xây dựng sản phẩm, nâng chất lượng công bố thông tin đến kết nối nhà đầu tư và thu xếp vốn. Mỗi chương trình hợp tác cần xuất phát từ nhu cầu thực tế, có phương án tài chính khả thi và khả năng triển khai giao dịch. \nCác nhóm ưu tiên của VIFC gồm quỹ đầu tư, trái phiếu quốc tế, công nghệ tài chính và sở giao dịch hàng hóa. Thành phố cũng định hướng phát triển dịch vụ tài chính hàng không, hàng hải; thu hút tổ chức quản lý quỹ, ngân hàng, doanh nghiệp bảo hiểm cùng các đơn vị pháp lý, kiểm toán và tư vấn tham gia. \nTừ phía Anh, Đại sứ Iain Frew nhấn mạnh vai trò đối tác lâu dài, kết hợp nguồn vốn với chuyên môn và kinh nghiệm quốc tế. Ông đề cập mức cam kết hỗ trợ ít nhất 6,5 tỷ USD của Cơ quan Tín dụng xuất khẩu Anh (UK Export Finance - UKEF) dành cho các cơ hội tại Việt Nam, thông qua cơ chế tín dụng xuất khẩu. \n \nTrong lĩnh vực tài chính xanh, Đại sứ dẫn khoản vay 50 triệu USD mà Định chế tài chính phát triển Anh (British International Investment - BII) cam kết cung cấp cho VPBank năm 2025 để hỗ trợ các khoản vay liên quan đến khí hậu. Ông cũng cho biết, UKEF đã phát hành thư bày tỏ quan tâm hỗ trợ các dự án điện gió ngoài khơi quy mô lớn đầu tiên của Việt Nam, thông qua làm việc với PetroVietnam và PTSC. \nVề điều kiện tiếp cận vốn xanh, ông Vinh nhấn mạnh dự án phải chứng minh được tính khả thi tài chính, bảo đảm minh bạch thông tin và đo lường tác động môi trường. TP.HCM mong muốn hợp tác xây dựng danh mục dự án, tư vấn cấu trúc tài chính và đánh giá độc lập để từng bước có những dự án, giao dịch mẫu đủ chất lượng huy động vốn. \nBên cạnh khả năng thu xếp tài chính, Đại sứ Iain Frew dành sự chú ý cho nền tảng pháp lý và niềm tin của nhà đầu tư. Theo ông, các nhà đầu tư quốc tế coi trọng tính chắc chắn và khả năng dự đoán của pháp luật, hiệu quả giải quyết tranh chấp, sự minh bạch trong quản lý và việc thực thi chính sách nhất quán. Đây là những điều kiện thiết yếu để thu hút vốn quốc tế dài hạn khi Việt Nam phát triển trung tâm tài chính tại TP.HCM và Đà Nẵng. \nỞ góc độ thị trường vốn, ông Dominic Scriven, Chủ tịch Dragon Capital, nhận định thị trường vốn Việt Nam đã tiến bộ đáng kể nhưng “vẫn còn nhiều dư địa để nâng cao thanh khoản, mở rộng sự tham gia của nhà đầu tư”. Theo ông, hạ tầng thị trường cũng cần tiếp tục được hoàn thiện; trao đổi kinh nghiệm thực tiễn giữa hai nước có thể góp phần tìm giải pháp cho giai đoạn phát triển tiếp theo.\n \nĐể cụ thể hóa hợp tác sau hội nghị, ông Nguyễn Công Vinh đề nghị các cơ quan và đối tác lựa chọn nội dung ưu tiên, xác định rõ đầu mối, tiến độ và sản phẩm đầu ra. Thành phố cam kết tăng cường đối thoại, xử lý khó khăn thuộc thẩm quyền và phối hợp với cơ quan Trung ương tháo gỡ những vấn đề vượt thẩm quyền.",
+      "expected": [
+        {
+          "symbol": "PVS",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "VPB",
+          "relevance": "mentioned"
+        }
+      ],
+      "must_not_tag": [
+        {
+          "symbol": "GAS",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.8
+        }
+      ],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 139,
+      "source_domain": "tinnhanhchungkhoan.vn",
+      "title": "Ngân hàng đua phát hành trái phiếu",
+      "url": "https://tinnhanhchungkhoan.vn/ngan-hang-dua-phat-hanh-trai-phieu-post397516.html",
+      "body": "Ngân hàng đua phát hành trái phiếu\n(ĐTCK) Để chuẩn bị thanh khoản cho mùa cao điểm cầu vốn cuối năm, các nhà băng tăng cường phát hành trái phiếu, chứng chỉ tiền gửi với lãi suất cao.\nLãi suất lên tới 10%/năm \nTrong bối cảnh nhu cầu huy động vốn tăng cao, các ngân hàng đẩy mạnh kênh trái phiếu. Lãi suất theo thống kê tăng nóng từ mức 8%/năm vào cuối tháng 6 lên 9%/năm trong tháng 7 và đạt 10%/năm trong tháng 8. \nTheo dữ liệu của Sở Giao dịch chứng khoán Hà Nội (HNX), Sacombank đã phát hành 3 lô trái phiếu trong tuần cuối tháng 7/2026, huy động tổng cộng 3.650 tỷ đồng. Các lô trái phiếu này cùng có kỳ hạn 6 năm và lãi suất cố định 10%/năm, đưa lãi suất trái phiếu ngân hàng lên mặt bằng mới. Được biết, các lô mới phát hành nằm trong kế hoạch chào bán 20.000 tỷ đồng trái phiếu riêng lẻ của Sacombank. \nHDBank vừa công bố Nghị quyết Hội đồng quản trị về phương án phát hành trái phiếu ra công chúng, phương án sử dụng vốn và phương án trả nợ đối với nguồn tiền thu được. Tổng mệnh giá trái phiếu dự kiến phát hành tối đa 20.000 tỷ đồng. Theo đó, ngân hàng này dự kiến chào bán tối đa 200 triệu trái phiếu, mệnh giá 100.000 đồng/trái phiếu, là loại trái phiếu không chuyển đổi, không kèm chứng quyền và không có tài sản bảo đảm. Đây là nợ thứ cấp, đáp ứng các điều kiện để được tính vào vốn cấp 2 của Ngân hàng. Tổ chức tư vấn và phân phối trái phiếu cho các đợt phát hành này là SHS. Đại lý đăng ký, lưu ký ban đầu là Chứng khoán HD (HDS). \nHDBank dự kiến chia kế hoạch huy động thành 3 đợt, kéo dài từ cuối năm 2026 đến năm 2027, với kỳ hạn trái phiếu là 7 hoặc 8 năm. Đợt phát hành đầu tiên có quy mô lớn nhất, với hai lô trái phiếu mỗi lô 5.000 tỷ đồng, dự kiến thực hiện trong khoảng quý IV/2026 đến quý I/2027. Đợt phát hành thứ 2 cũng bao gồm hai lô trái phiếu, mỗi lô 3.000 tỷ đồng, dự kiến phát hành trong quý II - III/2027. Với đợt phát hành cuối cùng, HDBank dự kiến huy động hai lô trái phiếu, mỗi lô 2.000 tỷ đồng, triển khai trong quý III và quý IV/2027. Như vậy, tổng quy mô của ba đợt phát hành có thể đạt lần lượt là 10.000 tỷ đồng, 6.000 tỷ đồng và 4.000 tỷ đồng, áp dụng cơ chế lãi suất thả nổi. Mức lãi suất được xác định bằng lãi suất tham chiếu cộng với biên độ tối đa 3,3%/năm. Lãi suất tham chiếu được tính dựa trên mức bình quân lãi suất tiền gửi kỳ hạn 12 tháng của 4 ngân hàng (VietinBank, BIDV, Vietcombank, Agribank). HDBank dự kiến với lãi suất trái phiếu giả định 9,2%/năm, tổng gốc, lãi phải trả của Ngân hàng trong 8 năm là 33.800 tỷ đồng. \nNguồn trả nợ được Ngân hàng xác định là tiền thu được từ các khoản khách hàng thanh toán lãi, gốc của các khoản giải ngân/cho vay dự kiến thu được từ nguồn vốn phát hành trái phiếu. Ước tính, với mức dư nợ đầu kỳ là 20.000 tỷ đồng và lãi suất đầu ra dự kiến tối thiểu là 11%/năm, khoản phải thu dự kiến trong 8 năm là 36.500 tỷ đồng, lớn hơn nghĩa vụ thanh toán được xác định nêu trên. Trong trường hợp khoản thu trên chưa đủ để thanh toán lãi, gốc trái phiếu cho các nhà đầu tư, HDBank dự kiến sẽ sử dụng nguồn vốn huy động khác, nguồn vốn tự tích lũy, lợi nhuận từ hoạt động và các nguồn thu khác và tiềm lực tài chính của mình để thanh toán đầy đủ lãi, gốc trái phiếu hoặc mua lại trái phiếu trước hạn.\n \nMB mới đây hoàn tất phát hành 10 lô trái phiếu, huy động gần 6.000 tỷ đồng, lãi suất dao động từ 8,3 - 8,4%/năm. TPBank hoàn tất phát hành hai lô trái phiếu riêng lẻ trong cùng ngày 24/8 vừa qua, với tổng giá trị 2.500 tỷ đồng. Hay VPBank huy động 1.000 tỷ đồng trái phiếu với lãi suất cố định 8,6%/năm cho kỳ hạn 3 năm. OCB cũng phát hành 3 đợt trái phiếu để huy động 3.000 tỷ đồng với mức lãi cao nhất đến 8,6%/năm... \nBIDV thông báo vừa phát hành thành công 2 lô trái phiếu, nâng tổng trị giá huy động vốn qua kênh trái phiếu từ đầu năm đến nay lên 6.675 tỷ đồng. Các thông tin về trái chủ, mục đích phát hành, tài sản đảm bảo... không được nhà băng này công bố. Tuy nhiên, theo ghi nhận trên HNX, các lô trái phiếu trên có lãi suất cố định 8,2%/năm. Cùng nhóm Big4, Vietcombank chào bán một lô trái phiếu với lãi suất cố định 7,9%/năm, cao hơn 3%/năm so với lô phát hành cuối năm ngoái... \nCuộc đua chưa có dấu hiệu hạ nhiệt \nTrong báo cáo mới công bố, nhóm phân tích FiinRatings dự báo mặt bằng lãi suất trái phiếu ngân hàng chưa có dấu hiệu hạ nhiệt. Điều này đồng thời thể hiện qua kế hoạch chào bán trái phiếu quy mô lớn của nhiều ngân hàng trong các tháng cuối năm. \n“Nhu cầu vốn của các ngân hàng trong nửa cuối năm nhiều khả năng vẫn duy trì ở mức cao, trong khi chênh lệch giữa huy động và tín dụng chưa thể sớm thu hẹp, cộng thêm nhu cầu bổ sung vốn cấp 2 để đáp ứng các tỷ lệ an toàn theo quy định”, chuyên gia FiinRatings nhận định.\n \nMặt bằng lãi suất phát hành gần đây cũng cho thấy sự phân hóa giữa các nhóm ngân hàng. Với các ngân hàng cổ phần tư nhân, lãi suất trái phiếu kỳ hạn từ 3 - 6 năm chủ yếu dao động quanh 9 - 9,1%/năm. Trong khi đó, lãi suất trái phiếu của nhóm ngân hàng có vốn nhà nước chi phối vào khoảng 7,87 - 8,2%/năm. \nTrong tháng 8, mức lãi suất cao đáng chú ý thuộc về TPBank với 9,7%/năm và PVcomBank với 9,6%/năm. Đây đều là trái phiếu có kỳ hạn 7 năm. Với PVcomBank, mức lãi suất này đã giảm 0,2%/năm so với lô trái phiếu phát hành cuối tháng 7 (có lãi suất 9,8%/năm). \nTheo số liệu từ VIS Rating, trong tháng 8/2026, thị trường trái phiếu doanh nghiệp ghi nhận tổng giá trị phát hành mới đạt 35.000 tỷ đồng, giảm 16% so với tháng trước. Ngân hàng tiếp tục là nhóm phát hành chính, chiếm tới 82% tổng giá trị phát hành mới, nhóm bất động sản chỉ chiếm 9%. Hình thức phát hành riêng lẻ chiếm ưu thế tuyệt đối với 91%. \nTS. Châu Đình Linh, Trường Đại học Ngân hàng TP.HCM nhận định, ngoài nhu cầu bổ sung nguồn vốn, việc phát hành trái phiếu còn có ý nghĩa đối với năng lực an toàn vốn của các tổ chức tín dụng. \nTheo ông Linh, bên cạnh mục tiêu đáp ứng nhu cầu thanh khoản, nhiều trái phiếu ngân hàng, nhất là trái phiếu có kỳ hạn dài và đáp ứng các điều kiện theo quy định có thể được tính vào vốn cấp 2. Qua đó, ngân hàng có thêm dư địa cải thiện hệ số an toàn vốn, củng cố năng lực tài chính và mở rộng hoạt động kinh doanh, nhất là khi huy động vốn cạnh tranh. Không chỉ chiếm tỷ trọng lớn về giá trị phát hành, trái phiếu ngân hàng còn có lợi thế trong việc tiếp cận nhóm nhà đầu tư tổ chức.\n \nThực tế, việc phát hành trái phiếu là một trong những kênh huy động vốn trung và dài hạn hiệu quả đối với ngân hàng. Lợi ích quan trọng của kênh này là giúp ngân hàng gia tăng nguồn vốn có kỳ hạn dài, qua đó, cải thiện cơ cấu nguồn vốn và đáp ứng tốt hơn nhu cầu tín dụng trung, dài hạn của nền kinh tế. Phát hành trái phiếu cũng giúp các tổ chức tín dụng cân đối lại tài sản và nguồn vốn, giảm mức độ phụ thuộc vào nguồn vốn ngắn hạn. Với những đợt phát hành quy mô lớn, ngân hàng còn có cơ hội tối ưu chi phí huy động và đa dạng hóa nguồn vốn bên cạnh tiền gửi truyền thống từ dân cư và các tổ chức kinh tế.\n Không chỉ giữ vai trò lớn ở phía phát hành, nhóm ngân hàng còn chiếm tỷ trọng áp đảo trong hoạt động mua lại trái phiếu trước hạn. Từ đầu năm đến nay, tổng giá trị trái phiếu doanh nghiệp được mua lại trước hạn đạt 199.172 tỷ đồng; trong đó, nhóm ngân hàng chiếm 87,6%, tương đương 174.617 tỷ đồng. Tổng giá trị trái phiếu đến hạn thanh toán từ nay đến cuối năm 2026 còn khoảng 91.413 tỷ đồng. Trong đó, nhóm bất động sản chiếm phần lớn với 51.686 tỷ đồng, tương đương 56,5%, tập trung chủ yếu vào tháng 9 và tháng 12. Nhóm ngân hàng đứng thứ 2, với 19.255 tỷ đồng, chiếm 21,1%. \n Xét về nghĩa vụ thanh toán trong 12 tháng tới, tổng giá trị trái phiếu đáo hạn ước tính khoảng 253.000 tỷ đồng. Trong nhóm các ngân hàng có giá trị đáo hạn trái phiếu lớn nhất 12 tháng tới thì ACB đứng đầu, với 21.720 tỷ đồng; Agribank đứng thứ hai, với 7.520 tỷ đồng; tiếp đến là Sacombank với 5.000 tỷ đồng, HDBank 4.751 tỷ đồng, LPBank với 3.000 tỷ đồng, TPBank 2.505 tỷ đồng, BIDV với 2.483 tỷ đồng, Vietcombank 2.000 tỷ đồng, OCB với 1.600 tỷ đồng, VPBank với 1.000 tỷ đồng.",
+      "expected": [
+        {
+          "symbol": "BID",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "HDB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "LPB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "STB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "TPB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "VCB",
+          "relevance": "primary"
+        },
+        {
+          "symbol": "VPB",
+          "relevance": "primary"
+        }
+      ],
+      "must_not_tag": [],
+      "uncertain": [
+        {
+          "symbol": "CTG",
+          "relevance": "mentioned",
+          "reason": "mã chỉ xuất hiện trong cụm trích dẫn tổ chức phân tích hoặc công thức lãi suất tham chiếu"
+        }
+      ],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 159,
+      "source_domain": "tuoitre.vn",
+      "title": "Trình diễn công nghệ in kỹ thuật số, đóng gói tự động tại triển lãm ở TP.HCM",
+      "url": "https://tuoitre.vn/trinh-dien-cong-nghe-in-ky-thuat-so-dong-goi-tu-dong-tai-trien-lam-o-tphcm-100260916190011506.htm",
+      "body": "Trình diễn công nghệ in kỹ thuật số, đóng gói tự động tại triển lãm ở TP.HCM\n Triển lãm quốc tế lần thứ 24 về máy móc thiết bị công nghiệp ngành in ấn và đóng gói bao bì tại Việt Nam (VietnamPrintPack 2026) khai mạc ngày 16-9 tại Trung tâm Hội chợ và triển lãm Sài Gòn (SECC), TP.HCM.\n \n Các doanh nghiệp quốc tế tìm hiểu những sản phẩm mới tại triển lãm - Ảnh: HẢI KIMĐáng chú ý, tại triển lãm, các doanh nghiệp Trung Quốc đã không \"nề hà\" mang những chiếc máy in nặng hàng tấn đến sự kiện để trình diễn công nghệ in kỹ thuật số, đóng gói tự động. Máy in, máy đóng gói chạy rộn ràng tại triển lãm VietnamPrintPack 2026Theo ghi nhận, các gian hàng trong ngày khai mạc rộn ràng tiếng máy chạy, tiếng dập của các thiết bị tự động. Khác với các triển lãm thông thường chủ yếu mang tính chất trưng bày, triển lãm VietnamPrintPack 2026 được các doanh nghiệp tham gia đầu tư gian hàng, giới thiệu máy móc rất sống động. Những chiếc máy in, máy đóng gói tự động được mang đến và cho ra sản phẩm ngay tại triển lãm để phục vụ khách tham quan cũng như cho thấy sản phẩm cuối cùng của dây chuyền. Tại sự kiện, nhóm máy móc, thiết bị in kỹ thuật số hiện đại quy tụ các thương hiệu và nhà phân phối hàng đầu thế giới, giới thiệu các giải pháp tập trung vào in tốc độ cao, nâng cao độ chính xác và tối ưu chi phí sản xuất.Trong khi đó, ở lĩnh vực đóng gói và xử lý bề mặt, triển lãm trưng bày các dây chuyền cắt bế, tráng phủ, cán màng, in date và đóng gói tự động hóa. Đây là nhóm thiết bị phục vụ các công đoạn hoàn thiện sản phẩm in, bao bì và nâng cao mức độ tự động hóa trong sản xuất.Bên cạnh đó, các công nghệ in nhãn thông minh và ứng dụng RFID được giới thiệu thông qua những doanh nghiệp tên tuổi, hướng đến định danh sản phẩm, truy xuất nguồn gốc và quản lý chuỗi cung ứng.Theo ban tổ chức, triển lãm năm nay quy tụ 800 gian hàng của 300 đơn vị triển lãm hàng đầu đến từ 13 quốc gia và vùng lãnh thổ trên tổng diện tích 16.000m². Những chiếc máy in, máy đóng bao bì tự động nặng từ 600kg trở lên được mang tới triển lãm để trình diễn cho công chúng - Ảnh: HẢI KIMÔng Nguyễn Văn Dòng, Chủ tịch Hiệp hội In Việt Nam, cho biết từ triển lãm cũng nhận thấy ngành in trong nước cần đổi mới công nghệ, nâng cao năng lực quản trị. Thực tế, doanh nghiệp in nội địa đối mặt với chi phí sản xuất cao hơn 15% do hạn chế về quản trị và chuyển đổi số, đồng thời cần 3 đến 5 năm để nâng cao năng lực cạnh tranh. Theo ông, ngành in duy trì tốc độ tăng trưởng bình quân trên dưới 10%/năm, song việc đầu tư công nghệ hiện đại vẫn là yêu cầu cấp thiết để nâng cao năng lực cạnh tranh và đáp ứng yêu cầu phát triển.Trong khi đó, quá trình chuyển đổi số và tự động hóa tại nhiều doanh nghiệp nội địa vẫn diễn ra chậm. Theo ông, doanh nghiệp Việt Nam có thể cần thêm 3-5 năm để cải thiện năng lực quản trị và vận hành.Phải nội địa hóa trên 50% thiết bị, nguyên liệu ngành inVietnamPrintPack 2026 xuất hiện như một \"trạm sạc\" công nghệ, giúp doanh nghiệp Việt tiếp cận thiết bị tiên tiến, giảm chi phí vận hành và thoát khỏi bẫy gia công giá rẻ - Ảnh: HẢI KIMTheo các doanh nghiệp, việc các khối FDI tiếp tục gia tăng đầu tư vào Việt Nam đang tạo sức ép cạnh tranh lớn, khiến doanh nghiệp in nội địa gặp nhiều khó khăn trong việc tham gia sâu vào chuỗi cung ứng. Bên cạnh đó, xung đột tại Trung Đông và chiến tranh thương mại toàn cầu cũng tác động tiêu cực đến hoạt động sản xuất, kinh doanh. Tuy nhiên, trong 8 tháng đầu năm, các doanh nghiệp in Việt Nam vẫn ghi nhận mức tăng trưởng khoảng 6-8% so với cùng kỳ năm trước.Ông Trần Việt Anh, Chủ tịch Hiệp hội Tái chế Việt Nam, cho biết để đáp ứng các tiêu chuẩn ngày càng khắt khe từ những khách hàng lớn trong ngành dược phẩm, điện tử và các lĩnh vực xuất khẩu, doanh nghiệp in bao bì Việt Nam, đặc biệt là doanh nghiệp vừa và nhỏ, buộc phải đầu tư đổi mới công nghệ, thiết bị và nguyên vật liệu. Tuy nhiên, chi phí đầu tư máy móc hiện đại, công nghệ số và mực in an toàn còn rất cao, trong khi nhiều doanh nghiệp vẫn đang sử dụng các thế hệ máy in đã vận hành 10-20 năm. Cùng với đó, sự gia tăng hiện diện của các doanh nghiệp in có vốn đầu tư nước ngoài tại Việt Nam đang tạo áp lực cạnh tranh trực tiếp đối với doanh nghiệp trong nước. \"Nhà nước cần có chính sách hỗ trợ tài chính cho việc nghiên cứu, chế tạo thiết bị in, nguyên liệu và mực in trong nước, hướng tới mục tiêu nội địa hóa trên 50%, thay vì phụ thuộc hoàn toàn vào nguồn nhập khẩu\", ông Việt Anh đề xuất bên lề triển lãm. Triển lãm kéo dài đến ngày 19-9.Doanh nghiệp Trung Quốc tiếp tục cho thấy thế mạnh của mình trong ngành in và đóng gói tự động. Khách tham quan dễ bắt gặp những xu hướng mới nhất của ngành in ấn và đóng gói bao bì hiện đại - Ảnh: HẢI KIMDoanh nghiệp Việt hướng đến ngành in 'xanh'",
+      "expected": [],
+      "must_not_tag": [
+        {
+          "symbol": "CMG",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "FPT",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        }
+      ],
+      "uncertain": [],
+      "group": "A_random_sample",
+      "note": null
+    },
+    {
+      "id": 162,
+      "source_domain": "tinnhanhchungkhoan.vn",
+      "title": "Tỷ giá nửa cuối năm: Giữ cân bằng giữa nhiều sức ép",
+      "url": "https://tinnhanhchungkhoan.vn/ty-gia-nua-cuoi-nam-giu-can-bang-giua-nhieu-suc-ep-post397677.html",
+      "body": "Tỷ giá nửa cuối năm: Giữ cân bằng giữa nhiều sức ép\nNhu cầu ngoại tệ được dự báo tiếp tục tăng trong những tháng cuối năm, trong khi cán cân thương mại lệch sang nhập siêu, kiều hối giảm và khả năng Cục Dự trữ Liên bang Mỹ (Fed) duy trì chính sách tiền tệ thắt chặt. Tất cả những yếu tố này tạo sức ép lên tỷ giá.\n \n Nhu cầu ngoại tệ dự báo tiếp tục tăng trong những tháng cuối năm, gây áp lực lên tỷ giá \nSức ép cung - cầu ngoại tệ \nNửa đầu năm 2026, kinh tế Việt Nam tiếp tục cho thấy sức bật đáng chú ý. Hoạt động thương mại tăng trưởng mạnh, đầu tư duy trì tích cực, du lịch phục hồi tốt và niềm tin của khu vực doanh nghiệp nhìn chung vẫn được giữ vững. \nTrong bức tranh đó, xuất khẩu và nhập khẩu cùng tăng nhanh. Theo ông Ngô Đăng Khoa, Giám đốc toàn quốc Khối kinh doanh vốn, tiền tệ và thị trường chứng khoán (HSBC Việt Nam), đây là một tín hiệu đáng khích lệ, phản ánh nền kinh tế không chỉ phục hồi theo chiều rộng, mà còn đang chuẩn bị năng lực cho giai đoạn tăng trưởng tiếp theo. \nTuy nhiên, khi nền kinh tế đi nhanh hơn, bài toán điều hành vĩ mô cũng trở nên phức tạp hơn. Tăng trưởng mạnh thường đi cùng với nhu cầu vốn lớn, nhu cầu nhập khẩu đầu vào cao hơn, nhu cầu thanh toán quốc tế lớn hơn và vì vậy, áp lực lên cung - cầu ngoại tệ, lãi suất và kỳ vọng thị trường cũng trở nên rõ nét hơn. Nửa cuối năm 2026, vì thế, là câu chuyện của việc giữ cân bằng trong một môi trường ngày càng nhạy cảm hơn. \nTính đến hết tháng 7/2026, cán cân thương mại hàng hóa có sự mất cân đối khi nhập siêu 20,52 tỷ USD, trong khi cùng kỳ năm 2025 xuất siêu 10,18 tỷ USD. Điều đáng chú ý không chỉ nằm ở quy mô nhập siêu, mà còn ở cấu trúc của nó. Khu vực kinh tế trong nước nhập siêu 28,5 tỷ USD, trong khi khu vực FDI vẫn xuất siêu 7,98 tỷ USD. Nhập khẩu tăng 34,8%, trong khi xuất khẩu chỉ tăng 21,7%, phản ánh nhu cầu ngoại tệ phục vụ sản xuất, vốn ít nhạy cảm với các thay đổi của chính sách tiền tệ bên ngoài. Trong nửa cuối năm, áp lực cung - cầu ngoại tệ có thể rõ hơn do yếu tố mùa vụ. \nHSBC cho rằng, quý III thường là giai đoạn doanh nghiệp tăng nhập nguyên liệu cho chu kỳ sản xuất cuối năm, đồng thời cũng là thời điểm nhiều doanh nghiệp FDI thực hiện chuyển lợi nhuận, thanh toán nội bộ hoặc cơ cấu lại dòng tiền. Vì vậy, cung - cầu ngoại tệ khả năng tiếp tục ở trạng thái căng hơn so cùng kỳ một số năm trước.\n \nTrong khi đó, kiều hối chuyển về TP.HCM trong 6 tháng đầu năm 2026 đạt 4,04 tỷ USD, giảm 22,8% so với cùng kỳ và giảm 21% so với nửa cuối năm 2025. Với tỷ trọng khoảng 55-60% tổng lượng kiều hối cả nước, mức giảm này hàm ý dòng kiều hối qua hệ thống ngân hàng có thể hụt khoảng 1,5-2 tỷ USD trong nửa đầu năm. \nLãnh đạo Ngân hàng Nhà nước, Chi nhánh Khu vực 2 xác định hai nguyên nhân mang tính cấu trúc: lãi suất tiền gửi ngoại tệ 0% làm triệt tiêu động lực chuyển vốn về nước và dòng tiền phân tán qua các kênh thanh toán mới khiến doanh số ghi nhận qua hệ thống ngân hàng giảm tương đối. Dù xuất phát từ những nguyên nhân khác nhau, cả hai đều làm giảm lượng ngoại tệ đi qua hệ thống ngân hàng, qua đó làm giảm khả năng bổ sung dự trữ ngoại hối... \nBáo cáo chiến lược triển vọng 6 tháng cuối năm 2026 của Công ty Chứng khoán Vietcombank (VCBS) nhận định, nếu lạm phát tại Mỹ tiếp tục neo ở mức cao, Fed có thể cân nhắc tăng lãi suất vào cuối quý III/2026 hoặc quý IV/2026, qua đó hỗ trợ Chỉ số USD-Index phục hồi và tạo thêm áp lực lên tỷ giá VND/USD. \n \n \n \n \n \n \n \nNhận diện áp lực trong nửa cuối năm\n \nNhóm phân tích VCBS cho rằng, tỷ giá hối đoái tại Việt Nam chỉ chịu áp lực tăng nhẹ do được bù đắp bởi các yếu tố tích cực của nền kinh tế trong nước. Đó là dòng vốn FDI duy trì giải ngân cao và kỳ vọng tiếp tục được đẩy mạnh; hoạt động xuất khẩu vẫn tăng trưởng tốt; giá vàng thế giới đã giảm, điều này làm giảm bớt nhu cầu nhập khẩu vàng, qua đó giảm nhu cầu USD tại thị trường tự do. Bởi vậy, VCBS dự báo VND có thể giảm giá khoảng 3% so với USD trong cả năm 2026. Theo giới phân tích, đây là mức hợp lý. \nCác chuyên gia của Ngân hàng Techcombank thì điều chỉnh dự báo theo hướng VND thậm chí có thể lên giá so với USD và tỷ giá có khả năng xuống dưới mức 26.000 VND/USD vào cuối năm. Dù vậy, Bộ phận Phân tích kinh tế và tình hình tài chính Techcombank cho rằng, lãi suất giảm mạnh không phải là điều dễ đạt được, đặc biệt trong bối cảnh áp lực tăng trưởng khiến nhu cầu vốn vẫn ở mức cao. Nhưng nếu mặt bằng lãi suất liên ngân hàng duy trì thấp và ổn định đủ lâu, điều này cũng có thể tạo thêm dư địa để lãi suất tiền gửi giảm nhẹ cuối năm. Việc lãi suất chỉ giảm ở mức tương đối nhẹ là tiền đề giúp tỷ giá duy trì ổn định trong năm 2026. \nTheo Techcombank, Fed nhiều khả năng sẽ giữ nguyên lãi suất và điều này sẽ giúp định hình lại vùng kỳ vọng đối với USD Index (DXY) ở mức dưới 100 điểm, qua đó góp phần hỗ trợ ổn định tỷ giá VND/USD. Còn trong kịch bản Fed không tăng lãi suất USD, còn lãi suất VND chỉ giảm nhẹ, chênh lệch lãi suất giữa VND và USD vẫn có thể duy trì ở mức cao trên 3%. Đây là một trong những yếu tố quan trọng nhất giúp tỷ giá ổn định trong thời gian qua, khi góp phần thu hút nguồn cung USD từ bên ngoài, qua đó bù đắp một phần cho trạng thái thâm hụt thương mại. Áp lực này đồng thời cũng được giảm tải nhờ mức tăng trưởng kỷ lục của giải ngân FDI. \nÔng Ngô Đăng Khoa cho rằng, trong nửa cuối năm 2026, áp lực cung - cầu ngoại tệ có thể rõ hơn do yếu tố mùa vụ. Dù vậy, kịch bản cơ sở vẫn là tỷ giá VND/USD biến động theo hướng tăng vừa phải, bởi Việt Nam hiện vẫn có nhiều yếu tố hỗ trợ quan trọng như tăng trưởng GDP cao, FDI giải ngân tích cực, du lịch phục hồi mạnh và triển vọng xuất khẩu lớn. Định hướng điều hành mới tiếp tục nhấn mạnh việc phối hợp đồng bộ giữa tỷ giá, lãi suất, cung tiền, thanh khoản, tín dụng. Ngân hàng Nhà nước được yêu cầu chủ động điều chỉnh cường độ, liều lượng, thời điểm sử dụng các công cụ thuộc thẩm quyền, đồng thời xác định các ngưỡng cảnh báo để phản ứng kịp thời trước thay đổi của thị trường. \nViệc điều hành tỷ giá, vì vậy, nhiều khả năng sẽ tiếp tục theo hướng linh hoạt, phù hợp với diễn biến thị trường và được phối hợp chặt chẽ với các công cụ chính sách tiền tệ khác. Theo ông Khoa, một điểm đáng chú ý của chu kỳ hiện nay là mối quan hệ giữa tỷ giá và lãi suất đã trở nên linh hoạt và đa chiều hơn so với trước. Nếu như ở một số giai đoạn trước, thị trường thường nhìn khá trực diện rằng áp lực tỷ giá tăng thì lãi suất phải tăng để bảo vệ đồng nội tệ, thì hiện nay bài toán điều hành phức tạp hơn nhiều. Lý do được ông Khoa đưa ra là nền kinh tế Việt Nam đang ở trong một chu kỳ tăng trưởng cao hơn, nhu cầu tín dụng lớn hơn, trong khi áp lực tỷ giá không chỉ đến từ yếu tố bên ngoài như USD mạnh lên, mà còn đến từ chính nhu cầu ngoại tệ phục vụ thương mại, đầu tư, thanh toán. Như vậy, lãi suất hiện không chỉ là công cụ để hỗ trợ tỷ giá, mà phải đồng thời cân bằng nhiều mục tiêu khác như hỗ trợ tăng trưởng, kiểm soát lạm phát, duy trì thanh khoản…\n \nTuy nhiên, ông Khoa cũng cho rằng, trong bối cảnh lãi suất điều hành được duy trì, mặt bằng lãi suất huy động và lãi suất liên ngân hàng vẫn cần được theo dõi sát, bởi diễn biến này phản ánh tương tác giữa nhu cầu tín dụng, thanh khoản hệ thống, kỳ vọng tỷ giá và ổn định mặt bằng lãi suất cho vay. Một số tín hiệu cho thấy, tâm lý thị trường đã thận trọng hơn, như tỷ giá phản ứng nhạy hơn với nhu cầu ngoại tệ nội địa, hay mặt bằng lãi suất VND ngắn hạn được duy trì ở mức phù hợp để hỗ trợ ổn định kỳ vọng. Một trong những điểm cần lưu ý cho nửa cuối năm, theo các chuyên gia phân tích HSBC, là thị trường có thể đang tương đối lạc quan về khả năng các áp lực sẽ tiếp tục được kiểm soát riêng lẻ. Những yếu tố hiện vẫn nằm trong vùng quản lý được như giá dầu đã hạ nhiệt so với giai đoạn căng thẳng nhất, lạm phát có dấu hiệu dịu hơn và tỷ giá vẫn đang vận động trong cơ chế linh hoạt. \nPhạm vi điều hành sẽ phụ thuộc nhiều hơn vào khả năng phối hợp đồng thời giữa tỷ giá, lãi suất, thanh khoản, tín dụng và các chính sách tài khóa, song rủi ro thực sự nằm ở khả năng nhiều áp lực cùng hội tụ trong một thời điểm. Theo các chuyên gia, nếu trong nửa cuối năm xuất hiện đồng thời 3 yếu tố là giá năng lượng tăng trở lại, Fed duy trì lập trường cao lâu hơn dự kiến và cầu ngoại tệ nội địa tăng mạnh theo mùa vụ, thị trường có thể nhanh chóng điều chỉnh, làm gia tăng áp lực lên tỷ giá.",
+      "expected": [],
+      "must_not_tag": [
+        {
+          "symbol": "ACB",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "BID",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "CTG",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "HDB",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        }
+      ],
+      "uncertain": [
+        {
+          "symbol": "TCB",
+          "relevance": "mentioned",
+          "reason": "mã chỉ xuất hiện trong cụm trích dẫn tổ chức phân tích hoặc công thức lãi suất tham chiếu"
+        }
+      ],
+      "group": "A_random_sample",
+      "note": "4 mã tầng T3 (score 0.40) đều vắng mặt trong thân bài; BID và HDB chỉ xuất hiện trong div.box-sidebar-* thuộc rail 'bài liên quan'. TCB bị xếp uncertain (chỉ xuất hiện trong cụm trích dẫn tổ chức phân tích)."
+    },
+    {
+      "id": 62,
+      "source_domain": "vnexpress.net",
+      "title": "Canada và thế khó của 'nền kinh tế hướng Mỹ'",
+      "url": null,
+      "body": "Canada và thế khó của 'nền kinh tế hướng Mỹ' Nền kinh tế hướng Mỹ giúp hàng hóa xuất khẩu của Canada hưởng lợi nhưng đồng thời dễ tổn thương khi thương chiến với ông Trump nổ ra. Bắt đầu từ 15/9, Washington mở rộng danh sách mặt hàng từ Canada chịu thuế nhập khẩu 50%, gồm giấy, đồ nội thất và các sản phẩm thép. Đến 29/9, một số loại rượu, sản phẩm sữa và xe máy sẽ bị cấm nhập vào Mỹ. Lộ trình này là phản ứng của chính quyền Tổng thống Donald Trump trước quyết định đáp trả thuế quan của Canada, hiệu lực vào 8/9. Chương mới trong tranh chấp thương mại nhắm vào một nền kinh tế được Ngân hàng Trung ương Canada dự báo tăng trưởng 1,6% năm 2026 và vẫn phụ thuộc sâu sắc vào láng giềng. Năm 2025, 71,7% kim ngạch xuất khẩu hàng hóa Canada đến từ Mỹ, giảm từ 75,9% vào 2024. Cần lưu ý, xuất khẩu chiếm tương đương một phần ba GDP Canada. Chiều ngược lại, Canada mua khoảng 15% hàng xuất khẩu của Mỹ. Theo Le Monde , nền kinh tế Canada \"gần như hoàn toàn hướng về Mỹ\". \"Canada rõ ràng ở phía dễ bị tổn thương\", bà Ann Harrison, nhà kinh tế học tại Trường Kinh doanh Haas thuộc Đại học California, Berkeley, nhận định. Theo bà, trong nhiều thập kỷ, các nhà kinh tế chủ yếu nhấn mạnh những lợi ích từ quá trình hội nhập, nhưng đại dịch đã phơi bày điểm yếu. Khi chuỗi cung ứng đứt gãy, cả hai quốc gia phụ thuộc lẫn nhau đều chịu cú sốc. Với Canada, họ còn chịu thêm rủi ro là dựa vào người láng giềng ngày càng khó đoán. Các nhà sản xuất thép cho biết xuất khẩu đã giảm một nửa so với 2024, do tình trạng \"leo thang (thuế quan) đáng lo ngại\". Bốn năm qua, 23 nhà máy gỗ xẻ đóng cửa, 70 nhà máy giảm sản lượng, do những rào cản mới của Mỹ. Trong lĩnh vực năng lượng, mức độ phụ thuộc lẫn nhau sâu sắc đến mức đây trở thành một trong những quân bài mặc cả chủ chốt của Ottawa trong đàm phán với Washington. Năm 2025, 90,8% dầu khí xuất khẩu của Canada được đưa sang Mỹ. Ngược lại, 63,4% dầu thô và 81,3% điện nhập khẩu của Mỹ đến từ Canada. Ngành ôtô Canada, với hơn 121.000 lao động trực tiếp, gắn kết sâu rộng với láng giềng phía Nam, nên không tránh khỏi vạ lây. Tháng 1, General Motors tinh giản 700 lao động tại nhà máy Oshawa, kéo theo hàng trăm việc làm khác biến mất ở các nhà cung cấp. Công ty cũng thu hẹp hoạt động tại nhà máy Ingersoll ở Ontario. Ông Michael McAdoo, chuyên gia tại Boston Consulting Group ở Montréal, nói Canada đã mất 60 năm để xây dựng chuỗi cung ứng ôtô tích hợp. Chuỗi này khó điều chỉnh bởi công suất ôtô toàn cầu đang dư thừa và Canada khó xoay sang các thị trường khác. Mối đe dọa lớn nhất vẫn còn ở phía trước. Ông Trump tuyên bố sẽ áp thuế 50% ôtô và linh kiện Canada nhập khẩu từ đầu năm sau. Khẩu hiệu \"mua hàng Canada\" tại một ngôi nhà ở tỉnh Manitoba, Canada tháng 3/2025. Ảnh: Reuters Để giảm phụ thuộc vào láng giềng , chính phủ của Thủ tướng Mark Carney đặt mục tiêu tăng gấp đôi kim ngạch xuất khẩu sang các nước ngoài Mỹ vào 2035. Năm 2025, xuất khẩu sang các thị trường này tăng 17,2%, chiếm 28,3% tổng kim ngạch xuất khẩu hàng hóa nước này. Ottawa đang tìm cách đẩy nhanh quá trình này. Với châu Âu, họ tham gia cơ chế mua sắm quốc phòng (SAFE) và kỳ vọng thiết lập quan hệ đối tác \"độc nhất\" và chưa từng có tiền lệ với Liên minh châu Âu (EU), theo ông Carney. Cụ thể, Canada và EU đang thảo luận về việc cho phép hàng hóa, dịch vụ và người lao động các lĩnh vực chiến lược như năng lượng, trí tuệ nhân tạo, quốc phòng và khoáng sản quan trọng, được tự do di chuyển, theo Wall Street Journal . Nhưng mở rộng sang các thị trường châu Âu và châu Á đồng nghĩa Canada phải nâng công suất cảng biển và đường sắt, xây dựng các hành lang năng lượng mới. Theo Boston Consulting Group, năng lực sản xuất, cơ sở hạ tầng và khả năng tiếp cận thị trường là 3 rào cản chính đối với quá trình đa dạng hóa của Canada. Tăng năng lực sản xuất đòi hỏi đầu tư lớn, trong khi mạng lưới vận tải nước này đến nay vẫn chủ yếu được tổ chức để phục vụ thương mại với Mỹ. Reuters cho hay đàm phán Canada - EU đang đề cập đến các dự án cơ sở hạ tầng chung như cáp ngầm dưới biển, trung tâm dữ liệu, lưu trữ đám mây, mạng lưới vệ tinh và các cơ sở vận chuyển năng lượng đến châu Âu. Giải pháp khác là thu hút đầu tư từ đa dạng đối tác quốc tế. Tuần này, Canada tổ chức hội nghị thượng đỉnh tại Toronto, kết nối khoảng 100 nhà đầu tư toàn cầu với các công ty và địa phương. \"Các nhà đầu tư lớn nhất thế giới, quản lý hơn 120.000 tỷ đôla Canada tài sản, sẽ đến tìm hiểu vì thế giới đang nhìn Canada theo cách khác\", ông Carney nói tại buổi tiếp đón hôm 13/9. Ông cho biết mong muốn chào đón các nhà đầu tư Arab Saudi và đã hàn gắn quan hệ với Ấn Độ, Trung Quốc. Trước đó, Thủ tướng Carney cam kết thu hút 1.000 tỷ đôla Canada (721 tỷ USD) trong 5 năm, bằng cách cắt giảm thủ tục hành chính và phát triển các dự án khai thác mỏ, năng lượng, công nghệ và cơ sở hạ tầng. Theo Reuters , thu hút đầu tư là yếu tố then chốt giúp nền kinh tế này vượt qua áp đặt thuế quan từ phía Mỹ. FDI vào nước này liên tục tăng từ 2022, trung bình quý khoảng 23 tỷ đôla Canada (16,5 tỷ USD) trong 2024, 2025 và 20 tỷ đôla Canada (14,4 tỷ USD) đầu 2026 đến nay. Dù vậy, Doug Porter, chuyên gia kinh tế trưởng tại BMO Capital Markets, cảnh báo khó thu hút FDI lớn vào nền kinh tế trưởng thành như Canada. Bình luận các nỗ lực, giới phân tích cho rằng cần tránh việc đa dạng hóa đồng nghĩa quay lưng với người láng giềng khổng lồ bên cạnh. \"Mục tiêu không nên là giảm xuất khẩu sang Mỹ về số tuyệt đối mà là duy trì và bảo đảm tăng trưởng ở những thị trường khác\", ông McAdoo nhận định. Bà Ann Harrison đồng tình. \"Canada nên đa dạng hóa xuất khẩu nhiều nhất có thể, song song cố gắng duy trì nguyên vẹn các chuỗi cung ứng hiện có\", bà nói. Theo Le Monde , Canada chưa thể sớm thoát khỏi quỹ đạo kinh tế của Mỹ. Thay vào đó, đối đầu thương mại với ông Trump là dịp để nhận ra rằng chỉ dựa vào lợi thế tiếp cận thị trường Mỹ không còn là chiến lược thương mại an toàn. Phiên An ( theo Le Monde, Reuters )",
+      "expected": [],
+      "must_not_tag": [
+        {
+          "symbol": "HPG",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "HSG",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "NKG",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "TIS",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        }
+      ],
+      "uncertain": [],
+      "group": "B_t3_false_positive_probe",
+      "note": "Bài về kinh tế Canada. 4 mã thép gắn ở tầng T3 (score 0.40) đều không xuất hiện trong thân bài."
+    },
+    {
+      "id": 82,
+      "source_domain": "vnexpress.net",
+      "title": "EVN hết lỗ lũy kế, lãi hơn 12.200 tỷ đồng trong 8 tháng - Báo VnExpress",
+      "url": null,
+      "body": "EVN hết lỗ lũy kế, lãi hơn 12.200 tỷ đồng trong 8 tháng EVN xử lý hết khoản lỗ lũy kế từ những năm trước và ước lãi 12.215 tỷ đồng trong 8 tháng đầu năm nay, theo Chủ tịch HĐTV Đặng Hoàng An. Ngày 15/9, Phó thủ tướng Thường trực Phạm Gia Túc làm việc với Tập đoàn Điện lực Việt Nam (EVN) về tình hình sản xuất, kinh doanh và định hướng tái cơ cấu ngành điện. Ông Đặng Hoàng An, Chủ tịch HĐTV EVN cho biết sau giai đoạn khó khăn 2022-2023, EVN tiết giảm chi phí, điều hành và cơ cấu lại hoạt động. Tính đến cuối tháng 6, tập đoàn đã xử lý hết số lỗ lũy kế tích tụ từ các năm trước. Trước đó, giai đoạn 2022-2023, EVN lỗ khoảng 50.029 tỷ đồng do nhiều chi phí sản xuất, cung ứng điện chưa được tính đủ vào giá bán lẻ điện. Tập đoàn này có lãi trở lại vào 2024 giúp khoản lỗ lũy kế giảm còn khoảng 33.792 tỷ đồng. Theo báo cáo tài chính hợp nhất 2025, tập đoàn này đã hết lỗ lũy kế. Tuy nhiên, xét riêng công ty mẹ - EVN, số lỗ còn tới cuối năm ngoái còn khoảng 5.611 tỷ đồng, nhờ hoạt động sản xuất kinh doanh của doanh nghiệp cải thiện. Trong 8 tháng đầu năm, \"ông lớn\" ngành điện ghi nhận doanh thu hơn 482.000 tỷ đồng, tương đương 70% kế hoạch năm. Lợi nhuận ước đạt 12.215 tỷ đồng, bằng 103% kế hoạch, còn số nộp ngân sách khoảng 17.160 tỷ đồng. EVN dự kiến cả năm lãi trên 13.500 tỷ đồng và nộp ngân sách hơn 26.300 tỷ. Tuy nhiên, ông An cho biết nhu cầu đầu tư hệ thống điện những năm tới rất lớn, dự kiến cần khoảng 830.000 tỷ đồng trong giai đoạn đến 2030. Theo Quy hoạch điện VIII điều chỉnh, hệ thống điện cần bổ sung nguồn với công suất khoảng 93.000 MW tới năm 2030. Trong đó, EVN được giao đầu tư, hoàn thành nguồn điện khoảng 6.066 MW và 1.700 MW hệ thống lưu trữ năng lượng. Lãnh đạo EVN cho rằng thách thức là nhu cầu điện tăng nhanh, trong khi tiến độ nguồn điện giữa các chủ đầu tư chưa đồng đều. Một số dự án của khu vực tư nhân và nhà đầu tư nước ngoài chậm tiến độ, có thể ảnh hưởng khả năng bổ sung nguồn theo quy hoạch. Bên cạnh đó, tiến độ đầu tư nguồn và lưới điện có độ lệch. Các dự án điện gió, mặt trời có thể triển khai tương đối nhanh, còn đường dây truyền tải 220-500 kV mất nhiều thời gian cho thủ tục, giải phóng mặt bằng và xây dựng. Lãnh đạo EVN kiến nghị nghiên cứu cơ chế thu hút nguồn lực xã hội đầu tư hạ tầng truyền tải để giảm áp lực vốn. Lãnh đạo EVN báo cáo tại cuộc làm việc với Phó thủ tướng Phạm Gia Túc, ngày 15/9. Ảnh: VGP Theo số liệu của EVN, 8 tháng đầu năm, tập đoàn đã khởi công 118 và đóng điện 116 công trình lưới 110-500 kV. Sản lượng điện sản xuất và nhập khẩu toàn hệ thống đạt gần 236 tỷ kWh, tăng 9,3% so với cùng kỳ. EVN dự báo nhu cầu điện từ nay tới cuối năm tăng khoảng 10,5-12%. Tập đoàn đặt mục tiêu hoàn thành 123.560 tỷ đồng vốn đầu tư năm nay, đưa Nhiệt điện Quảng Trạch I vào vận hành và đẩy nhanh các dự án nguồn, lưới theo quy hoạch. Tại cuộc làm việc, Phó thủ tướng Thường trực Phạm Gia Túc yêu cầu EVN tiếp tục giữ vai trò nòng cốt trong bảo đảm an ninh năng lượng. Về tái cơ cấu ngành điện, theo ông, EVN cần tổ chức lại hoạt động theo các trụ cột rõ ràng, gắn với chiến lược phát triển, nâng năng lực cạnh tranh và hiệu quả hoạt động. Ông cũng cho rằng việc phát triển nguồn phải gắn với phát triển lưới, trong đó hệ thống truyền tải cần đi trước một bước, tránh tình trạng nhà máy hoàn thành nhưng không đủ khả năng giải tỏa công suất. EVN cũng cần đẩy nhanh nguồn điện mặt trời mái nhà tự sản tự tiêu, điện gió và hệ thống lưu trữ năng lượng. Với giá điện, Phó thủ tướng yêu cầu EVN thực hiện đúng quy định, bảo đảm công khai, minh bạch và hài hòa lợi ích giữa Nhà nước, doanh nghiệp và người dân. Phương Dung",
+      "expected": [],
+      "must_not_tag": [
+        {
+          "symbol": "POW",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "REE",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        }
+      ],
+      "uncertain": [],
+      "group": "B_t3_false_positive_probe",
+      "note": "Bài về kết quả kinh doanh EVN. POW/REE gắn ở T3, không xuất hiện trong thân bài."
+    },
+    {
+      "id": 105,
+      "source_domain": "vnexpress.net",
+      "title": "Bắc Ninh hỗ trợ 100% tiền thuê đất cho doanh nghiệp công nghệ cao, startup - Báo VnExpress",
+      "url": null,
+      "body": "Bắc Ninh hỗ trợ 100% tiền thuê đất cho doanh nghiệp công nghệ cao, startup Bắc Ninh hỗ trợ 100% tiền thuê đất trong các khu, cụm công nghiệp, vườn ươm công nghệ đối với doanh nghiệp công nghệ cao, khởi nghiệp sáng tạo trong 5 năm đầu, đồng thời hỗ trợ 10.000 hộ kinh doanh chuyển đổi số. Chính sách hỗ trợ tiền thuê đất triển khai từ tháng 8, theo Quyết định 64/2026 của UBND tỉnh, áp dụng với doanh nghiệp công nghệ cao thuộc khu vực kinh tế tư nhân, doanh nghiệp nhỏ và vừa (SME), khởi nghiệp sáng tạo thuê đất sản xuất kinh doanh trong khu công nghiệp. Trong đó, doanh nghiệp công nghệ cao phải có giấy chứng nhận doanh nghiệp công nghệ cao. Doanh nghiệp khởi nghiệp sáng tạo được công nhận theo Luật Khoa học, công nghệ và đổi mới sáng tạo. Doanh nghiệp SME đáp ứng các quy định của Luật Hỗ trợ doanh nghiệp nhỏ và vừa. Thời gian hỗ trợ được tính từ ngày doanh nghiệp ký hợp đồng thuê lại đất với chủ đầu tư hạ tầng. Nguồn kinh phí hỗ trợ được bố trí từ dự toán chi ngân sách địa phương hằng năm. Các chủ đầu tư hạ tầng có trách nhiệm thực hiện giảm tiền thuê đất đúng đối tượng, sau đó lập hồ sơ để ngân sách nhà nước hoàn trả hoặc bù trừ vào nghĩa vụ tài chính theo quy định. Khu công nghiệp Đình Trám, Bắc Ninh. Ảnh: Thanh Hải Nguồn kinh phí hỗ trợ được bố trí từ dự toán chi ngân sách địa phương hằng năm. Các chủ đầu tư hạ tầng có trách nhiệm thực hiện giảm tiền thuê đất đúng đối tượng, sau đó lập hồ sơ để ngân sách nhà nước hoàn trả hoặc bù trừ vào nghĩa vụ tài chính theo quy định. Trước đó, trong các giải pháp cải thiện môi trường kinh doanh năm 2026, Bắc Ninh cũng yêu cầu các khu, cụm công nghiệp dành tối thiểu 20 ha hoặc 5% quỹ đất để hỗ trợ doanh nghiệp nhỏ và vừa, doanh nghiệp công nghệ cao và khởi nghiệp sáng tạo thuê. Tỉnh đồng thời đặt mục tiêu giảm ít nhất 30% thời gian giải quyết các thủ tục liên quan đến thuê đất, cấp giấy chứng nhận quyền sử dụng đất cho người dân và doanh nghiệp. Các chính sách này được kỳ vọng sẽ gia tăng sức hút đầu tư chất lượng cao, giúp Bắc Ninh tiếp tục khẳng định vị thế là điểm đến hấp dẫn đối với các doanh nghiệp công nghệ và khởi nghiệp sáng tạo. Hỗ trợ hộ kinh doanh chuyển đổi số Song song chính sách về đất đai, Bắc Ninh đang triển khai chương trình hỗ trợ chuyển đổi số cho các cửa hàng, hộ kinh doanh bán buôn, bán lẻ trên địa bàn. Theo công văn 9939 của UBND tỉnh, đến cuối năm nay, ít nhất 10.000 cửa hàng, hộ kinh doanh được tư vấn, hướng dẫn trực tiếp về chuyển đổi số. Trong số này, tối thiểu 5.000 hộ được hỗ trợ cài đặt và sử dụng các phần mềm, nền tảng số. Tỉnh yêu cầu 100% xã, phường tổ chức ít nhất một hội nghị tập huấn chuyển đổi số dành cho cửa hàng, hộ kinh doanh. Các chủ thể OCOP và các hộ kinh doanh tiêu biểu tại làng nghề truyền thống được hỗ trợ thiết lập website sử dụng tên miền \"biz.vn\". Trong khi đó, các hộ có nhu cầu còn được hướng dẫn sử dụng chữ ký số và tên miền quốc gia \".vn\". Giai đoạn cao điểm triển khai diễn ra từ ngày 1/10 đến 30/11. Các xã, phường sẽ phối hợp với doanh nghiệp công nghệ tổ chức tuyên truyền, tiếp cận trực tiếp và hỗ trợ hộ kinh doanh cài đặt, sử dụng nền tảng số. Mỗi địa phương phải hoàn thành ít nhất một hội nghị tập huấn trước ngày 30/11. Sở Khoa học và Công nghệ Bắc Ninh là cơ quan thường trực, chịu trách nhiệm tổng hợp danh sách hộ kinh doanh, phân bổ chỉ tiêu cho từng xã, phường và điều phối doanh nghiệp công nghệ số tham gia. Mỗi địa phương có ít nhất một doanh nghiệp đồng hành. Các doanh nghiệp công nghệ số, ngân hàng và đơn vị đăng ký tên miền tham gia chương trình phải bố trí tối thiểu hai nhân sự kỹ thuật tại mỗi địa bàn được phân công trong thời gian triển khai. Các đơn vị phải xử lý yêu cầu hỗ trợ kỹ thuật của cửa hàng, hộ kinh doanh trong vòng 24 giờ, đồng thời không thu các khoản phí ngoài danh mục đã công bố. Đặc biệt, việc tiếp cận, thu thập và sử dụng thông tin của cửa hàng, hộ kinh doanh chỉ được thực hiện khi có sự đồng ý của chủ thể dữ liệu và phải tuân thủ quy định về bảo vệ dữ liệu cá nhân, an toàn thông tin. Một góc thành phố Bắc Giang (cũ), nay là phường Bắc Giang, tỉnh Bắc Ninh. Ảnh: Thanh Hải Các chính sách trên được triển khai trong bối cảnh số doanh nghiệp mới tại Bắc Ninh tiếp tục tăng. Trong 8 tháng, toàn tỉnh có 5.939 doanh nghiệp thành lập mới với tổng vốn đăng ký 102.207 tỷ đồng; 246 chi nhánh, văn phòng đại diện được đăng ký và 2.677 địa điểm kinh doanh được thành lập mới. Cùng kỳ, 5 khu công nghiệp mới được chấp thuận chủ trương đầu tư, với tổng vốn hơn 8.000 tỷ đồng. Lũy kế, địa phương có 39 khu công nghiệp được chấp thuận, tổng diện tích hơn 11.600 ha, tỷ lệ lấp đầy khoảng 53%. Đây là nền tảng để tỉnh tiếp tục mở rộng khu vực sản xuất, thu hút doanh nghiệp công nghệ cao và thúc đẩy khu vực kinh tế tư nhân. Mới đây, Quốc hội thông qua nghị quyết thành lập thành phố Bắc Ninh trên cơ sở toàn bộ diện tích tự nhiên và quy mô dân số của tỉnh. Nghị quyết có hiệu lực từ ngày 20/9. Sau khi thành lập, thành phố Bắc Ninh được xác định là hình mẫu về đô thị xanh, thông minh, hiện đại, văn minh, giàu đẹp, mang đậm bản sắc văn hóa Kinh Bắc. Phát triển kinh tế sẽ gắn với bảo vệ môi trường sinh thái, trong đó khoa học, công nghệ và đổi mới sáng tạo được xác định là động lực tăng trưởng chủ yếu. Minh Ngọc",
+      "expected": [],
+      "must_not_tag": [
+        {
+          "symbol": "CMG",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "FPT",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        }
+      ],
+      "uncertain": [],
+      "group": "B_t3_false_positive_probe",
+      "note": "Bài về chính sách tiền thuê đất Bắc Ninh. CMG/FPT gắn ở T3, không xuất hiện trong thân bài."
+    },
+    {
+      "id": 118,
+      "source_domain": "tinnhanhchungkhoan.vn",
+      "title": "Xây dựng cơ chế cảnh báo sớm cho ngành xuất khẩu trăm tỷ USD",
+      "url": null,
+      "body": "VEIA và Bộ Công thương được giao phối hợp lập cơ chế cảnh báo sớm cho ngành điện tử xuất khẩu. Xuất khẩu điện tử tăng nhanh, nhưng đang đặt ra yêu cầu lớn hơn về chủ động điều chỉnh cơ cấu thị trường, nguyên liệu, đảm bảo tính bền vững và giảm thiểu các biện pháp phòng vệ thương mại từ các thị trường nước ngoài. Trước yêu cầu này, Chính phủ giao Hiệp hội Doanh nghiệp điện tử Việt Nam (VEIA) phối hợp với Bộ Công thương thiết lập cơ chế cảnh báo sớm về những thay đổi liên quan đến thuế quan, quy tắc xuất xứ, hàng rào kỹ thuật, phòng vệ thương mại và nguy cơ chuyển tải bất hợp pháp. Theo VEIA, bối cảnh chuỗi cung ứng toàn cầu liên tục biến động, chính sách thương mại của các nền kinh tế lớn thay đổi nhanh và các biện pháp phòng vệ thương mại ngày càng được sử dụng phổ biến, yêu cầu này có ý nghĩa đặc biệt đối với ngành điện tử, vốn là lĩnh vực có độ mở và tỷ trọng xuất nhập khẩu rất lớn. Nếu được tổ chức hiệu quả, cơ chế cảnh báo sớm sẽ giúp doanh nghiệp có thêm thời gian chuẩn bị trước các thay đổi từ thị trường, chủ động điều chỉnh nguồn cung, cơ cấu sản phẩm, thị trường xuất khẩu cũng như hoàn thiện hồ sơ chứng minh xuất xứ. \"Ngành điện tử có mức độ hội nhập sâu vào chuỗi cung ứng toàn cầu, kiểm soát nguồn gốc nguyên liệu, linh kiện và quá trình sản xuất trở thành yêu cầu tất yếu\", bà Đỗ Thị Thúy Hương, Phó chủ tịch VEIA nhấn mạnh. Đây không chỉ là điều kiện để doanh nghiệp đáp ứng quy tắc xuất xứ và hưởng ưu đãi thuế quan, mà còn liên quan trực tiếp đến khả năng duy trì uy tín của hàng hóa Việt Nam trong chuỗi cung ứng toàn cầu. Vì vậy, cảnh báo sớm không chỉ giúp doanh nghiệp “đi trước” một bước trước các thay đổi về chính sách, mà còn góp phần hạn chế rủi ro phòng vệ thương mại và chuyển tải bất hợp pháp, qua đó bảo vệ thị trường xuất khẩu trong dài hạn. Việt Nam đã thu hút được nhiều tập đoàn điện tử, bán dẫn lớn và trở thành một mắt xích quan trọng trong mạng lưới sản xuất toàn cầu. Tuy nhiên, mức độ tham gia của doanh nghiệp trong nước vào chuỗi cung ứng vẫn còn hạn chế, trong khi nhiều linh kiện, vật liệu và thiết bị có giá trị cao vẫn phải nhập khẩu. Minh chứng, 8 tháng năm 2026, xuất khẩu nhóm máy vi tính, sản phẩm điện tử và linh kiện đạt khoảng 101 tỷ USD, tăng 51%, trong khi nhập khẩu đạt 161,6 tỷ USD, tăng 68,3%, đưa nhóm hàng này vào trạng thái nhập siêu khoảng 60,5 tỷ USD. Trên bình diện chung, khi quy mô xuất khẩu hàng hóa gia tăng, cũng kéo theo nhiều vụ điều tra phòng vệ thương mại. Trong một số trường hợp, do bị động, xuất khẩu bị thu hẹp đáng kể do chịu thuế cao. Tính đến hết tháng 5/2026, hàng hóa xuất khẩu của Việt Nam đã đối mặt với 321 vụ việc điều tra phòng vệ thương mại, trong đó chống bán phá giá và tự vệ là hai hình thức điều tra chiếm tỷ lệ cao nhất. Mỹ là thị trường khởi xướng nhiều vụ việc điều tra nhất đối với hàng hóa Việt Nam, với hơn 80 vụ việc. Cuộc \"đại phẫu\" ngành hàng xuất khẩu TP.HCM và cơ hội cho doanh nghiệp \"nội\" Ngành sản xuất trong nước cải thiện nhờ áp thuế tạm thời HRC nhập khẩu FDI nắm trọn kim ngạch xuất khẩu một số ngành hàng chủ lực",
+      "expected": [],
+      "must_not_tag": [
+        {
+          "symbol": "POW",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "REE",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        }
+      ],
+      "uncertain": [],
+      "group": "B_t3_false_positive_probe",
+      "note": "Bài về cơ chế cảnh báo sớm xuất khẩu. POW/REE gắn ở T3, không xuất hiện trong thân bài."
+    },
+    {
+      "id": 130,
+      "source_domain": "vneconomy.vn",
+      "title": "Lãnh đạo ngành dầu khí Mỹ cảnh báo khủng hoảng nhiên liệu đã bắt đầu",
+      "url": null,
+      "body": "Các lãnh đạo ngành dầu khí Mỹ cảnh báo khủng hoảng nhiên liệu đã bắt đầu trong bối cảnh tồn kho toàn cầu suy giảm, nguồn dự phòng dần cạn kiệt và xung đột Trung Đông tiếp tục làm gián đoạn nguồn cung... Ảnh minh họa - Ảnh: UPI Suốt nhiều tháng qua, các nhà lãnh đạo doanh nghiệp dầu khí Mỹ đã cảnh báo rằng việc eo biển Hormuz bị đóng cửa kéo dài chắc chắn sẽ gây ra một cuộc khủng hoảng nhiên liệu. Giờ đây, họ cho rằng cuộc khủng hoảng ấy đã bắt đầu. NGUỒN DỰ PHÒNG DẦN CẠN KIỆT Theo tờ báo Wall Street Journal, tồn kho nhiên liệu thương mại trên toàn cầu đã liên tục giảm trong hơn 6 tháng qua, trong khi các kho dự trữ chiến lược cũng không còn nhiều dầu thô để tiếp tục đưa ra thị trường. Áp lực nguồn cung càng gia tăng sau khi các cuộc tấn công tuần trước khiến một đường ống dẫn dầu quan trọng của Saudi Arabia phải ngừng hoạt động. Tuyến đường ống này giúp nước này vận chuyển dầu theo tuyến không đi qua eo biển Hormuz. Theo ước tính của các nhà phân tích, vụ việc này làm gián đoạn nguồn cung ít nhất 2,5 triệu thùng dầu/ngày, khiến thị trường dầu toàn cầu vốn đã khan hiếm càng thêm căng thẳng. “Những biện pháp dự phòng đã giúp hạn chế rủi ro về giá cả và nguồn cung. Tuy nhiên, đến nay, dư địa sử dụng các biện pháp đó gần như không còn, trong khi khả năng dự phòng của hệ thống năng lượng đã giảm đáng kể so với khi tình trạng gián đoạn mới bắt đầu”, ông Mike Wirth, CEO hãng dầu khí Chevron, phát biểu ngày 11/9 tại một hội nghị năng lượng ở Austin, bang Texas, Mỹ. Theo ông Wirth, rất khó dự báo giá dầu sẽ diễn biến ra sao, nhưng lúc này giá dầu khó có thể nhanh chóng giảm trở lại. “Tôi ước mình có thể chỉ ra một lý do để tin rằng tình hình sẽ dịu đi, nhưng hiện rất khó thấy điều đó xảy ra”, ông Wirth nói. Các chuyên gia năng lượng lâu năm cảnh báo tình hình có nguy cơ vượt khỏi tầm kiểm soát khi chiến tranh Mỹ - Iran vẫn chưa có lối thoát. Giá dầu diesel tại Mỹ đã tăng lên mức kỷ lục 6,23 USD/gallon, trong khi giá xăng, từng giảm xuống dưới 4 USD/gallon vào mùa hè, đã tăng trở lại mức 4,32 USD/gallon. Một số nhà phân tích năng lượng cho biết giới đầu tư đang đặt câu hỏi về thời điểm giá nhiên liệu cao sẽ buộc người tiêu dùng nước này cắt giảm mua sắm hay không. Trước đó, chính quyền Tổng thống Donald Trump nhiều lần cam kết với người dân Mỹ rằng giá nhiên liệu bán lẻ sẽ giảm và nguồn cung năng lượng từ Trung Đông sẽ tiếp tục tăng. Tại một sự kiện của G20 ở Houston ngày 14/9, Bộ trưởng Nội vụ Mỹ Doug Burgum cho rằng giá nhiên liệu dưới thời chính quyền tiền nhiệm cũng từng cao như hiện nay. Theo ông, người Mỹ có thể đã phải chịu mức giá cao này trong thời gian dài nếu chính sách hạn chế nguồn cung năng lượng và đóng cửa các nhà máy lọc dầu của cựu Tổng thống Joe Biden tiếp tục được thực hiện. “Nếu viết về giá nhiên liệu, hãy nhớ dùng từ ‘tạm thời’, bởi đây chỉ là một sự gián đoạn tạm thời”, ông Burgum nói với các phóng viên. MỸ TÌM CÁCH HẠ GIÁ NHIÊN LIỆU Nhà Trắng cho rằng có thể hạ nhiệt giá nhiên liệu bằng hai biện pháp: thúc đẩy Venezuela tăng sản lượng dầu và mở rộng công suất lọc dầu tại Mỹ. Trong những tháng gần đây, các quan chức Mỹ tập trung thúc đẩy những thỏa thuận nhằm nâng sản lượng dầu của Venezuela. Bên cạnh nỗ lực tăng nguồn cung, ông Trump cũng trực tiếp gây sức ép với các hãng dầu khí. Ngày 3/8, ông viết trên mạng xã hội Truth Social rằng CEO Chevron đã không ghi nhận vai trò của chính quyền đối với thành công của ngành dầu khí, đồng thời yêu cầu Chevron và các công ty trong ngành “giảm giá dầu bán lẻ cho người tiêu dùng ngay lập tức”. Tuy nhiên, lo ngại trong ngành năng lượng tiếp tục gia tăng trong bối cảnh căng thẳng tại Vùng Vịnh chưa có dấu hiệu hạ nhiệt. “Trong hầu hết các cuộc đàm phán, lợi thế thường thuộc về bên có thời gian và sẵn sàng kiên nhẫn”, ông Wil VanLoh, nhà sáng lập kiêm CEO Quantum Capital Group, phát biểu tại hội nghị ở Austin. Nói về Iran, ông VanLoh nhận định nước này sẵn sàng chịu đựng bởi người dân đã phải trải qua nhiều khó khăn trong suốt nhiều thập kỷ. Trung Quốc cũng đang góp phần khiến thị trường dầu toàn cầu thêm thắt chặt. Trong nhiều tháng, nước nhập khẩu dầu lớn nhất thế giới dựa vào kho dầu thô của mình để đáp ứng gần một nửa nhu cầu tiêu thụ mỗi ngày, qua đó giảm bớt sức ép mua trên thị trường quốc tế. Tuy nhiên, các nhà phân tích cho biết trong những tuần gần đây, Trung Quốc đã tăng mua dầu trở lại từ các nhà cung cấp nước ngoài. Giá dầu thô WTI của Mỹ đã tăng 19% trong 3 tuần qua, lên hơn 100 USD/thùng, khi các cuộc tấn công tại Trung Đông leo thang. Iran đã tấn công các tàu chở dầu đi qua eo biển Hormuz, bất chấp tuyên bố của ông Trump và các quan chức cấp cao rằng Mỹ đã hộ tống một số tàu vượt qua eo biển mà không bị phát hiện. Từ Yemen, lực lượng Houthi gần đây đã tấn công cơ sở hạ tầng và các mục tiêu quân sự của Saudi Arabia, đồng thời làm hư hại đường ống Đông - Tây nối mỏ dầu Abqaiq với Yanbu al-Bahr, một thành phố cảng lớn của Saudi Arabia bên bờ Biển Đỏ. Ông Trump cam kết gia tăng sức ép kinh tế với Iran và loại trừ khả năng đưa quân tham chiến trên bộ. Ông dự báo cuộc chiến sẽ kéo dài đến cuộc bầu cử Quốc hội Mỹ giữa nhiệm kỳ vào tháng 11, nhưng giới đầu tư cho rằng xung đột sẽ còn tiếp diễn lâu hơn. Theo ông Dan Pickering, nhà sáng lập công ty tài chính Pickering Energy Partners, nguồn cung dầu diesel đang khan hiếm do nhiều nhà máy lọc dầu phải ngừng hoạt động vì các cuộc xung đột tại Trung Đông và Nga. Nhu cầu loại nhiên liệu này được dự báo sẽ tăng khi nông dân bước vào vụ thu hoạch và sử dụng nhiều máy móc hạng nặng. “Không có giải pháp dễ dàng nào cho tình trạng thiếu dầu diesel”, ông Pickering nói. Trong khi đó, ông Trump cho rằng Ukraine phải ngừng các cuộc tấn công vào Nga gây nguy hiểm cho nguồn cung dầu diesel toàn cầu. Theo Wall Street Journal, hồi tháng 3, lãnh đạo ba công ty dầu khí lớn nhất Mỹ là ExxonMobil, Chevron và ConocoPhillips đã cảnh báo các quan chức trong chính quyền Tổng thống Trump, trong đó có các ông Burgum và Bộ trưởng Năng lượng Chris Wright, rằng việc eo biển Hormuz bị đóng cửa kéo dài có thể gây thiếu hụt các sản phẩm lọc dầu như dầu diesel. Tại hội nghị ngày 14/9, ông Burgum bác bỏ đồn đoán rằng Nhà Trắng đang nghiêm túc cân nhắc áp lệnh tạm cấm xuất khẩu các sản phẩm lọc dầu như dầu diesel. Theo ông, đội ngũ của Tổng thống Trump cho rằng biện pháp này sẽ không giúp hạ giá nhiên liệu. “Chúng tôi sẽ làm bất cứ điều gì có thể giúp giảm giá trong nước. Nhưng chúng tôi cũng phải hành động một cách tỉnh táo, chứ không thể đơn giản cho rằng ngừng xuất khẩu sẽ khiến giá giảm một cách thần kỳ”, ông Burgum nói.",
+      "expected": [],
+      "must_not_tag": [
+        {
+          "symbol": "GAS",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "PLX",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "PVD",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "PVS",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        }
+      ],
+      "uncertain": [],
+      "group": "B_t3_false_positive_probe",
+      "note": "Bài về ngành dầu khí Mỹ. 4 mã dầu khí VN gắn ở T3, không xuất hiện trong thân bài."
+    },
+    {
+      "id": 168,
+      "source_domain": "tuoitre.vn",
+      "title": "'Hồi hộp' Fed trước giờ quyết định lãi suất, Việt Nam sẽ chịu tác động thế nào nếu chốt tăng?",
+      "url": null,
+      "body": "Tâm điểm của thị trường tuần này là cuộc họp của Fed vào ngày 15 và 16-9 với xác suất tăng lãi suất đang được thị trường dự đoán mức 90% - Ảnh: QUANG ĐỊNH Nếu diễn biến đúng kỳ vọng, đây sẽ là lần tăng lãi suất đầu tiên của Fed sau hơn ba năm. Tuy nhiên, sự chú ý của giới đầu tư không chỉ nằm ở quyết định lần này, mà còn ở tín hiệu về đường hướng chính sách tiếp theo. Liệu Fed chỉ tăng lãi suất một lần nhằm ứng phó với áp lực lạm phát hay đây sẽ là bước khởi đầu cho một chu kỳ thắt chặt tiền tệ mới. Tỉ giá, lãi suất có chịu áp lực? Quyết định của Fed dự kiến được công bố vào rạng sáng 17-9 theo giờ Việt Nam. Trao đổi với Tuổi Trẻ , bà Hoàng Thúy Lương, Kinh tế trưởng Chứng khoán Vietcap, nhận định nếu Fed thực sự tăng lãi suất, tác động đối với Việt Nam trong ngắn hạn cũng sẽ không quá lớn. Với tỉ giá, lãi suất USD tăng có thể hỗ trợ đồng bạc xanh, qua đó tạo thêm áp lực lên cặp USD/VND. Tuy nhiên, theo bà Lương, VND hiện vẫn được hỗ trợ bởi một số yếu tố. Trong đó, tỉ giá trên thị trường tự do có xu hướng giảm thời gian gần đây; giá vàng trong nước và nhu cầu đầu tư vàng đã hạ nhiệt; dòng vốn FDI tiếp tục duy trì ổn định. Bên cạnh đó là triển vọng thu hút thêm dòng vốn đầu tư gián tiếp nước ngoài sau khi thị trường chứng khoán Việt Nam được nâng hạng. Còn đối với lãi suất, chuyên gia Vietcap cho rằng việc Fed tăng lãi suất có thể khiến chênh lệch lãi suất VND - USD thu hẹp, qua đó phần nào làm giảm dư địa nới lỏng chính sách tiền tệ của Ngân hàng Nhà nước. Dù vậy, tác động lên mặt bằng lãi suất trong nước trong ngắn hạn được dự báo tương đối hạn chế, trừ trường hợp tỉ giá USD/VND quay đầu tăng mạnh trở lại. Biến số khác từ chính sách của Ngân hàng Trung ương Nhật Bản Ở góc nhìn thận trọng, bà Trần Thị Khánh Hiền, Giám đốc khối phân tích chứng khoán MB (MBS), cho rằng Fed không phải là biến số duy nhất cần theo dõi trong tuần này. Sau cuộc họp của Fed ngày 15 và 16-9, sự chú ý của thị trường sẽ chuyển sang cuộc họp chính sách của Ngân hàng Trung ương Nhật Bản (BOJ) ngày 18 và 19-9. Theo bà Hiền, nếu BOJ tiếp tục thắt chặt tiền tệ, thanh khoản trên thị trường tài chính quốc tế có thể chịu thêm áp lực. Khi đó, tác động đồng thời từ chính sách của Fed và BOJ có thể ảnh hưởng tới dòng chảy thanh khoản toàn cầu. Ở trong nước, áp lực điều hành còn đến từ bài toán lạm phát. Bà Hiền cho rằng trong nửa cuối năm 2026, Việt Nam phải đối mặt với sức ép giá cả từ cả bên ngoài lẫn trong nước, khiến dư địa kiểm soát CPI những tháng cuối năm trở nên thách thức hơn.",
+      "expected": [],
+      "must_not_tag": [
+        {
+          "symbol": "ACB",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "BID",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "CTG",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "HDB",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "VND",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.9
+        }
+      ],
+      "uncertain": [],
+      "group": "B_t3_false_positive_probe",
+      "note": "Bài về quyết định lãi suất Fed. 4 mã ngân hàng gắn ở T3 đều vắng mặt. VND gắn score 0.900 nhưng là ĐƠN VỊ TIỀN TỆ (cặp USD/VND, chênh lệch lãi suất VND-USD); 0 từ khoá ngữ cảnh cổ phiếu trong toàn bài -> vi phạm rule G-02."
+    },
+    {
+      "id": 191,
+      "source_domain": "tuoitre.vn",
+      "title": "Chứng khoán 16-9: Tiền đổ vào dầu khí, ngân hàng, VN-Index bước vào nhịp tăng mới?",
+      "url": null,
+      "body": "Dòng tiền khối ngoại quay lại thị trường chứng khoán trong 2 phiên gần đây - Ảnh: QUANG ĐỊNH VN-Index đóng cửa phiên 15-9 tại 1.811,15 điểm, tăng gần 23 điểm. Độ rộng thị trường nghiêng rõ về bên mua khi 17/18 nhóm ngành tăng điểm. Dầu khí tăng mạnh nhất, tiếp đến là tiện ích và hàng hóa, dịch vụ công nghiệp. Dòng tiền có tín hiệu quay trở lại Theo Chứng khoán Yuanta Việt Nam, động lực hồi phục phiên 16-9 chủ yếu đến từ dầu khí và ngân hàng. Khối ngoại tiếp tục mua ròng trên HoSE khoảng 719 tỉ đồng, tập trung ở ngân hàng và dầu khí. Một số cổ phiếu được mua ròng mạnh gồm VCB 229 tỉ đồng, BSR 158 tỉ đồng, BID 125 tỉ đồng, TCB 105 tỉ đồng và MBB 98 tỉ đồng. Nhóm dầu khí trở thành điểm sáng đáng chú ý sau nhịp hồi phục 15-9. Yuanta Việt Nam cho rằng nhà đầu tư có thể chờ những nhịp điều chỉnh để xem xét giải ngân tại một số cổ phiếu dầu khí. Về kỹ thuật, Chứng khoán Tiên Phong (TPS) đánh giá VN-Index đã tạm thời vượt lên toàn bộ hệ thống đường trung bình giá, qua đó bảo toàn xu hướng tăng. Tuy nhiên, thanh khoản phiên hồi phục chưa đủ lớn để phủ định 2 phiên phân phối mạnh trước đó. Chứng khoán HSC cũng cho rằng dòng tiền đã cải thiện và lan tỏa tốt hơn, nhưng thanh khoản chưa thực sự bứt phá. Do đó, chưa đủ cơ sở xác nhận thị trường đã bước sang một xu hướng tăng mới. Chưa nên mua đuổi Các công ty chứng khoán nhìn chung cho rằng nhịp hồi phục có thể tiếp diễn, nhưng thị trường vẫn có khả năng rung lắc khi tiến vào các vùng kháng cự. Yuanta Việt Nam dự báo VN-Index có thể kiểm định vùng 1.820 - 1.825 điểm trong các phiên tới, trong khi HSC lưu ý vùng kháng cự 1.820 - 1.850 điểm. Đây cũng là giai đoạn thị trường chuẩn bị bước vào tuần đáo hạn phái sinh và trước cuộc họp Fed, do đó diễn biến có thể nhạy cảm hơn.",
+      "expected": [
+        {
+          "symbol": "BID",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "MBB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "TCB",
+          "relevance": "mentioned"
+        },
+        {
+          "symbol": "VCB",
+          "relevance": "mentioned"
+        }
+      ],
+      "must_not_tag": [
+        {
+          "symbol": "GAS",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "PLX",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "PVD",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        },
+        {
+          "symbol": "PVS",
+          "tagged_relevance": "mentioned",
+          "tagger_score": 0.4
+        }
+      ],
+      "uncertain": [],
+      "group": "B_t3_false_positive_probe",
+      "note": "Bản tin thị trường. 4 mã ngân hàng score 0.900 là ĐÚNG (nêu đích danh giá trị mua ròng). 4 mã dầu khí gắn ở T3 score 0.40 đều KHÔNG xuất hiện - bài chỉ nói 'nhóm dầu khí'. Ghi chú recall: bài có nêu BSR nhưng tagger không gắn."
+    }
+  ]
+}

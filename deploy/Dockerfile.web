@@ -1,0 +1,98 @@
+# syntax=docker/dockerfile:1.9
+# ==============================================================================
+# TenPoint — Web (Next.js App Router, SSR)
+# Tham chiếu: docs/03-sa/architecture.md mục 2 (web: Next.js SSR, Node 22, :3000)
+#
+# BUILD CONTEXT PHẢI LÀ THƯ MỤC GỐC DỰ ÁN:
+#   docker build -f deploy/Dockerfile.web -t tenpoint-web .
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Stage 1 — deps: chỉ cài node_modules. Tách riêng để đổi source không cài lại.
+# ------------------------------------------------------------------------------
+FROM node:22-alpine AS deps
+
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+# Cache layer: chỉ package.json + package-lock.json.
+COPY frontend/package.json frontend/package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --no-audit --no-fund
+
+# ------------------------------------------------------------------------------
+# Stage 2 — builder: next build
+# ------------------------------------------------------------------------------
+FROM node:22-alpine AS builder
+
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY frontend/ ./
+
+ENV NEXT_TELEMETRY_DISABLED=1 \
+    NODE_ENV=production
+
+# API_BASE_URL ở build-time: Next có thể cần khi prerender trang tĩnh.
+ARG API_BASE_URL=http://api:8080
+ENV API_BASE_URL=${API_BASE_URL}
+
+RUN npm run build
+
+# --- Chuẩn hoá output về /runtime ---------------------------------------------
+# Hai nhánh, vì next.config.ts có thể CHƯA bật output: 'standalone'.
+#   A. Có .next/standalone  → gói gọn: server.js + .next/static + public
+#   B. Không có             → gói đầy đủ app + node_modules để chạy `next start`
+RUN set -eux; \
+    mkdir -p /runtime; \
+    if [ -d .next/standalone ]; then \
+        echo ">>> standalone output: BẬT — đóng gói tối giản"; \
+        cp -a .next/standalone/. /runtime/; \
+        mkdir -p /runtime/.next; \
+        cp -a .next/static /runtime/.next/static; \
+        if [ -d public ]; then cp -a public /runtime/public; fi; \
+    else \
+        echo ">>> standalone output: TẮT — fallback sang next start (image sẽ nặng hơn)"; \
+        cp -a package.json package-lock.json /runtime/; \
+        cp -a node_modules /runtime/node_modules; \
+        cp -a .next /runtime/.next; \
+        if [ -d public ]; then cp -a public /runtime/public; fi; \
+        for f in next.config.ts next.config.js next.config.mjs; do \
+            if [ -f "$f" ]; then cp -a "$f" /runtime/; fi; \
+        done; \
+    fi
+
+# ------------------------------------------------------------------------------
+# Stage 3 — runtime
+# ------------------------------------------------------------------------------
+FROM node:22-alpine AS runtime
+
+# tzdata để hiển thị ngày/giờ theo giờ VN đúng ở phía SSR.
+RUN apk add --no-cache tzdata wget
+
+# User non-root `nextjs` theo chuẩn khuyến nghị của Next.js.
+# Lưu ý: busybox adduser yêu cầu TÊN USER đứng CUỐI, sau mọi tuỳ chọn.
+# (uid/gid 1000 đã bị user `node` của image chiếm → dùng 1001.)
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S -D -u 1001 -G nodejs nextjs
+
+WORKDIR /app
+
+COPY --from=builder --chown=nextjs:nodejs /runtime ./
+COPY --chown=root:root --chmod=0755 deploy/web-entrypoint.sh /usr/local/bin/web-entrypoint.sh
+
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    TZ=Asia/Ho_Chi_Minh \
+    PORT=3000 \
+    HOSTNAME=0.0.0.0
+
+USER nextjs:nodejs
+
+EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+    CMD wget -q --spider "http://127.0.0.1:${PORT}/" || exit 1
+
+ENTRYPOINT ["/usr/local/bin/web-entrypoint.sh"]

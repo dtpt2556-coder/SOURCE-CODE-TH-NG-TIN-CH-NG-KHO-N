@@ -1,0 +1,124 @@
+# ==============================================================================
+# TenPoint — .gitignore (thư mục gốc)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Biến môi trường & secret  — QUAN TRỌNG NHẤT
+# ------------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+deploy/.env
+deploy/.env.*
+!deploy/.env.example
+*.pem
+*.key
+!**/testdata/**/*.key
+secrets/
+
+# ------------------------------------------------------------------------------
+# Go (backend)
+# ------------------------------------------------------------------------------
+/backend/bin/
+/backend/dist/
+/backend/tmp/
+*.test
+*.out
+coverage.out
+coverage.html
+__debug_bin*
+vendor/
+# binary build nhầm ở gốc module
+/backend/api
+/backend/ingest
+
+# ------------------------------------------------------------------------------
+# Node / Next.js (frontend)
+# ------------------------------------------------------------------------------
+node_modules/
+.next/
+out/
+build/
+.turbo/
+.swc/
+*.tsbuildinfo
+next-env.d.ts
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+.vercel
+
+# ------------------------------------------------------------------------------
+# Test & coverage
+# ------------------------------------------------------------------------------
+/coverage/
+/frontend/coverage/
+playwright-report/
+test-results/
+# Ảnh chụp / trace do công cụ QA tự động sinh ra
+.playwright-mcp/
+
+# ------------------------------------------------------------------------------
+# Docker / dữ liệu vận hành
+# ------------------------------------------------------------------------------
+# Volume Postgres hoặc thư mục dữ liệu nếu ai đó bind-mount ra ngoài
+/deploy/data/
+/deploy/pgdata/
+/deploy/caddy_data/
+/pgdata/
+# Bản sao lưu DB sinh bởi `make backup-db`
+/backups/
+*.dump
+*.sql.gz
+# Override compose riêng của từng người
+docker-compose.override.yml
+deploy/docker-compose.override.yml
+
+# ------------------------------------------------------------------------------
+# Log
+# ------------------------------------------------------------------------------
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ------------------------------------------------------------------------------
+# Hệ điều hành
+# ------------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ------------------------------------------------------------------------------
+# IDE / editor
+# ------------------------------------------------------------------------------
+.idea/
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.shared.json
+*.iml
+*.swp
+*.swo
+*~
+.history/
+.fleet/
+.zed/
+
+# ------------------------------------------------------------------------------
+# Khác
+# ------------------------------------------------------------------------------
+.cache/
+tmp/
+*.bak
+*.orig

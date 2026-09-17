@@ -1,0 +1,765 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Ánh xạ token -> Tailwind v4 (design-system v2 muc 9)
+   Tailwind v4 khong dung tailwind.config.ts. Dung `inline` de utility tro
+   thang vao bien CSS goc o :root, nho vay doi theme la doi ngay mau.
+   ------------------------------------------------------------------ */
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-up: var(--price-up);
+  --color-down: var(--price-down);
+
+  --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-serif: var(--font-source-serif-4), "Noto Serif", Charter, Georgia,
+    serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo,
+    monospace;
+
+  --container-content: 1180px;
+  --container-prose: 68ch;
+  --container-title: 92ch;
+  --container-summary: 62ch;
+
+  --radius-none: 0px;
+  --radius-chip: 2px;
+}
+
+/* ==================================================================
+   He mau "Ban Tin" - design-system v2 muc 2
+   cool bone + navy editorial + 5 mau gia chuan TTCK Viet Nam
+   ================================================================== */
+
+/* --- 2.1 Light mode (mac dinh) --- */
+:root {
+  --surface: #f4f5f2;
+  --surface-raised: #fcfcfb;
+  --surface-sunken: #e7e9e4;
+
+  --ink: #14181b;
+  --ink-2: #39424a;
+  /* #6b7580 chi dat 4.28:1 tren #F4F5F2, duoi nguong AA 4.5 (QA TC-A11Y-03).
+     #666f79 dat 4.66:1, van du mo de giu duoc cap do thu bac. */
+  --ink-muted: #666f79;
+  --ink-faint: #9ba3ad;
+
+  --rule: #d5d8d2;
+  --rule-strong: #14181b;
+
+  --accent: #1e4b8f;
+  --accent-hover: #163a70;
+  --accent-soft: #e3eaf4;
+
+  --focus: #1e4b8f;
+
+  /* 2.3 Mau gia - quy uoc cung cua thi truong VN, chi dung cho du lieu gia */
+  --price-up: #0f7a43;
+  --price-down: #c02a1d;
+  --price-ceiling: #8a2bb0;
+  --price-floor: #0e7490;
+  --price-ref: #a07800;
+
+  color-scheme: light;
+
+  /* Spacing - thang 4px, muc 4 */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Font stack - muc 3 */
+  --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-serif: var(--font-source-serif-4), "Noto Serif", Charter, Georgia,
+    serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo,
+    monospace;
+}
+
+/* --- 2.2 Dark mode ---
+ * Hai selector, cung mot bo gia tri, de nut chuyen thu cong thang duoc
+ * media query o CA HAI CHIEU:
+ *   - he thong toi + nguoi dung chon sang  -> :root[data-theme="light"] loai
+ *     media query ra nho :not(), nen token light o tren giu nguyen.
+ *   - he thong sang + nguoi dung chon toi  -> :root[data-theme="dark"] thang.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface: #101317;
+    --surface-raised: #171b21;
+    --surface-sunken: #0b0e11;
+
+    --ink: #e9ecef;
+    --ink-2: #b4bcc6;
+    --ink-muted: #7e8894;
+    --ink-faint: #5a636e;
+
+    --rule: #262c34;
+    --rule-strong: #e9ecef;
+
+    --accent: #6fa0f0;
+    --accent-hover: #96baf6;
+    --accent-soft: #16233a;
+
+    --focus: #6fa0f0;
+
+    --price-up: #42c47e;
+    --price-down: #ff7a6b;
+    --price-ceiling: #d08bef;
+    --price-floor: #5bc8e8;
+    --price-ref: #e0b83c;
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --surface: #101317;
+  --surface-raised: #171b21;
+  --surface-sunken: #0b0e11;
+
+  --ink: #e9ecef;
+  --ink-2: #b4bcc6;
+  --ink-muted: #7e8894;
+  --ink-faint: #5a636e;
+
+  --rule: #262c34;
+  --rule-strong: #e9ecef;
+
+  --accent: #6fa0f0;
+  --accent-hover: #96baf6;
+  --accent-soft: #16233a;
+
+  --focus: #6fa0f0;
+
+  --price-up: #42c47e;
+  --price-down: #ff7a6b;
+  --price-ceiling: #d08bef;
+  --price-floor: #5bc8e8;
+  --price-ref: #e0b83c;
+
+  color-scheme: dark;
+}
+
+/* ------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------ */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  left: var(--space-2);
+  top: var(--space-2);
+  background: var(--surface-raised);
+  border: 1px solid var(--rule-strong);
+  padding: var(--space-2) var(--space-3);
+  font-size: 14px;
+}
+
+/* ------------------------------------------------------------------
+   Controls - FilterBar (muc 5.6)
+   Vien 1px, radius 0, nen surface. Khong gradient, khong shadow.
+   ------------------------------------------------------------------ */
+.control {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  padding: 7px 10px;
+  min-height: 34px;
+}
+
+.control::placeholder {
+  color: var(--ink-faint);
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  padding: 7px 12px;
+  min-height: 34px;
+  cursor: pointer;
+  transition: background 120ms ease-out;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--surface-sunken);
+}
+
+.btn:disabled {
+  color: var(--ink-faint);
+  cursor: default;
+}
+
+.btn-strong {
+  border-color: var(--rule-strong);
+}
+
+.link-quiet {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+.link-quiet:hover {
+  color: var(--accent);
+}
+
+/* Chip ma CK trong bo loc - muc 5.2 */
+.chip {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-chip);
+  padding: 3px 8px;
+  min-height: 24px;
+  min-width: 24px;
+  cursor: pointer;
+  transition: background 120ms ease-out;
+}
+
+.chip:hover {
+  background: var(--surface-sunken);
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* --- Nut chuyen sang/toi ---
+ * Nhan hien thi do CSS quyet dinh chu khong do React, nen markup server va
+ * client luon giong het nhau: khong co nguy co lech hydration, va nhan van
+ * dung ngay ca truoc khi JS chay.
+ */
+.theme-label-to-dark {
+  display: inline;
+}
+
+.theme-label-to-light {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-label-to-dark {
+    display: none;
+  }
+  :root:not([data-theme="light"]) .theme-label-to-light {
+    display: inline;
+  }
+}
+
+:root[data-theme="dark"] .theme-label-to-dark {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-label-to-light {
+  display: inline;
+}
+
+:root[data-theme="light"] .theme-label-to-dark {
+  display: inline;
+}
+
+:root[data-theme="light"] .theme-label-to-light {
+  display: none;
+}
+
+/* FilterBar sticky - muc 5.6. Khong shadow: chi mot hairline duoi day. */
+.filter-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--surface-raised);
+  border-bottom: 1px solid var(--rule);
+}
+
+/*
+ * Tren mobile cac control xuong dong thanh ~5 hang; giu sticky se chiem gan
+ * nua man hinh va che mat noi dung doc.
+ */
+@media (max-width: 767px) {
+  .filter-bar {
+    position: static;
+  }
+}
+
+/* ------------------------------------------------------------------
+   DigestTable - muc 5.1
+   Hairline ngan hang, ke dam duoi header, KHONG zebra, KHONG border doc
+   ------------------------------------------------------------------ */
+.digest-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-serif);
+}
+
+.digest-table thead th {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  text-align: left;
+  padding: 0 var(--space-6) var(--space-3) 0;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.digest-table tbody td {
+  padding: var(--space-5) var(--space-6) var(--space-5) 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+
+.digest-table tbody tr {
+  transition: background 120ms ease-out;
+}
+
+.digest-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.digest-table tbody tr:hover {
+  background: var(--surface-sunken);
+}
+
+/* `num`: moi con so dang bang dung mono (muc 3, density 7) */
+.digest-date {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--ink-muted);
+}
+
+.digest-summary {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 62ch;
+  overflow-wrap: anywhere;
+}
+
+/* Chu ky thi giac: so lieu nhan bang WEIGHT, tuyet doi khong bang mau */
+.digest-summary strong,
+.note-body strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.digest-type {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.digest-type-inline {
+  display: none;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  color: var(--ink-muted);
+}
+
+/* U-03: nguon da sua bai sau khi dang. Muted va xuong dong rieng de khong
+   canh tranh voi ngay dang, nhung van doc duoc khi nguoi dung can. */
+.digest-updated {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+
+.ticker-cell {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.ticker-link {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+
+.ticker-link:hover {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Mo rong danh sach ma khi > 8 ma - thuan HTML, khong can JS */
+.ticker-more {
+  display: inline;
+}
+
+.ticker-more > summary {
+  display: inline;
+  list-style: none;
+  cursor: pointer;
+  color: var(--accent);
+}
+
+.ticker-more > summary::-webkit-details-marker {
+  display: none;
+}
+
+.ticker-more[open] > summary {
+  color: var(--ink-muted);
+}
+
+/* --- SourceLink, muc 5.3 --- */
+.source-link {
+  position: relative;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  overflow-wrap: anywhere;
+}
+
+/* WCAG 2.2 - 2.5.8 Target Size. Link chi cao ~17px theo line-height cua chu.
+   Noi rong vung cham bang pseudo-element de dat 24px ma KHONG doi metric thi
+   giac cua bang - neu tang padding that thi hang bang gian ra, lech anh goc. */
+.source-link::after,
+.ticker-link::after {
+  content: "";
+  position: absolute;
+  inset: -4px -3px;
+}
+
+.source-link:hover {
+  color: var(--accent);
+}
+
+.source-dead {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-faint);
+  cursor: not-allowed;
+  overflow-wrap: anywhere;
+}
+
+.source-dead-note {
+  display: block;
+  font-size: 12.5px;
+  color: var(--ink-muted);
+}
+
+/* --- Ti le cot desktop >=1024px --- */
+@media (min-width: 1024px) {
+  .digest-table th[data-col="date"],
+  .digest-table td[data-col="date"] {
+    width: 11%;
+    min-width: 96px;
+    white-space: nowrap;
+  }
+  .digest-table th[data-col="tickers"],
+  .digest-table td[data-col="tickers"] {
+    width: 16%;
+  }
+  .digest-table th[data-col="summary"],
+  .digest-table td[data-col="summary"] {
+    width: 48%;
+  }
+  .digest-table th[data-col="source"],
+  .digest-table td[data-col="source"] {
+    width: 14%;
+  }
+  .digest-table th[data-col="type"],
+  .digest-table td[data-col="type"] {
+    width: 11%;
+    padding-right: 0;
+  }
+}
+
+/* --- Tablet 768-1023px: 4 cot, gop Loai tin vao dong meta --- */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .digest-table th[data-col="type"],
+  .digest-table td[data-col="type"] {
+    display: none;
+  }
+  .digest-type-inline {
+    display: inline;
+  }
+  .digest-table th[data-col="date"],
+  .digest-table td[data-col="date"] {
+    width: 14%;
+    min-width: 96px;
+  }
+  .digest-table th[data-col="tickers"],
+  .digest-table td[data-col="tickers"] {
+    width: 18%;
+  }
+  .digest-table th[data-col="summary"],
+  .digest-table td[data-col="summary"] {
+    width: 52%;
+  }
+  .digest-table th[data-col="source"],
+  .digest-table td[data-col="source"] {
+    width: 16%;
+    padding-right: 0;
+  }
+}
+
+/* --- Mobile <768px: bang -> card xep doc, KHONG scroll ngang --- */
+@media (max-width: 767px) {
+  .digest-table,
+  .digest-table thead,
+  .digest-table tbody,
+  .digest-table tr,
+  .digest-table th,
+  .digest-table td {
+    display: block;
+  }
+
+  /* Giu header trong cay accessibility nhung an khoi man hinh */
+  .digest-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .digest-table tbody tr {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    grid-template-areas:
+      "date type"
+      "tickers tickers"
+      "summary summary"
+      "source source";
+    gap: var(--space-2);
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .digest-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .digest-table tbody tr:hover {
+    background: transparent;
+  }
+
+  .digest-table tbody td {
+    padding: 0;
+    border-bottom: none;
+  }
+
+  .digest-table td[data-col="date"] {
+    grid-area: date;
+  }
+  .digest-table td[data-col="type"] {
+    grid-area: type;
+  }
+  .digest-table td[data-col="tickers"] {
+    grid-area: tickers;
+  }
+  .digest-table td[data-col="summary"] {
+    grid-area: summary;
+  }
+  .digest-table td[data-col="source"] {
+    grid-area: source;
+  }
+
+  .digest-table td[data-col="type"]::before {
+    content: "· ";
+    color: var(--ink-faint);
+  }
+
+  .digest-summary {
+    font-size: 15px;
+    max-width: none;
+  }
+}
+
+/* ------------------------------------------------------------------
+   ResearchNote - muc 5.5
+   ------------------------------------------------------------------ */
+.note-title {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.015em;
+  font-size: 40px;
+  line-height: 1.12;
+  max-width: 92ch;
+  color: var(--ink);
+}
+
+@media (min-width: 1024px) {
+  .note-title {
+    font-size: 52px;
+  }
+}
+
+.note-section {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+
+.note-points {
+  list-style: none;
+  padding: 0;
+  /* Section heading -> luan diem dau tien: 24px (muc 5.5) */
+  margin: var(--space-6) 0 0;
+}
+
+.note-point + .note-point {
+  margin-top: var(--space-8);
+}
+
+.note-lead {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--ink);
+  max-width: 68ch;
+}
+
+.note-body {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.62;
+  color: var(--ink-2);
+  max-width: 68ch;
+  margin-top: var(--space-3);
+}
+
+/* ------------------------------------------------------------------
+   Toast copy - muc 7
+   ------------------------------------------------------------------ */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-6);
+  z-index: 60;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: 0;
+  animation: toast-in 200ms ease-out;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.fade-in {
+  animation: fade-in 160ms ease-out both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

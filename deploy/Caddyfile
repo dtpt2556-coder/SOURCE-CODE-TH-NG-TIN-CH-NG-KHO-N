@@ -1,0 +1,119 @@
+# ==============================================================================
+# TenPoint — Caddy reverse proxy
+# Tham chiếu: docs/03-sa/architecture.md mục 2 (routing) và mục 11 (NFR bảo mật)
+#
+# CHẾ ĐỘ CHẠY — điều khiển bằng biến môi trường SITE_ADDRESS:
+#   • Local / dev :  SITE_ADDRESS=":80"          → HTTP thuần, KHÔNG TLS
+#   • Production  :  SITE_ADDRESS="tenpoint.vn"  → TLS tự động (Let's Encrypt)
+#     (nhiều domain:  SITE_ADDRESS="tenpoint.vn, www.tenpoint.vn")
+#   Mặc định khi không set: ":80"
+# ==============================================================================
+{
+	# Email đăng ký ACME. Chỉ dùng khi xin chứng chỉ thật.
+	email {$ACME_EMAIL:devops@example.com}
+
+	# Tắt admin API (cổng 2019) — không cần và là bề mặt tấn công thừa.
+	admin off
+
+	# Log ở mức INFO; `make dev` set CADDY_DEBUG=debug để xem chi tiết.
+	log {
+		format json
+		level {$CADDY_DEBUG:INFO}
+	}
+
+	servers {
+		# Chỉ tin X-Forwarded-* đến từ dải IP nội bộ (docker network).
+		trusted_proxies static private_ranges
+	}
+}
+
+{$SITE_ADDRESS::80} {
+	# --------------------------------------------------------------------------
+	# Nén — zstd ưu tiên hơn gzip khi client hỗ trợ.
+	# --------------------------------------------------------------------------
+	encode zstd gzip
+
+	# --------------------------------------------------------------------------
+	# Security headers (NFR mục 11: "Không thành công cụ phishing")
+	# --------------------------------------------------------------------------
+	header {
+		# Chặn trình duyệt tự đoán MIME type.
+		X-Content-Type-Options "nosniff"
+
+		# Chặn nhúng trang vào iframe (clickjacking).
+		X-Frame-Options "DENY"
+
+		# Rò rỉ referrer tối thiểu khi người dùng bấm short link ra báo ngoài.
+		Referrer-Policy "strict-origin-when-cross-origin"
+
+		# Khoá các API nhạy cảm của trình duyệt — TenPoint không dùng cái nào.
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+
+		# ----------------------------------------------------------------------
+		# Content-Security-Policy — ĐỌC KỸ TRƯỚC KHI SIẾT
+		#
+		#   script-src: mặc định {$CSP_SCRIPT_SRC} = "'self' 'unsafe-inline'".
+		#     ⚠️ Next.js App Router SSR chèn các thẻ <script> inline dạng
+		#        `self.__next_f.push(...)` để stream RSC payload. Nếu đặt
+		#        script-src 'self' MÀ KHÔNG có nonce, các script này bị chặn →
+		#        trang render ra HTML nhưng KHÔNG hydrate, mọi tương tác chết.
+		#     ✅ Cách siết đúng: FE thêm middleware sinh nonce cho Next
+		#        (https://nextjs.org/docs/app/guides/content-security-policy),
+		#        rồi đặt CSP_SCRIPT_SRC="'self'" trong deploy/.env.
+		#
+		#   style-src: buộc phải có 'unsafe-inline' — Next.js/Tailwind inject
+		#     <style> inline khi SSR. Không có cách bỏ mà không sinh nonce.
+		#
+		#   img-src https: — để hiển thị favicon/ảnh đại diện nguồn báo nếu có.
+		#   connect-src 'self' — SSR fetch chạy server-side nên client chỉ gọi
+		#     về chính origin này (đường /api/* do Caddy proxy).
+		#   frame-ancestors 'none' — bản song song của X-Frame-Options: DENY.
+		# ----------------------------------------------------------------------
+		Content-Security-Policy "default-src 'self'; script-src {$CSP_SCRIPT_SRC:'self' 'unsafe-inline'}; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; manifest-src 'self'"
+
+		# Bỏ header lộ công nghệ.
+		-Server
+		-X-Powered-By
+	}
+
+	# HSTS CHỈ khi đang chạy HTTPS. Bật ở local (:80) sẽ khiến trình duyệt ghim
+	# localhost sang https vĩnh viễn và không vào được nữa.
+	@secure protocol https
+	header @secure Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+	# --------------------------------------------------------------------------
+	# Routing (architecture.md mục 2)
+	#   /api/*  → REST API v1
+	#   /r/*    → short link redirect 302  (NFR: < 50ms)
+	#   còn lại → Next.js SSR
+	# --------------------------------------------------------------------------
+	@api path /api/* /r/*
+	handle @api {
+		reverse_proxy api:8080 {
+			header_up X-Real-IP {remote_host}
+			# Short link phải nhanh; API list p95 < 200ms → timeout ngắn là đủ.
+			transport http {
+				dial_timeout 5s
+				response_header_timeout 30s
+			}
+		}
+	}
+
+	handle {
+		reverse_proxy web:3000 {
+			header_up X-Real-IP {remote_host}
+			transport http {
+				dial_timeout 5s
+				response_header_timeout 30s
+			}
+		}
+	}
+
+	# --------------------------------------------------------------------------
+	# Log truy cập
+	# --------------------------------------------------------------------------
+	log {
+		output stdout
+		format json
+	}
+}
